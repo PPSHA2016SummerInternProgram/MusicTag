@@ -10,11 +10,11 @@ import com.paypal.musictag.service.HelloService;
 @Service("helloServiceImpl")
 public class HelloServiceImpl implements HelloService {
 
-	public Map<String, Object> hello() throws Exception {
+    public Map<String, Object> hello() throws Exception {
 
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("location", "Hello! I'm created in HelloServiceImpl.hello");
-		return result;
-	}
+        Map<String, Object> result = new HashMap<String, Object>();
+        result.put("location", "Hello! I'm created in HelloServiceImpl.hello");
+        return result;
+    }
 
 }
