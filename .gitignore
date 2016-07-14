@@ -1,2 +1,7 @@
-/target/
+target/
+src/musicbrainzws2/
+
+# Ignore IntelliJ IDEA files
+*.iml
 .*
+
