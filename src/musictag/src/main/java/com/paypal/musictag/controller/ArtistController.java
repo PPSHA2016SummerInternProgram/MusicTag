@@ -15,22 +15,29 @@ import com.paypal.musictag.util.MusicTagUtil;
 @Controller
 @RequestMapping("/artist")
 public class ArtistController {
-    @Autowired
-    private ArtistService artistServiceImpl;
-    
-    @RequestMapping(value = "/basicInfo", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> basicInfo(@RequestParam String gid) {
+	@Autowired
+	private ArtistService artistServiceImpl;
 
-        try {
-            return MusicTagUtil.createResultMap(true, artistServiceImpl.basicInfo(gid),
-                    null);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return MusicTagUtil.createResultMap(true, null, e.getMessage());
-        }
-    }
-    
-    
-    
+	@RequestMapping(value = "/basicInfo", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> basicInfo(@RequestParam String gid) {
+
+		try {
+			return MusicTagUtil.createResultMap(true, artistServiceImpl.basicInfo(gid), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MusicTagUtil.createResultMap(false, null, e.getMessage());
+		}
+	}
+
+	@RequestMapping(value = "/releaseGroup", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> releaseGroup(@RequestParam String gid) {
+		try {
+			return MusicTagUtil.createResultMap(true, artistServiceImpl.releaseGroup(gid), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return MusicTagUtil.createResultMap(false, null, e.getMessage());
+		}
+	}
 }
