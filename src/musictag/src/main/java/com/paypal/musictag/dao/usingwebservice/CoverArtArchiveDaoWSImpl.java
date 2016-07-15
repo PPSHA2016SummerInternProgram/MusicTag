@@ -19,5 +19,4 @@ public class CoverArtArchiveDaoWSImpl implements CoverArtArchiveDao {
 	public Map<String, Object> releaseGroupCover(String releaseGroupGid) throws IOException {
 		return CoverArtArchiveServiceAPI.sendRequest("release-group/", releaseGroupGid);
 	}
-	
 }
