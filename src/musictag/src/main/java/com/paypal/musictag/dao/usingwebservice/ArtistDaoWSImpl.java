@@ -13,7 +13,9 @@ public class ArtistDaoWSImpl implements ArtistDao {
 
 	@Override
     public Map<String, Object> basicInfo(String artistGid) throws IOException {
-        return MusicTagServiceAPI.sendRequest("artist/" + artistGid, null);
+		Map<String, String> params = new HashMap<>();
+		params.put("inc", "url-rels");
+        return MusicTagServiceAPI.sendRequest("artist/" + artistGid, params);
     }
 
 	@Override

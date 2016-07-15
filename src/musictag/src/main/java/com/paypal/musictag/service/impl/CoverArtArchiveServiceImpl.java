@@ -13,16 +13,16 @@ import com.paypal.musictag.service.CoverArtArchiveService;
 public class CoverArtArchiveServiceImpl implements CoverArtArchiveService {
 
 	@Autowired
-	private CoverArtArchiveDao coverArtArchiveWSImpl;
+	private CoverArtArchiveDao coverArtArchiveDaoWSImpl;
 
 	@Override
 	public Map<String, Object> releaseCover(String releaseGid) throws IOException {
-		return coverArtArchiveWSImpl.releaseCover(releaseGid);
+		return coverArtArchiveDaoWSImpl.releaseCover(releaseGid);
 	}
 
 	@Override
 	public Map<String, Object> releaseGroupCover(String releaseGroupGid) throws IOException {
-		return coverArtArchiveWSImpl.releaseGroupCover(releaseGroupGid);
+		return coverArtArchiveDaoWSImpl.releaseGroupCover(releaseGroupGid);
 	}
 
 }

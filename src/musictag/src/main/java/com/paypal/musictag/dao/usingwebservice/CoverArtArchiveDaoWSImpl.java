@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.CoverArtArchiveDao;
 
-@Service("coverArtArchiveWSImpl")
-public class CoverArtArchiveWSImpl implements CoverArtArchiveDao {
+@Service("coverArtArchiveDaoWSImpl")
+public class CoverArtArchiveDaoWSImpl implements CoverArtArchiveDao {
 
 	@Override
 	public Map<String, Object> releaseCover(String releaseGid) throws IOException {
