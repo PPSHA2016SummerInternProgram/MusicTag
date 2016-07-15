@@ -50,6 +50,10 @@
 .readmore_single_toggler:hover {
 	cursor: pointer;
 }
+
+.list-group-item {
+    padding: 5px;
+}
 </style>
 </head>
 <body>
@@ -109,26 +113,55 @@
 				</div>
 				<div class="artist-overview-key">Life Span:</div>
 				<div class="artist-overview-value">1979-01-18~?</div>
+				<div class="artist-overview-key" style="margin-top:5px;"><button class="btn btn-sm" style="margin-left:-10px" data-artist-overview-link-btn="hide">Show Links</button></div>
+				<div class="artist-overview-value" style="padding:10px; display:none;" data-artist-overview-links>
+				    <ul class="list-group">
+                        <li class="list-group-item"><label style="width:100px">IMDb</label><a href="">http://www.imdb.com/name/nm1727100/</a></li>
+                        <li class="list-group-item"><label style="width:100px">VIAF</label><a href="">http://viaf.org/viaf/86517081</a></li>
+                        <li class="list-group-item"><label style="width:100px">discogs</label><a href="">http://www.discogs.com/artist/1705275</a></li>
+                        <li class="list-group-item"><label style="width:100px">last.fm</label><a href="">http://www.last.fm/music/%E5%91%A8%E6%9D%B0%E5%80%AB</a></li>
+				    </ul>
+				</div>
 			</div>
 		</div>
 	</div>
 	<script>
 		$(function() {
-			var profile = $('#artist-overview-profile');
-			var more = $('#artist-overview-profile-read-more');
-			var less = $('#artist-overview-profile-read-less');
-			var hiddenClass = 'artist-overview-profile-less';
-			more.on('click', function() {
-				profile.removeClass(hiddenClass);
-				more.hide();
-				less.show();
-			});
-			less.on('click', function() {
-				profile.addClass(hiddenClass);
-				more.show();
-				less.hide();
-			});
+			addReadMoreProfileListener();
+			addShowLinksListener();
 		});
+		
+		function addReadMoreProfileListener(){
+			var profile = $('#artist-overview-profile');
+            var more = $('#artist-overview-profile-read-more');
+            var less = $('#artist-overview-profile-read-less');
+            var hiddenClass = 'artist-overview-profile-less';
+            more.on('click', function() {
+                profile.removeClass(hiddenClass);
+                more.hide();
+                less.show();
+            });
+            less.on('click', function() {
+                profile.addClass(hiddenClass);
+                more.show();
+                less.hide();
+            });
+		}
+		
+		function addShowLinksListener(){
+			var btn = 'data-artist-overview-link-btn';
+            var filterBtn = '[' + btn + ']';
+            var filterLinks = '[data-artist-overview-links]';
+            $(filterBtn).on('click', function(){
+                if($(this).attr(btn) == 'hide'){
+                    $(this).attr(btn, 'show');
+                    $(filterLinks).show();
+                }else{
+                    $(this).attr(btn, 'hide');
+                    $(filterLinks).hide();
+                }
+            });
+		}
 	</script>
 </body>
 </html>
