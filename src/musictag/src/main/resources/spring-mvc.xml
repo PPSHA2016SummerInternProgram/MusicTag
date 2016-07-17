@@ -33,7 +33,7 @@
 		</property>
 	</bean>
 
-	<context:property-placeholder location="classpath:postgres.properties" />
+	<context:property-placeholder location="classpath:musictag.properties" />
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
 		destroy-method="close">
 		<property name="driverClass" value="${jdbc.driverClassName}" />
