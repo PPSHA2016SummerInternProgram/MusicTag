@@ -34,7 +34,7 @@ public class AjaxController {
                     null);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(true, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage());
         }
     }
 
