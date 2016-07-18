@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<html>
+<html lang="zh-CN">
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/albums.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
-<link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/bootstrap.css" />
+<script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
+<script src="<%=request.getContextPath()%>/js/paginator.js"></script>
+<script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
+<script src="<%=request.getContextPath()%>/js/albums.js"></script>
 <style type="text/css">
 .artist-image {
 	width: 160px;
@@ -72,7 +76,6 @@
 </head>
 
 <body>
-
 
 	<nav class="navbar navbar-default">
 		<div class="container-fluid-new" style="padding:0;margin:0">
@@ -193,6 +196,7 @@
 				</div>
 			</div>
 		</div>
+		<%@ include file="_albums.html"%>
 	</div>
 
 	<script src="<%=request.getContextPath()%>/js/util.js"></script>
