@@ -1,12 +1,13 @@
 $(function() {
 	hideBasicInfo();
-	getBasicInfoFromServer(getUrlVars()['gid']);
+	getBasicInfoFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
 });
 
 function hideBasicInfo() {
 	$('[data-artist-overview]').hide();
+	$('[data-artist-overview-image]').hide();
 	clearBasicInfo();
 }
 
@@ -24,11 +25,48 @@ function clearBasicInfo() {
 	$('[data-artist-overview-links-wrapper]').html('')
 }
 
-function getBasicInfoFromServer(gid) {
+function getBasicInfoFromServer() {
 	var url = 'basic-info';
 	var data = {}
 	sendAjax(url, data, receivedBasicInfo);
 }
+
+function getImageFromServer() {
+	var url = 'image';
+	sendAjax(url, null, receivedImageUrl);
+}
+
+function getRelLinksFromServer() {
+	var url = 'rel-links';
+	sendAjax(url, null, receivedRelLinks);
+}
+
+function receivedImageUrl(data) {
+	if (data.success && !isEmpty(getValue(data, 'data', 'commons-img'))) {
+		var src = getValue(data, 'data', 'commons-img');
+		console.log(src);
+		$('[data-artist-overview-image]').show();
+		$('[data-artist-overview-image]').attr('src', src);
+	}
+}
+
+function receivedRelLinks(data){
+	if(!data.success){
+		console.log(data.errorMsg);
+		return;
+	}
+
+	var relations = getValue(data, 'data', 'relations');
+	for (var i = 0; !isEmpty(relations) && i < relations.length; i++) {
+		var relation = relations[i];
+		var url = relation['url']['resource'];
+		var type = relation['type'];
+		$('[data-artist-overview-links-wrapper]').append(
+				'<li class="list-group-item"><label class="artist-overview-link-label">'
+						+ type + '</label><a href="' + url + '">' + url
+						+ '</a></li>');
+	}
+} 
 
 function receivedBasicInfo(data) {
 	if (!data.success) {
@@ -37,13 +75,13 @@ function receivedBasicInfo(data) {
 	}
 
 	info = data.data;
-	var name = info['name'];
-	var gender = info['gender'];
-	var area = info['area']['name'];
-	var image = info['commons-img'];
-	var lifeSpanBegin = info['life-span']['begin'];
-	var lifeSpanEnd = info['life-span']['end'];
-	var profile = info['wikipedia-extract'];
+	var name = getValue(info, 'name');
+	var gender = getValue(info, 'gender');
+	var area = getValue(info, 'area', 'name');
+	var image = getValue(info, 'commons-img');
+	var lifeSpanBegin = getValue(info, 'life-span', 'begin');
+	var lifeSpanEnd = getValue(info, 'life-span', 'end');
+	var profile = getValue(info, 'wikipedia-extract');
 	var lifeSpan = '';
 	if (!isEmpty(lifeSpanBegin) || !isEmpty(lifeSpanEnd)) {
 		lifeSpan = (isEmpty(lifeSpanBegin) ? '?' : lifeSpanBegin) + '~'
@@ -57,18 +95,10 @@ function receivedBasicInfo(data) {
 	$('[data-artist-overview-life-span]').text(lifeSpan);
 	$('[data-artist-overview-image]').attr('src', image);
 
-	var relations = info['relations'];
-	for (var i = 0; i < relations.length; i++) {
-		var relation = relations[i];
-		var url = relation['url']['resource'];
-		var type = relation['type'];
-		$('[data-artist-overview-links-wrapper]').append(
-				'<li class="list-group-item"><label class="artist-overview-link-label">'
-						+ type + '</label><a href="' + url + '">' + url
-						+ '</a></li>');
-	}
-
 	showBasicInfo();
+
+	getImageFromServer();
+	getRelLinksFromServer();
 }
 
 /**
