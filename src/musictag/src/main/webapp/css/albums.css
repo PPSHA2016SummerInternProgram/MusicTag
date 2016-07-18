@@ -1,0 +1,19 @@
+.nav-album > li > a {
+  padding: 6px 12px; }
+
+.album-row .album-cover {
+  width: 65px;
+  height: 65px;
+  margin-right: 1rem; }
+.album-row .album-title {
+  margin-right: 1rem; }
+
+.album-frame {
+  text-align: center; }
+  .album-frame .album-cover {
+    width: 100%; }
+  .album-frame > span {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 90%; }

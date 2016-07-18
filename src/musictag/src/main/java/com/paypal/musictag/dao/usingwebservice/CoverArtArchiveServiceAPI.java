@@ -9,7 +9,7 @@ import com.paypal.musictag.util.MusicTagUtil;
 /**
  * This class uses coverartarchive api to get cover for release/release group.
  * request url is
- * http://coverartarchive.org/{release|release-group}/gid/[front|end]
+ * http://coverartarchive.org/{release|release-group}/gid
  * 
  * @author shilzhang
  *
