@@ -25,10 +25,8 @@ function clearBasicInfo() {
 }
 
 function getBasicInfoFromServer(gid) {
-	var url = ContextPath + '/artist/basicInfo';
-	var data = {
-		gid : gid
-	}
+	var url = 'basic-info';
+	var data = {}
 	sendAjax(url, data, receivedBasicInfo);
 }
 

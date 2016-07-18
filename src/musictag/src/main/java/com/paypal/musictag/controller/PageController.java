@@ -13,9 +13,4 @@ public class PageController {
     public String index(ModelMap model) {
         return "/WEB-INF/pages/index.jsp";
     }
-
-    @RequestMapping(value = "/artist-overview", method = RequestMethod.GET)
-    public String artistOverview(ModelMap model) {
-        return "/WEB-INF/pages/artist-overview.jsp";
-    }
 }
