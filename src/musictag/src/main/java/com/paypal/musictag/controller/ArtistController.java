@@ -25,10 +25,10 @@ public class ArtistController {
     public Map<String, Object> profile(@PathVariable("gid") String gid){
         
         try {
-            return MusicTagUtil.createResultMap(true, artistServiceImpl.profile(gid), null);
+            return MusicTagUtil.createResultMap(true, artistServiceImpl.profile(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.NOT_PROVIDED);
         }
     }
     
@@ -40,7 +40,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true, artistServiceImpl.relLinks(gid), null);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
         }
     }
     
@@ -52,7 +52,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true, artistServiceImpl.image(gid), null);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.NOT_PROVIDED);
         }
     }
 
