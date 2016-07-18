@@ -3,6 +3,7 @@ package com.paypal.musictag.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.service.HelloService;
 import com.paypal.musictag.util.MusicTagUtil;
+import com.paypal.musictag.util.ResponseCode;
 
 @Controller
 @RequestMapping("/ajax")
@@ -31,10 +33,10 @@ public class AjaxController {
 
         try {
             return MusicTagUtil.createResultMap(true, helloServiceImpl.hello(),
-                    null);
+                    ResponseCode.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
         }
     }
 
@@ -70,10 +72,10 @@ public class AjaxController {
                 throw new Exception("Cannot support the operation " + operation);
             }
             data.put("result", result);
-            return MusicTagUtil.createResultMap(true, data, null);
+            return MusicTagUtil.createResultMap(true, data, ResponseCode.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, data, e.getMessage());
+            return MusicTagUtil.createResultMap(false, data, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
         }
     }
 }
