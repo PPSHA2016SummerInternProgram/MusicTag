@@ -1,2 +1,7 @@
 /target/
 .*
+
+# ignore idea files
+*.iml
+target
+lib
