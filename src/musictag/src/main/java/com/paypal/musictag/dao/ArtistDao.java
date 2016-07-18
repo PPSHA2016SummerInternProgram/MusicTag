@@ -14,7 +14,7 @@ public interface ArtistDao {
      * @return
      * @throws IOException
      */
-    public Map<String, Object> basicInfo(String artistGid) throws IOException;
+    Map<String, Object> basicInfo(String artistGid) throws IOException;
 
     /**
      * Find all release-groups (Albums) of an artist by his/her global ID.
@@ -25,6 +25,6 @@ public interface ArtistDao {
      * @return
      * @throws IOException
      */
-    public Map<String, Object> releaseGroup(String artistGid)
+    Map<String, Object> releaseGroup(String artistGid)
             throws IOException;
 }
