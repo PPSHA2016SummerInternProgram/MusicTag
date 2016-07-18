@@ -36,7 +36,11 @@ var initAlbumEumerable = function(json) {
                     img.attr('src', this.src);
                 };
                 downloadingImage.src = json.data.images[0].thumbnails.large;
+            } else {
+                $(html).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
             }
+        }).fail(function(){
+            $(html).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
         });
 
         return html;
@@ -47,7 +51,9 @@ var initAlbumEumerable = function(json) {
         //var cnt = rg['release-count'];
         var frame = $(builder('div', {class: 'album-frame col-xs-6 col-sm-4 col-md-3'},
             builder('a', {href: '#', class: 'thumbnail'},
-                builder('img', {class: 'album-cover'}) +
+                builder('div', {class: 'album-cover-wrapper'},
+                    builder('img', {class: 'album-cover'})
+                ) +
                 builder('span', {class: 'album-title'}, rg['title'])
                 //(cnt > 1 ? builder('button', {class: 'btn btn-sm btn-primary'},
                 //    '版本数' + builder('span', {class: 'badge'}, cnt)) : '')
@@ -64,7 +70,11 @@ var initAlbumEumerable = function(json) {
                     img.attr('src', this.src);
                 };
                 downloadingImage.src = json.data.images[0].thumbnails.large;
+            } else {
+                $(frame).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
             }
+        }).fail(function () {
+            $(frame).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
         });
         return frame;
     });
