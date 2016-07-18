@@ -5,82 +5,20 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/albums.css" />
+    href="<%=request.getContextPath()%>/css/albums.css" />
+<link rel="stylesheet" type="text/css"
+    href="<%=request.getContextPath()%>/css/artist-overview.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
 <script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
 <script src="<%=request.getContextPath()%>/js/albums.js"></script>
-<style type="text/css">
-.artist-image {
-	width: 160px;
-	float: left;
-	padding-top: 10px;
-	margin-right: 10px;
-}
-
-.artist-overview-name {
-	font-size: 20px;
-	font-weight: bold;
-}
-
-.artist-overview-key {
-	width: 80px;
-	float: left;
-}
-
-.artist-overview-value {
-	margin-left: 80px;
-	min-width: 100px;
-	min-height: 20px;
-}
-
-.artist-overview-profile-less {
-	overflow: hidden;
-	max-height: 135px;
-}
-
-.artist-overview-link-label {
-	width: 100px;
-}
-
-.readmore_toggler {
-	background: white;
-	color: #868379;
-	display: block;
-	height: 20px;
-}
-
-.readmore_toggler:hover {
-	background: white;
-	color: black;
-	display: block;
-	height: 20px;
-}
-
-.readmore_single_toggler:hover {
-	cursor: pointer;
-}
-
-.container-fluid-new {
-	padding-right: 200px;
-	padding-left: 95px;
-	margin-right: auto;
-	margin-left: auto;
-	background-color: #151414;
-}
-
-.list-group-item {
-	padding: 5px;
-}
-</style>
 </head>
-
 <body>
 
 	<nav class="navbar navbar-default">
-		<div class="container-fluid-new" style="padding: 0; margin: 0">
+		<div class="container-fluid-new nopadding-nomargin">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="container">
 				<div class="span3">
@@ -92,7 +30,7 @@
 								class="icon-bar"></span> <span class="icon-bar"></span> <span
 								class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" style="padding-left: 0" href="#">iMusic</a>
+						<a class="navbar-brand nopadding-left" href="#">iMusic</a>
 					</div>
 				</div>
 
@@ -124,14 +62,12 @@
 	</nav>
 
 	<div class="container">
-		<div style="padding-top: 30px; margin-bottom: 30px; display: none"
-			data-artist-overview>
+		<div class="artist-overview" data-artist-overview>
 			<div class="artist-image">
-				<img width="160"
-					data-artist-overview-image
+				<img width="160" data-artist-overview-image
 					src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Jay_Chou_in_Seoul.jpg/220px-Jay_Chou_in_Seoul.jpg">
 			</div>
-			<div style="margin-left: 170px; margin-right: 100px">
+			<div class="artist-overview-basic-info">
 				<p class="artist-overview-name" data-artist-overview-name>周杰倫</p>
 				<div class="artist-overview-key">Gender:</div>
 				<div class="artist-overview-value" data-artist-overview-gender>Male</div>
@@ -201,7 +137,9 @@
 			</div>
 			<div style="clear: both"></div>
 		</div>
-		<%@ include file="_albums.html"%>
+		<div style="display: none" data-artist-albums>
+			<%@ include file="_albums.html"%>
+		</div>
 	</div>
 
 	<script src="<%=request.getContextPath()%>/js/util.js"></script>

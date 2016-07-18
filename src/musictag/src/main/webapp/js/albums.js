@@ -47,6 +47,7 @@ var initAlbumEumerable = function(json) {
 $(document).ready(function() {
     $.getJSON('release-groups', function (json) {
         initAlbumEumerable(json);
+        $('[data-artist-albums]').show();
     });
 });
 

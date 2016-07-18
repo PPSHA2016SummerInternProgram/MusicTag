@@ -13,7 +13,7 @@ function hideBasicInfo() {
 }
 
 function showBasicInfo() {
-	$('[data-artist-overview]').show();
+	$('[data-artist-overview]').fadeIn(1000);
 }
 
 function clearBasicInfo() {
@@ -145,10 +145,10 @@ function addShowLinksListener() {
 	$(filterBtn).on('click', function() {
 		if ($(this).attr(btn) == 'hide') {
 			$(this).attr(btn, 'show');
-			$(filterLinks).show();
+			$(filterLinks).fadeIn(500);
 		} else {
 			$(this).attr(btn, 'hide');
-			$(filterLinks).hide();
+			$(filterLinks).fadeOut(500);
 		}
 	});
 }

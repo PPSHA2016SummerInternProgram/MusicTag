@@ -1,0 +1,81 @@
+.artist-overview {
+	padding-top: 30px;
+	margin-bottom: 30px;
+	display: none;
+}
+
+.artist-overview-basic-info {
+	margin-left: 190px;
+	margin-right: 0px;
+}
+
+.artist-image {
+	width: 160px;
+	float: left;
+	padding-top: 10px;
+	margin-right: 10px;
+}
+
+.artist-overview-name {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.artist-overview-key {
+	width: 80px;
+	float: left;
+}
+
+.artist-overview-value {
+	margin-left: 80px;
+	min-width: 100px;
+	min-height: 20px;
+}
+
+.artist-overview-profile-less {
+	overflow: hidden;
+	max-height: 135px;
+}
+
+.artist-overview-link-label {
+	width: 100px;
+}
+
+.readmore_toggler {
+	background: white;
+	color: #868379;
+	display: block;
+	height: 20px;
+}
+
+.readmore_toggler:hover {
+	background: white;
+	color: black;
+	display: block;
+	height: 20px;
+}
+
+.readmore_single_toggler:hover {
+	cursor: pointer;
+}
+
+.container-fluid-new {
+	padding-right: 200px;
+	padding-left: 95px;
+	margin-right: auto;
+	margin-left: auto;
+	background-color: #151414;
+}
+
+.list-group-item {
+	padding: 5px;
+}
+
+.nopadding-nomargin {
+	padding: 0;
+	margin: 0;
+}
+
+.nopadding-left {
+	padding-left: 0;
+}
