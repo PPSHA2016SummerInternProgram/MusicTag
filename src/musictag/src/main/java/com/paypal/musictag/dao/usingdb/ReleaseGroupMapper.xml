@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paypal.musictag.dao.usingdb.ReleaseGroupMapper">
+	<select id="releasesCounts" parameterType="list" resultType="hashmap">
+		select rg.gid, count(*) 
+		from release as r join release_group as rg
+		on r.release_group = rg.id
+		where rg.gid in
+		<foreach item="releaseGroupGid" collection='releaseGroupList' open="(" separator="," close=")">
+			#{releaseGroupGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		</foreach>
+		group by rg.gid
+	</select>
+</mapper>
