@@ -1,11 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<html>
+<html lang="zh-CN">
 <head>
-<script src="<%=request.getContextPath()%>/js/jquery.js"></script>
-<script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/albums.css" />
+<script src="<%=request.getContextPath()%>/js/jquery.js"></script>
+<script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
+<script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
+<script src="<%=request.getContextPath()%>/js/paginator.js"></script>
+<script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
+<script src="<%=request.getContextPath()%>/js/albums.js"></script>
 <style type="text/css">
 .artist-image {
 	width: 160px;
@@ -73,9 +79,8 @@
 
 <body>
 
-
 	<nav class="navbar navbar-default">
-		<div class="container-fluid-new" style="padding:0;margin:0">
+		<div class="container-fluid-new" style="padding: 0; margin: 0">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="container">
 				<div class="span3">
@@ -87,7 +92,7 @@
 								class="icon-bar"></span> <span class="icon-bar"></span> <span
 								class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand" style="padding-left:0" href="#">iMusic</a>
+						<a class="navbar-brand" style="padding-left: 0" href="#">iMusic</a>
 					</div>
 				</div>
 
@@ -119,9 +124,11 @@
 	</nav>
 
 	<div class="container">
-		<div style="padding-top: 30px; display: none" data-artist-overview>
+		<div style="padding-top: 30px; margin-bottom: 30px; display: none"
+			data-artist-overview>
 			<div class="artist-image">
-				<img width="160" data-artist-overview-image
+				<img width="160"
+					data-artist-overview-image
 					src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Jay_Chou_in_Seoul.jpg/220px-Jay_Chou_in_Seoul.jpg">
 			</div>
 			<div style="margin-left: 170px; margin-right: 100px">
@@ -192,7 +199,9 @@
 					</ul>
 				</div>
 			</div>
+			<div style="clear: both"></div>
 		</div>
+		<%@ include file="_albums.html"%>
 	</div>
 
 	<script src="<%=request.getContextPath()%>/js/util.js"></script>

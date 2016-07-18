@@ -21,6 +21,21 @@ public class ArtistServiceImpl implements ArtistService {
 	@Autowired
 	private ReleaseGroupMapper releaseGroupMapper;
 
+    @Override
+    public Map<String, Object> profile(String gid) throws Exception {
+        return artistDaoWSImpl.profile(gid);
+    }
+
+    @Override
+    public Map<String, Object> relLinks(String gid) throws Exception {
+        return artistDaoWSImpl.relLinks(gid);
+    }
+    
+    @Override
+    public Map<String, Object> image(String gid) throws Exception {
+        return artistDaoWSImpl.image(gid);
+    }
+
 	public Map<String, Object> basicInfo(String gid) throws Exception {
 		return artistDaoWSImpl.basicInfo(gid);
 	}
