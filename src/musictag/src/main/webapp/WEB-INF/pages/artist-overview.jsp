@@ -62,7 +62,7 @@
 	</nav>
 
 	<div class="container">
-		<div class="artist-overview" data-artist-overview>
+		<div class="artist-overview" data-artist-overview style="margin-top:50px;">
 			<div class="artist-image">
 				<img width="160" data-artist-overview-image
 					src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Jay_Chou_in_Seoul.jpg/220px-Jay_Chou_in_Seoul.jpg">
