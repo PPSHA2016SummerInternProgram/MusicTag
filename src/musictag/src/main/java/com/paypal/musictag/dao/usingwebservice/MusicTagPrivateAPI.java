@@ -8,6 +8,7 @@ import java.util.Map;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.paypal.musictag.util.MusicTagUtil;
 
@@ -20,8 +21,11 @@ public class MusicTagPrivateAPI {
 		String requestUrl = new StringBuilder(URL).append("artist/").append(artistGid).append("/")
 				.append("commons-image").toString();
 		Document doc = Jsoup.connect(requestUrl).get();
-		Element img = doc.select(".picture > img").first();
-		String commonsImgUrl = img.attr("src");
+		Elements imgs = doc.select(".picture > img");
+		String commonsImgUrl = "";
+		if (imgs != null && imgs.first() != null) {
+			commonsImgUrl = imgs.first().attr("src");
+		}
 		System.out.println("commonsImgUrl: "+commonsImgUrl);
 		map.put("commons-img", commonsImgUrl);
 		return map;
@@ -34,8 +38,11 @@ public class MusicTagPrivateAPI {
 		System.out.println(requestUrl);
 		Document doc = Jsoup.connect(requestUrl).get();
 		System.out.println(doc.outerHtml());
-		Element wiki = doc.select("div.wikipedia-extract-body.wikipedia-extract-collapse").first();
-		String wikiExtract = wiki.outerHtml();
+		Elements wikis = doc.select("div.wikipedia-extract-body.wikipedia-extract-collapse");
+		String wikiExtract = "";
+		if(wikis != null && wikis.first() != null){
+			wikiExtract = wikis.first().outerHtml();
+		}
 		map.put("wikipedia-extract", wikiExtract);
 		return map;
 	}
