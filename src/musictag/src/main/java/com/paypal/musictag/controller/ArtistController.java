@@ -19,6 +19,18 @@ public class ArtistController {
 	@Autowired
 	private ArtistService artistServiceImpl;
     
+    @RequestMapping(value = "/{gid}/profile", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> profile(@PathVariable("gid") String gid){
+        
+        try {
+            return MusicTagUtil.createResultMap(true, artistServiceImpl.profile(gid), null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+        }
+    }
+    
     @RequestMapping(value = "/{gid}/rel-links", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> relLinks(@PathVariable("gid") String gid){

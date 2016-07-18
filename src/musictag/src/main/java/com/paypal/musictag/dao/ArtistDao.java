@@ -6,6 +6,15 @@ import java.util.Map;
 public interface ArtistDao {
 
     /**
+     * Find profile for artist.
+     * 
+     * @param artistGid
+     * @return
+     * @throws IOException
+     */
+    Map<String, Object> profile(String artistGid) throws IOException;
+
+    /**
      * Find rel-links for artist.
      * 
      * @param artistGid

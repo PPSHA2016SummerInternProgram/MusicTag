@@ -1,6 +1,7 @@
 $(function() {
 	hideBasicInfo();
 	getBasicInfoFromServer();
+	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
 });
@@ -41,6 +42,11 @@ function getRelLinksFromServer() {
 	sendAjax(url, null, receivedRelLinks);
 }
 
+function getProfileFromServer() {
+	var url = 'profile';
+	sendAjax(url, null, receivedProfile);
+}
+
 function receivedImageUrl(data) {
 	if (data.success && !isEmpty(getValue(data, 'data', 'commons-img'))) {
 		var src = getValue(data, 'data', 'commons-img');
@@ -68,9 +74,19 @@ function receivedRelLinks(data){
 	}
 } 
 
+function receivedProfile(data){
+	if(!data.success){
+		console.log(data.errorMsg);
+		return;
+	}
+
+	var profile = getValue(data, 'data', 'wikipedia-extract');
+	$('[data-artist-overview-profile]').html(profile);
+}
+
 function receivedBasicInfo(data) {
 	if (!data.success) {
-		console(data.errorMsg);
+		console.log(data.errorMsg);
 		return;
 	}
 
@@ -81,7 +97,6 @@ function receivedBasicInfo(data) {
 	var image = getValue(info, 'commons-img');
 	var lifeSpanBegin = getValue(info, 'life-span', 'begin');
 	var lifeSpanEnd = getValue(info, 'life-span', 'end');
-	var profile = getValue(info, 'wikipedia-extract');
 	var lifeSpan = '';
 	if (!isEmpty(lifeSpanBegin) || !isEmpty(lifeSpanEnd)) {
 		lifeSpan = (isEmpty(lifeSpanBegin) ? '?' : lifeSpanBegin) + '~'
@@ -91,7 +106,6 @@ function receivedBasicInfo(data) {
 	$('[data-artist-overview-name]').text(name);
 	$('[data-artist-overview-gender]').text(gender);
 	$('[data-artist-overview-area]').text(area);
-	$('[data-artist-overview-profile]').html(profile);
 	$('[data-artist-overview-life-span]').text(lifeSpan);
 	$('[data-artist-overview-image]').attr('src', image);
 

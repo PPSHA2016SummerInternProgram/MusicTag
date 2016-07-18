@@ -12,6 +12,11 @@ import com.paypal.musictag.dao.ArtistDao;
 public class ArtistDaoWSImpl implements ArtistDao {
 
     @Override
+    public Map<String, Object> profile(String artistGid) throws IOException {
+        return MusicTagPrivateAPI.getArtistWikiProfle(artistGid);
+    }
+
+    @Override
     public Map<String, Object> relLinks(String artistGid) throws IOException {
         Map<String, String> params = new HashMap<>();
         params.put("inc", "url-rels");
@@ -31,7 +36,6 @@ public class ArtistDaoWSImpl implements ArtistDao {
         Map<String, Object> res = MusicTagServiceAPI.sendRequest("artist/" + artistGid, params);
         long t2 = System.currentTimeMillis();
         long t3 = System.currentTimeMillis();
-        res.putAll(MusicTagPrivateAPI.getArtistWikiProfle(artistGid));
         long t4 = System.currentTimeMillis();
         System.out.println((t2-t1));
         System.out.println((t3-t2));
