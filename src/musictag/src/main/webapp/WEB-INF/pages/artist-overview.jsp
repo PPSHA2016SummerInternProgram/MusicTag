@@ -30,7 +30,7 @@
 								class="icon-bar"></span> <span class="icon-bar"></span> <span
 								class="icon-bar"></span>
 						</button>
-						<a class="navbar-brand nopadding-left" href="#">iMusic</a>
+						<a class="navbar-brand nopadding-left" href="#">OmniMusic</a>
 					</div>
 				</div>
 
