@@ -12,11 +12,11 @@ public class CoverArtArchiveDaoWSImpl implements CoverArtArchiveDao {
 
 	@Override
 	public Map<String, Object> releaseCover(String releaseGid) throws IOException {
-		return CoverArtArchiveServiceAPI.sendRequest("release/", releaseGid);
+		return CoverArtArchiveAPI.sendRequest("release/", releaseGid);
 	}
 
 	@Override
 	public Map<String, Object> releaseGroupCover(String releaseGroupGid) throws IOException {
-		return CoverArtArchiveServiceAPI.sendRequest("release-group/", releaseGroupGid);
+		return CoverArtArchiveAPI.sendRequest("release-group/", releaseGroupGid);
 	}
 }

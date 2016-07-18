@@ -14,7 +14,7 @@ import com.paypal.musictag.util.MusicTagUtil;
  * @author shilzhang
  *
  */
-public final class CoverArtArchiveServiceAPI {
+public final class CoverArtArchiveAPI {
 	private static final String URL = "http://coverartarchive.org/";
 
 	public static Map<String, Object> sendRequest(String subUrl, String gid) throws IOException {

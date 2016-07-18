@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.service.CoverArtArchiveService;
 import com.paypal.musictag.util.MusicTagUtil;
+import com.paypal.musictag.util.ResponseCode;
 
 @Controller
 @RequestMapping("/cover-art-archive")
@@ -24,10 +25,10 @@ public class CoverArtArchiveController {
     public Map<String, Object> releaseCover(@PathVariable("gid") String gid) {
         try {
             return MusicTagUtil.createResultMap(true,
-                    coverArtArchiveServiceImpl.releaseCover(gid), null);
+                    coverArtArchiveServiceImpl.releaseCover(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, ResponseCode.ERR_NOT_FOUND);
         }
     }
 
@@ -36,10 +37,10 @@ public class CoverArtArchiveController {
     public Map<String, Object> releaseGroupCover(@PathVariable("gid") String gid) {
         try {
             return MusicTagUtil.createResultMap(true,
-                    coverArtArchiveServiceImpl.releaseGroupCover(gid), null);
+                    coverArtArchiveServiceImpl.releaseGroupCover(gid), ResponseCode.SUCCESS);
         } catch (IOException e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
         }
     }
 }

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -41,11 +42,27 @@ public final class MusicTagUtil {
 	}
 
 	public static Map<String, Object> createResultMap(boolean success,
-			Object data, String errorMessage) {
+			Object data, ResponseCode code) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("success", success);
 		map.put("data", data);
-		map.put("errorMessage", errorMessage);
+		if (code != null) {
+			map.put("errorMessage", code.getMsg());
+			map.put("responseCode", code.getValue());
+		}else {
+			map.put("errorMessage", ResponseCode.NOT_PROVIDED.getMsg());
+			map.put("responseCode", ResponseCode.NOT_PROVIDED.getValue());
+		}
+		return map;
+	}
+	
+	public static Map<String, Object> createResultMap(boolean success,
+			Object data, String errorMessage, ResponseCode code) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("success", success);
+		map.put("data", data);
+		map.put("errorMessage", errorMessage == null ? ResponseCode.NOT_PROVIDED.getMsg() : errorMessage);
+		map.put("responseCode", code == null ? ResponseCode.NOT_PROVIDED : code.getValue());
 		return map;
 	}
 
@@ -67,6 +84,7 @@ public final class MusicTagUtil {
 		con.setRequestMethod("GET");
 
 		System.out.println("connection opened");
+		System.out.println("response code: " + con.getResponseCode());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
 		System.out.println(con.getContentType());

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.util.MusicTagUtil;
+import com.paypal.musictag.util.ResponseCode;
 
 @Controller
 @RequestMapping("/artist")
@@ -24,10 +25,10 @@ public class ArtistController {
     public Map<String, Object> profile(@PathVariable("gid") String gid){
         
         try {
-            return MusicTagUtil.createResultMap(true, artistServiceImpl.profile(gid), null);
+            return MusicTagUtil.createResultMap(true, artistServiceImpl.profile(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.NOT_PROVIDED);
         }
     }
     
@@ -39,7 +40,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true, artistServiceImpl.relLinks(gid), null);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
         }
     }
     
@@ -51,7 +52,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true, artistServiceImpl.image(gid), null);
         } catch (Exception e) {
             e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, e.getMessage());
+            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.NOT_PROVIDED);
         }
     }
 
@@ -60,10 +61,10 @@ public class ArtistController {
 	public Map<String, Object> basicInfo(@PathVariable("gid") String gid) {
 
 		try {
-			return MusicTagUtil.createResultMap(true, artistServiceImpl.basicInfo(gid), null);
+			return MusicTagUtil.createResultMap(true, artistServiceImpl.basicInfo(gid), ResponseCode.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return MusicTagUtil.createResultMap(false, null, e.getMessage());
+			return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
 		}
 	}
 
@@ -71,10 +72,10 @@ public class ArtistController {
 	@ResponseBody
 	public Map<String, Object> releaseGroup(@PathVariable("gid") String gid) {
 		try {
-			return MusicTagUtil.createResultMap(true, artistServiceImpl.releaseGroup(gid), null);
+			return MusicTagUtil.createResultMap(true, artistServiceImpl.releaseGroup(gid), ResponseCode.SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return MusicTagUtil.createResultMap(false, null, e.getMessage());
+			return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
 		}
 	}
 
