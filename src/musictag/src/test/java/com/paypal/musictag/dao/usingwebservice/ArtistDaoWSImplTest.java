@@ -5,9 +5,14 @@ import java.io.IOException;
 import junit.framework.TestCase;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.paypal.musictag.dao.ArtistDao;
 
+@RunWith(SpringJUnit4ClassRunner.class)  
+@ContextConfiguration({"classpath*:/spring-mvc.xml"})  
 public class ArtistDaoWSImplTest extends TestCase {
 
     ArtistDao artistDao = new ArtistDaoWSImpl();

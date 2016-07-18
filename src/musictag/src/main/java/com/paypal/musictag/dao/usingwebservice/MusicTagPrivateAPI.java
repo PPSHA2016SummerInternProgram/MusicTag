@@ -9,9 +9,11 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
+import com.paypal.musictag.util.MusicTagUtil;
+
 
 public class MusicTagPrivateAPI {
-	private static final String URL = "http://10.24.53.72:5000/";
+	private static final String URL = MusicTagUtil.getProperties().getProperty("musicbrainzPrivateURL");
 
 	public static Map<String, Object> getArtistCommonsImage(String artistGid) throws MalformedURLException, IOException {
 		Map<String, Object> map = new HashMap<String, Object>();

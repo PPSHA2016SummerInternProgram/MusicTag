@@ -9,6 +9,11 @@ import java.net.Proxy;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParseException;
@@ -18,7 +23,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class MusicTagUtil {
 
-	public static Map<String, Object> createResultMap(boolean success, Object data, String errorMessage) {
+	static final Properties properties;
+	static {
+		Resource resource = null;
+		Properties props = null;
+		try {
+			resource = new ClassPathResource("musictag.properties");
+			props = PropertiesLoaderUtils.loadProperties(resource);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		properties = props;
+	}
+
+	public static Properties getProperties() {
+		return properties;
+	}
+
+	public static Map<String, Object> createResultMap(boolean success,
+			Object data, String errorMessage) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("success", success);
 		map.put("data", data);
@@ -28,14 +51,24 @@ public final class MusicTagUtil {
 
 	public static String getJsonFromURL(URL url) throws IOException {
 		// Send request and get response
-		
-		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress("10.24.40.39", 3128));
-		
-		HttpURLConnection con = (HttpURLConnection) url.openConnection(proxy);
+
+		HttpURLConnection con = null;
+		if ("true".equals(properties.get("useProxy"))) {
+			String proxyIp = properties.getProperty("proxyIp");
+			Integer proxyPort = Integer.parseInt(properties
+					.getProperty("proxyPort"));
+			System.out.println("Using proxy, " + proxyIp + ":" + proxyPort);
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
+					proxyIp, proxyPort));
+			con = (HttpURLConnection) url.openConnection(proxy);
+		} else {
+			con = (HttpURLConnection) url.openConnection();
+		}
 		con.setRequestMethod("GET");
 
 		System.out.println("connection opened");
-		BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				con.getInputStream()));
 		System.out.println(con.getContentType());
 		System.out.println("response read");
 		String line = null;
@@ -45,6 +78,8 @@ public final class MusicTagUtil {
 		}
 		reader.close();
 		String json = response.toString();
+		System.out.println("Got response:");
+		System.out.println(json);
 		return json;
 	}
 
