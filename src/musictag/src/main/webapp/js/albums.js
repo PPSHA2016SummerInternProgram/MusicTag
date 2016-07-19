@@ -26,7 +26,7 @@ var initAlbumEumerable = function(json) {
             builder('td') +
             builder('td', {class: 'first-release-date'}, rg['first-release-date'])) );
 
-        var url = '/musictag/cover-art-archive/release-group/' + rg.id;
+        var url = ContextPath + '/cover-art-archive/release-group/' + rg.id;
 
         $.getJSON(url, function(json){
             if(json.success == true) {
@@ -37,10 +37,10 @@ var initAlbumEumerable = function(json) {
                 };
                 downloadingImage.src = json.data.images[0].thumbnails.large;
             } else {
-                $(html).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
+                $(html).find('img').attr('src', ContextPath + '/images/default_album_cover.jpg')
             }
         }).fail(function(){
-            $(html).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
+            $(html).find('img').attr('src', ContextPath + '/images/default_album_cover.jpg')
         });
 
         return html;
@@ -60,7 +60,7 @@ var initAlbumEumerable = function(json) {
             ))
         );
 
-        var url = '/musictag/cover-art-archive/release-group/' + rg.id;
+        var url = ContextPath + '/cover-art-archive/release-group/' + rg.id;
 
         $.getJSON(url, function(json){
             if(json.success == true) {
@@ -71,10 +71,10 @@ var initAlbumEumerable = function(json) {
                 };
                 downloadingImage.src = json.data.images[0].thumbnails.large;
             } else {
-                $(frame).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
+                $(frame).find('img').attr('src', ContextPath + '/images/default_album_cover.jpg')
             }
         }).fail(function () {
-            $(frame).find('img').attr('src', '/muscictag/images/default_album_cover.jpg')
+            $(frame).find('img').attr('src', ContextPath + '/images/default_album_cover.jpg')
         });
         return frame;
     });
