@@ -1,0 +1,31 @@
+.panel.panel-default
+  .panel-heading
+    / Nav tabs
+    %ul.nav.nav-album.pull-right{:role => 'tablist'}
+      %li.pull-right{:role => 'presentation'}
+        %a.btn.btn-default{'aria-controls' => 'album-frames', 'data-toggle' => 'tab', :href => '#album-frames', :role => 'tab'}
+          %span.glyphicon.glyphicon-th-large
+      %li.pull-right
+        &nbsp
+      %li.active.pull-right{:role => 'presentation'}
+        %a.btn.btn-default{'aria-controls' => 'album-table', 'data-toggle' => 'tab', :href => '#album-table', :role => 'tab'}
+          %span.glyphicon.glyphicon-th-list
+    %h4 Albums
+
+  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'date', 'direction': 'desc'}}
+    #album-table.tab-pane.fade.in.active{:role => 'tabpanel'}
+      .panel-body
+        %table.table.table-hover{data: {'release-groups': ''}}
+          %thead
+            %tr
+              %th Cover & Title
+              %th
+              %th First release date
+          %tbody
+    #album-frames.tab-pane.fade{:role => 'tabpanel'}
+      .panel-body.row
+    #pagination.text-center{data: {enumerable: '#albums'}}
+
+
+
+

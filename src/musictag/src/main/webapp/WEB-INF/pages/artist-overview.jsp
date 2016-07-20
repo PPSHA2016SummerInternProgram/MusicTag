@@ -10,10 +10,12 @@
     href="<%=request.getContextPath()%>/css/artist-overview.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
-<script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
-<script src="<%=request.getContextPath()%>/js/paginator.js"></script>
-<script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
+<script src="<%=request.getContextPath()%>/js/util.js"></script>
 <script src="<%=request.getContextPath()%>/js/albums.js"></script>
+<script src="<%=request.getContextPath()%>/js/artist.js"></script>
+<script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
+<script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
+<script src="<%=request.getContextPath()%>/js/paginator.js"></script>
 </head>
 <body>
 
@@ -137,12 +139,11 @@
 			</div>
 			<div style="clear: both"></div>
 		</div>
-		<div style="display: none" data-artist-albums>
+		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.html"%>
 		</div>
 	</div>
 
-	<script src="<%=request.getContextPath()%>/js/util.js"></script>
-	<script src="<%=request.getContextPath()%>/js/artist.js"></script>
+
 </body>
 </html>

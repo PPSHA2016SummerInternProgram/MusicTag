@@ -1,16 +1,9 @@
 ;(function($, window, undefined){
     'use strict';
 
-    window.Paginator = function(enumerable, customTemplate) {
-        // turn into jquery object
-        enumerable = $(enumerable);
-        var pagination = $(enumerable.data('pagination'));
+    window.Paginator = function(enumerable, updatePage, customTemplate) {
 
-        var totalAmount = enumerable.children().length;
-        var perPage = enumerable.data('per-page') || 10;
-        var pageCnt = Math.ceil(totalAmount/perPage);
-        //var curPageClass = enumerable.data('cur-page-class') || 'active';
-
+        // pagination template
         var template = function(amount) {
             var pages = '';
             for(var i = 0; i < amount; ++i) {
@@ -38,32 +31,32 @@
         if(customTemplate instanceof Function) template = customTemplate;
 
         var turnTo = function(enumerable, index) {
+            // turn into jquery object
             enumerable = $(enumerable);
             var pagination = $(enumerable.data('pagination'));
-            var perPage = enumerable.data('per-page');
-            var pageCnt = Math.ceil(totalAmount/perPage);
+
+            var perPage = enumerable.data('per-page') || 10;
+            var orderBy = enumerable.data('order-by') || '';
+            var direction = enumerable.data('direction') || '';
             var curPageClass = enumerable.data('cur-page-class') || 'active';
 
-            enumerable.children().hide();
+            // update page
+            enumerable.hide();
+            var pageCnt = Math.ceil(updatePage(index, perPage, orderBy, direction) / perPage);
+            enumerable.fadeIn(1000);
 
-            enumerable.children().slice(index * perPage, (index + 1) * perPage).fadeIn(1000);
-
-            pagination.find('[data-previous-page], [data-next-page]').removeClass('disabled');
+            // generate pagination
+            pagination.html(template(pageCnt));
             if(index == 0) pagination.find('[data-previous-page]').addClass('disabled');
             if(index == pageCnt - 1 ) pagination.find('[data-next-page]').addClass('disabled');
-
-            pagination.find('.' + curPageClass).removeClass(curPageClass);
             pagination.find('[data-page="' + (index + 1) + '"]').addClass(curPageClass);
         };
 
-        // generate pagination
-        pagination.html(template(pageCnt));
-
         turnTo(enumerable, 0);
 
+        var pagination = $(enumerable.data('pagination'));
         // bind events
         pagination.on('click', '[data-page]', function(e) {
-            e.preventDefault();
             if(!$(this).hasClass('active')) {
                 pagination = $(e.delegateTarget);
                 enumerable = $(pagination.data('enumerable'));
@@ -71,10 +64,10 @@
 
                 turnTo(enumerable, index);
             }
+            e.preventDefault();
         });
 
         pagination.on('click', '[data-previous-page]', function(e) {
-            e.preventDefault();
             if(!$(this).hasClass('disabled')) {
                 pagination = $(e.delegateTarget);
                 enumerable = $(pagination.data('enumerable'));
@@ -82,10 +75,10 @@
 
                 turnTo(enumerable, curPage - 2);
             }
+            e.preventDefault();
         });
 
         pagination.on('click', '[data-next-page]', function(e) {
-            e.preventDefault();
             if(!$(this).hasClass('disabled')) {
                 pagination = $(e.delegateTarget);
                 enumerable = $(pagination.data('enumerable'));
@@ -93,9 +86,8 @@
 
                 turnTo(enumerable, curPage);
             }
-
+            e.preventDefault();
         });
-
     };
 
 })(jQuery, window);
