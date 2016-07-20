@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    // initialize albums display
     var albumsWrapper = $('#albums-wrapper');
     window.Paginator($('#albums'), function(index, perPage, orderBy, direction){
 
@@ -26,7 +27,7 @@ $(document).ready(function() {
                             builder('img', {class: "album-cover"}) +
                             builder('span', {class: 'album-title'}, rg['title']) +
                             (cnt > 1 ? builder('button', {class: 'btn btn-sm btn-primary'},
-                                'Versions' + builder('span', {class: 'badge'}, cnt)) : '')
+                                builder('span', {class: 'badge'}, cnt) + ' Versions') : '')
                         ) +
                         builder('td') +
                         builder('td', {class: 'first-release-date'}, rg['first-release-date'])) );
@@ -75,5 +76,14 @@ $(document).ready(function() {
         return albumCnt;
     });
     albumsWrapper.show();
+
+    // bind album order select event
+    var select = $('[data-albums-order]').find('select').change(function(){
+        var op = $(this).find('option:selected');
+        var albums = $('#albums');
+        albums.data('order-by', op.data('order-by')).data('direction', op.data('direction'));
+        window.Paginator.turnTo(albums, 0);
+
+    });
 });
 

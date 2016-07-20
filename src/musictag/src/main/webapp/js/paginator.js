@@ -30,6 +30,7 @@
 
         if(customTemplate instanceof Function) template = customTemplate;
 
+        // TODO: redundantly redefine
         var turnTo = function(enumerable, index) {
             // turn into jquery object
             enumerable = $(enumerable);
@@ -51,6 +52,8 @@
             if(index == pageCnt - 1 ) pagination.find('[data-next-page]').addClass('disabled');
             pagination.find('[data-page="' + (index + 1) + '"]').addClass(curPageClass);
         };
+
+        window.Paginator.turnTo = turnTo;
 
         turnTo(enumerable, 0);
 

@@ -10,9 +10,20 @@
       %li.active.pull-right{:role => 'presentation'}
         %a.btn.btn-default{'aria-controls' => 'album-table', 'data-toggle' => 'tab', :href => '#album-table', :role => 'tab'}
           %span.glyphicon.glyphicon-th-list
+      %li.pull-right
+        &nbsp
+      %li.pull-right
+        %form.form-inline{data: {'albums-order': ''}}
+          %form-group
+            %label Order by:
+            %select.form-control
+              %option{selected: true, data: {'order-by': 'name', 'direction': 'asc'}} Name(A-Z)
+              %option{data: {'order-by': 'name', 'direction': 'desc'}} Name(Z-A)
+              %option{data: {'order-by': 'date', 'direction': 'asc'}} Name(0-9)
+              %option{data: {'order-by': 'date', 'direction': 'desc'}} Name(9-0)
     %h4 Albums
 
-  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'date', 'direction': 'desc'}}
+  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'name', 'direction': 'desc'}}
     #album-table.tab-pane.fade.in.active{:role => 'tabpanel'}
       .panel-body
         %table.table.table-hover{data: {'release-groups': ''}}
