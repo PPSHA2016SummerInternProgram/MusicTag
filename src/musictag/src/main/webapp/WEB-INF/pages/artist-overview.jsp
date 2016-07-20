@@ -11,8 +11,8 @@
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
-<script src="<%=request.getContextPath()%>/js/albums.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist.js"></script>
+<script src="<%=request.getContextPath()%>/js/albums.js"></script>
 <script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
 <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
