@@ -19,8 +19,8 @@
             %select.form-control
               %option{selected: true, data: {'order-by': 'name', 'direction': 'asc'}} Name(A-Z)
               %option{data: {'order-by': 'name', 'direction': 'desc'}} Name(Z-A)
-              %option{data: {'order-by': 'date', 'direction': 'asc'}} Name(0-9)
-              %option{data: {'order-by': 'date', 'direction': 'desc'}} Name(9-0)
+              %option{data: {'order-by': 'date', 'direction': 'asc'}} Date(0-9)
+              %option{data: {'order-by': 'date', 'direction': 'desc'}} Date(9-0)
     %h4 Albums
 
   .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'name', 'direction': 'desc'}}
