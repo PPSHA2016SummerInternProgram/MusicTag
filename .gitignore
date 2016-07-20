@@ -5,3 +5,6 @@
 *.iml
 target
 lib
+
+# ignore transpiling
+*.css.map
