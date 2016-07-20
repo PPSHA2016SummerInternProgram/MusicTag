@@ -2,8 +2,6 @@ package com.paypal.musictag.dao.usingwebservice;
 
 import java.io.IOException;
 
-import junit.framework.TestCase;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,61 +9,90 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.paypal.musictag.dao.ArtistDao;
+import com.paypal.musictag.values.StaticValues;
 
-@RunWith(SpringJUnit4ClassRunner.class)  
-@ContextConfiguration({"classpath*:/spring-mvc.xml"})  
-public class ArtistDaoWSImplTest extends TestCase {
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration({ "classpath*:/spring-mvc.xml" })
+public class ArtistDaoWSImplTest {
 
     @Autowired
     ArtistDao artistDaoWSImpl;
 
-    @Test
-    public void testBasicInfo() {
+    private Exception exception = new Exception("An exception is needed.");
 
+    @Test
+    public void testProfile() throws Exception {
+        artistDaoWSImpl.profile(StaticValues.artistGid0);
+        artistDaoWSImpl.profile(StaticValues.artistGid1);
         try {
-            artistDaoWSImpl.basicInfo("a223958d-5c56-4b2c-a30a-87e357bc121b"); // 周杰伦
-            artistDaoWSImpl.basicInfo("20244d07-534f-4eff-b4d4-930878889970"); // Taylor Swift
+            artistDaoWSImpl.profile(null);
+            throw exception;
         } catch (IOException e) {
-            e.printStackTrace();
-            assertEquals(0, 1);
+
         }
+    }
+
+    @Test
+    public void testRelLinks() throws Exception {
+        artistDaoWSImpl.relLinks(StaticValues.artistGid0);
+        artistDaoWSImpl.relLinks(StaticValues.artistGid1);
+        try {
+            artistDaoWSImpl.relLinks(null);
+            throw exception;
+        } catch (IOException e) {
+
+        }
+    }
+
+    @Test
+    public void testRelLinksImage() throws Exception {
+        artistDaoWSImpl.image(StaticValues.artistGid0);
+        artistDaoWSImpl.image(StaticValues.artistGid1);
+        try {
+            artistDaoWSImpl.image(null);
+            throw exception;
+        } catch (IOException e) {
+
+        }
+    }
+
+    @Test
+    public void testBasicInfo() throws Exception {
+
+        artistDaoWSImpl.basicInfo(StaticValues.artistGid0);
+        artistDaoWSImpl.basicInfo(StaticValues.artistGid1);
 
         try {
             artistDaoWSImpl.basicInfo("some one not exists");
-            assertEquals(0, 1);
+            throw exception;
         } catch (IOException e) {
             // Just Empty
         }
 
         try {
             artistDaoWSImpl.basicInfo(null);
-            assertEquals(0, 1);
+            throw exception;
         } catch (IOException e) {
             // Just Empty
         }
     }
 
     @Test
-    public void testReleaseGroup() {
+    public void testReleaseGroup() throws Exception {
 
-        try {
-            artistDaoWSImpl.releaseGroup("a223958d-5c56-4b2c-a30a-87e357bc121b"); // 周杰伦
-            artistDaoWSImpl.releaseGroup("20244d07-534f-4eff-b4d4-930878889970"); // Taylor Swift
-        } catch (IOException e) {
-            e.printStackTrace();
-            assertEquals(0, 1);
-        }
+        artistDaoWSImpl.releaseGroup(StaticValues.artistGid0);
+        artistDaoWSImpl.releaseGroup(StaticValues.artistGid1);
 
         try {
             artistDaoWSImpl.releaseGroup("some one not exists");
-            assertEquals(0, 1);
+            throw exception;
         } catch (IOException e) {
             // Just Empty
         }
 
         try {
             artistDaoWSImpl.releaseGroup(null);
-            assertEquals(0, 1);
+            throw exception;
         } catch (IOException e) {
             // Just Empty
         }

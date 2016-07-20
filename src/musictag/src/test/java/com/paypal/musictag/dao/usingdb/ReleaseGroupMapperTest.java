@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.paypal.musictag.values.StaticValues;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:/spring-mvc.xml" })
 @Service("ReleaseGroupMapperTest")
@@ -23,12 +25,11 @@ public class ReleaseGroupMapperTest extends TestCase {
     private ReleaseGroupMapper releaseGroupMapper;
 
     static private int amount = 0;
-    private String artistGid = "a223958d-5c56-4b2c-a30a-87e357bc121b"; // 周杰伦
 
     @Test
     public void testFindReleasesByReleaseGroup0() {
         Map<String, Object> param = new HashMap<String, Object>();
-        param.put("artistGid", UUID.fromString(artistGid));
+        param.put("artistGid", UUID.fromString(StaticValues.artistGid0));
         param.put("offset", 0);
         param.put("amount", 1);
         List<Map<String, Object>> result = releaseGroupMapper
@@ -42,7 +43,7 @@ public class ReleaseGroupMapperTest extends TestCase {
         // find all release-groups (asc & desc)
         // and compare their IDs
         Map<String, Object> param = new HashMap<String, Object>();
-        param.put("artistGid", UUID.fromString(artistGid));
+        param.put("artistGid", UUID.fromString(StaticValues.artistGid0));
         param.put("offset", 0);
         param.put("amount", amount);
         param.put("order_by", "date");
@@ -67,7 +68,7 @@ public class ReleaseGroupMapperTest extends TestCase {
     public void testFindReleasesByReleaseGroup2() {
 
         Map<String, Object> param = new HashMap<String, Object>();
-        param.put("artistGid", UUID.fromString(artistGid));
+        param.put("artistGid", UUID.fromString(StaticValues.artistGid0));
         param.put("offset", 0);
         param.put("amount", amount);
         param.put("order_by", "date");
