@@ -77,7 +77,7 @@ public class ArtistController {
         }
     }
 
-    @RequestMapping(value = "/{gid}/release-groups", method = RequestMethod.GET)
+    @RequestMapping(value = "/{gid}/release-groups-old", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> releaseGroup(@PathVariable("gid") String gid) {
         try {
@@ -90,7 +90,7 @@ public class ArtistController {
         }
     }
 
-    @RequestMapping(value = "/{gid}/release-groups-paged", method = RequestMethod.GET)
+    @RequestMapping(value = "/{gid}/release-groups", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> releaseGroupPaged(
             @PathVariable("gid") String gid,
