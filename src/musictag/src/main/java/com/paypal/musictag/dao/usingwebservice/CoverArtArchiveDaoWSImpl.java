@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.CoverArtArchiveDao;
+import com.paypal.musictag.dao.usingwebservice.api.CoverArtArchiveAPI;
 
 @Service("coverArtArchiveDaoWSImpl")
 public class CoverArtArchiveDaoWSImpl implements CoverArtArchiveDao {

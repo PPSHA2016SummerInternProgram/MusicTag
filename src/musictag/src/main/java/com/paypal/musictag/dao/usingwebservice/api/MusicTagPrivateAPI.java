@@ -1,4 +1,4 @@
-package com.paypal.musictag.dao.usingwebservice;
+package com.paypal.musictag.dao.usingwebservice.api;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -7,7 +7,6 @@ import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import com.paypal.musictag.util.MusicTagUtil;
@@ -26,7 +25,6 @@ public class MusicTagPrivateAPI {
 		if (imgs != null && imgs.first() != null) {
 			commonsImgUrl = imgs.first().attr("src");
 		}
-		System.out.println("commonsImgUrl: "+commonsImgUrl);
 		map.put("commons-img", commonsImgUrl);
 		return map;
 	}
@@ -35,9 +33,7 @@ public class MusicTagPrivateAPI {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String requestUrl = new StringBuilder(URL).append("artist/").append(artistGid).append("/")
 				.append("wikipedia-extract").toString();
-		System.out.println(requestUrl);
 		Document doc = Jsoup.connect(requestUrl).get();
-		System.out.println(doc.outerHtml());
 		Elements wikis = doc.select("div.wikipedia-extract-body.wikipedia-extract-collapse");
 		String wikiExtract = "";
 		if(wikis != null && wikis.first() != null){

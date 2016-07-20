@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.ReleaseGroupDao;
+import com.paypal.musictag.dao.usingwebservice.api.MusicTagServiceAPI;
 
 @Service("releaseGroupDaoWSImpl")
 public class ReleaseGroupDaoWSImpl implements ReleaseGroupDao{

@@ -7,6 +7,8 @@ import java.util.Map;
 import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.ArtistDao;
+import com.paypal.musictag.dao.usingwebservice.api.MusicTagPrivateAPI;
+import com.paypal.musictag.dao.usingwebservice.api.MusicTagServiceAPI;
 
 @Service("artistDaoWSImpl")
 public class ArtistDaoWSImpl implements ArtistDao {
@@ -32,14 +34,7 @@ public class ArtistDaoWSImpl implements ArtistDao {
 	@Override
     public Map<String, Object> basicInfo(String artistGid) throws IOException {
 		Map<String, String> params = new HashMap<>();
-		long t1 = System.currentTimeMillis();
         Map<String, Object> res = MusicTagServiceAPI.sendRequest("artist/" + artistGid, params);
-        long t2 = System.currentTimeMillis();
-        long t3 = System.currentTimeMillis();
-        long t4 = System.currentTimeMillis();
-        System.out.println((t2-t1));
-        System.out.println((t3-t2));
-        System.out.println((t4-t3));
         return res;
     }
 

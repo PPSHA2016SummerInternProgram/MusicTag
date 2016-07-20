@@ -43,6 +43,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     public Map<String, Object> releaseGroup(String artistGid) throws Exception {
         Map<String, Object> res = artistDaoWSImpl.releaseGroup(artistGid);
+        @SuppressWarnings("unchecked")
         List<Map<String, Object>> releaseGroups = (List<Map<String, Object>>) res
                 .get("release-groups");
         if (releaseGroups.size() == 0) {

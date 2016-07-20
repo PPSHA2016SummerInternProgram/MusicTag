@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -74,7 +73,6 @@ public final class MusicTagUtil {
 			String proxyIp = properties.getProperty("proxyIp");
 			Integer proxyPort = Integer.parseInt(properties
 					.getProperty("proxyPort"));
-			System.out.println("Using proxy, " + proxyIp + ":" + proxyPort);
 			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
 					proxyIp, proxyPort));
 			con = (HttpURLConnection) url.openConnection(proxy);
@@ -83,12 +81,8 @@ public final class MusicTagUtil {
 		}
 		con.setRequestMethod("GET");
 
-		System.out.println("connection opened");
-		System.out.println("response code: " + con.getResponseCode());
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
-		System.out.println(con.getContentType());
-		System.out.println("response read");
 		String line = null;
 		StringBuilder response = new StringBuilder();
 		while ((line = reader.readLine()) != null) {
@@ -96,8 +90,6 @@ public final class MusicTagUtil {
 		}
 		reader.close();
 		String json = response.toString();
-		System.out.println("Got response:");
-		System.out.println(json);
 		return json;
 	}
 

@@ -2,9 +2,11 @@ package com.paypal.musictag.dao.usingwebservice;
 
 import java.io.IOException;
 
+import junit.framework.TestCase;
+
 import org.junit.Test;
 
-import junit.framework.TestCase;
+import com.paypal.musictag.dao.usingwebservice.api.CoverArtArchiveAPI;
 
 public class CoverArtArchiveAPITest extends TestCase{
 	

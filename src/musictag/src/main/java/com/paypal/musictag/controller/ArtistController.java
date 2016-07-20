@@ -99,7 +99,6 @@ public class ArtistController {
             @RequestParam("order-by") String orderBy,
             @RequestParam("direction") String direction) {
         try {
-            System.out.println("curPage: " + curPage);
             return MusicTagUtil.createResultMap(true, artistServiceImpl
                     .releaseGroupPaged(gid, curPage, perPage, orderBy,
                             direction), ResponseCode.SUCCESS);

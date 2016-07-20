@@ -1,4 +1,4 @@
-package com.paypal.musictag.dao.usingwebservice;
+package com.paypal.musictag.dao.usingwebservice.api;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,11 +21,9 @@ public final class CoverArtArchiveAPI {
 		StringBuffer url = new StringBuffer(URL).append(subUrl).append(gid);
 
 		URL requestUrl = new URL(url.toString());
-		System.out.println(requestUrl);
 		String json = MusicTagUtil.getJsonFromURL(requestUrl);
 
 		Map<String, Object> map = MusicTagUtil.jsontoMap(json);
-		System.out.println(map);
 		return map;
 	}
 
