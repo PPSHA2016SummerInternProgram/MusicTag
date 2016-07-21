@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
+import com.paypal.musictag.dao.usingwebservice.ArtistDaoWSImpl;
 import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.util.ReleaseesCountsMapResultHandler;
 
@@ -37,6 +38,7 @@ public class ArtistServiceImpl implements ArtistService {
         return artistDaoWSImpl.image(gid);
     }
 
+    @Override
     public Map<String, Object> basicInfo(String gid) throws Exception {
         return artistDaoWSImpl.basicInfo(gid);
     }
