@@ -14,7 +14,6 @@
 <script src="<%=request.getContextPath()%>/js/artist.js"></script>
 <script src="<%=request.getContextPath()%>/js/albums.js"></script>
 <script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
-<script src="<%=request.getContextPath()%>/js/enumerable.js"></script>
 <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
 </head>
 <body>
