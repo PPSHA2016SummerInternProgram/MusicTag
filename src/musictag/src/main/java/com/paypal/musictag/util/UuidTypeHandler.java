@@ -9,8 +9,12 @@ import java.util.UUID;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
+import org.apache.log4j.Logger;
 
 public class UuidTypeHandler implements TypeHandler<UUID> {
+    
+    private static final Logger logger = Logger.getLogger(UuidTypeHandler.class);
+    
     @Override
     public void setParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
         if (parameter == null) {
@@ -42,7 +46,7 @@ public class UuidTypeHandler implements TypeHandler<UUID> {
         try {
             return UUID.fromString(val);
         } catch (IllegalArgumentException e) {
-            System.err.println("Bad UUID found: " + val);
+            logger.error(null, e);
         }
         return null;
     }

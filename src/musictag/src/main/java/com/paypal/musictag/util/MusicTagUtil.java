@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -23,6 +24,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public final class MusicTagUtil {
 
+    private static final Logger logger = Logger.getLogger(MusicTagUtil.class);
+    
+    private MusicTagUtil() {
+        // Just Empty
+    }
+
 	static final Properties properties;
 	static {
 		Resource resource = null;
@@ -31,7 +38,7 @@ public final class MusicTagUtil {
 			resource = new ClassPathResource("musictag.properties");
 			props = PropertiesLoaderUtils.loadProperties(resource);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		properties = props;
 	}
@@ -42,7 +49,7 @@ public final class MusicTagUtil {
 
 	public static Map<String, Object> createResultMap(boolean success,
 			Object data, ResponseCode code) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("success", success);
 		map.put("data", data);
 		if (code != null) {
@@ -57,7 +64,7 @@ public final class MusicTagUtil {
 	
 	public static Map<String, Object> createResultMap(boolean success,
 			Object data, String errorMessage, ResponseCode code) {
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		map.put("success", success);
 		map.put("data", data);
 		map.put("errorMessage", errorMessage == null ? ResponseCode.NOT_PROVIDED.getMsg() : errorMessage);
@@ -68,7 +75,7 @@ public final class MusicTagUtil {
 	public static String getJsonFromURL(URL url) throws IOException {
 		// Send request and get response
 
-		HttpURLConnection con = null;
+		HttpURLConnection con;
 		if ("true".equals(properties.get("useProxy"))) {
 			String proxyIp = properties.getProperty("proxyIp");
 			Integer proxyPort = Integer.parseInt(properties
@@ -83,14 +90,13 @@ public final class MusicTagUtil {
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
 				con.getInputStream()));
-		String line = null;
+		String line;
 		StringBuilder response = new StringBuilder();
 		while ((line = reader.readLine()) != null) {
 			response.append(line);
 		}
 		reader.close();
-		String json = response.toString();
-		return json;
+		return response.toString();
 	}
 
 	/**
@@ -103,7 +109,7 @@ public final class MusicTagUtil {
 	 * @throws JsonMappingException
 	 */
 	public static Map<String, Object> jsontoMap(String json)
-			throws IOException, JsonParseException, JsonMappingException {
+			throws IOException, JsonMappingException {
 		JsonFactory factory = new JsonFactory();
 		ObjectMapper mapper = new ObjectMapper(factory);
 		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
