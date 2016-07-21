@@ -18,13 +18,12 @@ public final class CoverArtArchiveAPI {
 	private static final String URL = "http://coverartarchive.org/";
 
 	public static Map<String, Object> sendRequest(String subUrl, String gid) throws IOException {
-		StringBuffer url = new StringBuffer(URL).append(subUrl).append(gid);
+		StringBuilder url = new StringBuilder(URL).append(subUrl).append(gid);
 
 		URL requestUrl = new URL(url.toString());
 		String json = MusicTagUtil.getJsonFromURL(requestUrl);
 
-		Map<String, Object> map = MusicTagUtil.jsontoMap(json);
-		return map;
+		return MusicTagUtil.jsontoMap(json);
 	}
 
 }
