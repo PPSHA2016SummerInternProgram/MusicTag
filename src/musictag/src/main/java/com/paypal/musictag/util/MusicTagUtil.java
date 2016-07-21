@@ -11,7 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
@@ -21,10 +22,11 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.paypal.musictag.controller.ArtistController;
 
 public final class MusicTagUtil {
 
-    private static final Logger logger = Logger.getLogger(MusicTagUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(ArtistController.class);
     
     private MusicTagUtil() {
         // Just Empty
@@ -38,7 +40,7 @@ public final class MusicTagUtil {
 			resource = new ClassPathResource("musictag.properties");
 			props = PropertiesLoaderUtils.loadProperties(resource);
 		} catch (IOException e) {
-			logger.error(e);
+			logger.error(null, e);
 		}
 		properties = props;
 	}

@@ -2,7 +2,8 @@ package com.paypal.musictag.controller;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -19,8 +20,9 @@ import com.paypal.musictag.util.ResponseCode;
 @Controller
 @RequestMapping("/artist")
 public class ArtistController {
-    
-    private static final Logger logger = Logger.getLogger(ArtistController.class);
+
+    private static final Logger logger = LoggerFactory
+            .getLogger(ArtistController.class);
 
     @Autowired
     private ArtistService artistServiceImpl;
@@ -29,6 +31,7 @@ public class ArtistController {
     @ResponseBody
     public Map<String, Object> profile(@PathVariable("gid") String gid) {
 
+        logger.info("profile");
         try {
             return MusicTagUtil.createResultMap(true,
                     artistServiceImpl.profile(gid), ResponseCode.SUCCESS);

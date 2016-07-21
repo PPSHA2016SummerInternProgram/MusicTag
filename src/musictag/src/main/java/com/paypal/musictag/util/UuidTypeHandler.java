@@ -9,11 +9,14 @@ import java.util.UUID;
 
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.paypal.musictag.controller.ArtistController;
 
 public class UuidTypeHandler implements TypeHandler<UUID> {
-    
-    private static final Logger logger = Logger.getLogger(UuidTypeHandler.class);
+
+    private static final Logger logger = LoggerFactory.getLogger(ArtistController.class);
     
     @Override
     public void setParameter(PreparedStatement ps, int i, UUID parameter, JdbcType jdbcType) throws SQLException {
