@@ -2,6 +2,7 @@ package com.paypal.musictag.controller;
 
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,6 +19,9 @@ import com.paypal.musictag.util.ResponseCode;
 @Controller
 @RequestMapping("/artist")
 public class ArtistController {
+    
+    private static final Logger logger = Logger.getLogger(ArtistController.class);
+
     @Autowired
     private ArtistService artistServiceImpl;
 
@@ -29,7 +33,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true,
                     artistServiceImpl.profile(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(),
                     ResponseCode.NOT_PROVIDED);
         }
@@ -43,7 +47,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true,
                     artistServiceImpl.relLinks(gid), null);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.NOT_PROVIDED);
         }
@@ -57,7 +61,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true,
                     artistServiceImpl.image(gid), null);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(),
                     ResponseCode.NOT_PROVIDED);
         }
@@ -71,7 +75,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true,
                     artistServiceImpl.basicInfo(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(),
                     ResponseCode.ERR_NOT_FOUND);
         }
@@ -84,7 +88,7 @@ public class ArtistController {
             return MusicTagUtil.createResultMap(true,
                     artistServiceImpl.releaseGroup(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(),
                     ResponseCode.ERR_NOT_FOUND);
         }
@@ -103,7 +107,7 @@ public class ArtistController {
                     .releaseGroupPaged(gid, curPage, perPage, orderBy,
                             direction), ResponseCode.SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(),
                     ResponseCode.ERR_NOT_FOUND);
         }

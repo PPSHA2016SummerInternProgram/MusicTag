@@ -3,6 +3,7 @@ package com.paypal.musictag.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +18,9 @@ import com.paypal.musictag.util.ResponseCode;
 @Controller
 @RequestMapping("/cover-art-archive")
 public class CoverArtArchiveController {
+
+    private static final Logger logger = Logger.getLogger(CoverArtArchiveController.class);
+    
     @Autowired
     private CoverArtArchiveService coverArtArchiveServiceImpl;
 
@@ -27,7 +31,7 @@ public class CoverArtArchiveController {
             return MusicTagUtil.createResultMap(true,
                     coverArtArchiveServiceImpl.releaseCover(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, ResponseCode.ERR_NOT_FOUND);
         }
     }
@@ -39,7 +43,7 @@ public class CoverArtArchiveController {
             return MusicTagUtil.createResultMap(true,
                     coverArtArchiveServiceImpl.releaseGroupCover(gid), ResponseCode.SUCCESS);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
         }
     }
