@@ -5,9 +5,9 @@ $(document).ready(function() {
 
         var builder = window.TagBuilder;
         var tbody = $('#album-table').find('tbody');
+        var frames = $('#album-frames').find('.panel-body');
         tbody.empty();
-        var framesContainer = $('#album-frames').find('.panel-body');
-        framesContainer.empty();
+        frames.empty();
         var albumCnt = 0;
 
         $.ajax({dataType: 'json',
@@ -20,7 +20,7 @@ $(document).ready(function() {
                 var imgMap = [];
                 var data = groups.data['release-groups'];
 
-                window.Enumerable(tbody, data, function(rg){
+                data.forEach(function(rg){
                     var cnt = rg['release-count'];
                     var html = $(builder('tr', {class: 'album-row'},
                         builder('td', null,
@@ -33,27 +33,23 @@ $(document).ready(function() {
                         builder('td', {class: 'first-release-date'}, rg['first-release-date'])) );
 
                     imgMap[rg.id] = [html.find('img')];
-                    return html;
-                });
+                    html.appendTo(tbody);
 
-                window.Enumerable(framesContainer, data, function(rg){
-                    //var cnt = rg['release-count'];
                     var frame = $(builder('div', {class: 'album-frame col-xs-6 col-sm-4 col-md-3'},
                         builder('a', {href: '#', class: 'thumbnail'},
                             builder('div', {class: 'album-cover-wrapper'},
                                 builder('img', {class: 'album-cover'})
                             ) +
                             builder('span', {class: 'album-title'}, rg['title'])
-                            //(cnt > 1 ? builder('button', {class: 'btn btn-sm btn-primary'},
-                            //    'Version' + builder('span', {class: 'badge'}, cnt)) : '')
                         ))
                     );
 
                     imgMap[rg.id][1] = frame.find('img');
+                    frame.appendTo(frames);
 
                     var url = ContextPath + '/cover-art-archive/release-group/' + rg.id;
                     $.getJSON(url, function(json){
-                        if(json.success == true) {
+                        if(json.success === true) {
                             var downloadingImage = new Image();
                             downloadingImage.onload = function () {
                                 imgMap[rg.id][0].attr('src', this.src);
@@ -68,7 +64,6 @@ $(document).ready(function() {
                         imgMap[rg.id][0].attr('src', ContextPath + '/images/default_album_cover.jpg');
                         imgMap[rg.id][1].attr('src', ContextPath + '/images/default_album_cover.jpg');
                     });
-                    return frame;
                 });
             }
         });
@@ -78,12 +73,11 @@ $(document).ready(function() {
     albumsWrapper.show();
 
     // bind album order select event
-    var select = $('[data-albums-order]').find('select').change(function(){
+    $('[data-albums-order]').find('select').change(function(){
         var op = $(this).find('option:selected');
         var albums = $('#albums');
         albums.data('order-by', op.data('order-by')).data('direction', op.data('direction'));
         window.Paginator.turnTo(albums, 0);
-
     });
 });
 

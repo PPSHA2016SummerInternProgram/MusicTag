@@ -48,8 +48,8 @@
 
             // generate pagination
             pagination.html(template(pageCnt));
-            if(index == 0) pagination.find('[data-previous-page]').addClass('disabled');
-            if(index == pageCnt - 1 ) pagination.find('[data-next-page]').addClass('disabled');
+            if(index === 0) pagination.find('[data-previous-page]').addClass('disabled');
+            if(index === pageCnt - 1 ) pagination.find('[data-next-page]').addClass('disabled');
             pagination.find('[data-page="' + (index + 1) + '"]').addClass(curPageClass);
         };
 
