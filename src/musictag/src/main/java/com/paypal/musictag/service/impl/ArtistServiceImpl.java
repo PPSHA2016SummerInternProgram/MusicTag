@@ -46,7 +46,7 @@ public class ArtistServiceImpl implements ArtistService {
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> releaseGroups = (List<Map<String, Object>>) res
                 .get("release-groups");
-        if (releaseGroups.size() == 0) {
+        if (releaseGroups.isEmpty()) {
             return res;
         }
         List<UUID> releaseGroupList = new ArrayList<>(releaseGroups.size());
@@ -68,40 +68,31 @@ public class ArtistServiceImpl implements ArtistService {
     public Map<String, Object> releaseGroupPaged(String artistGid, int curPage,
             int perPage, String orderBy, String direction) throws Exception {
 
-        curPage = Math.max(curPage, 0);
+        int curPageTmp = Math.max(curPage, 0);
 
         // at most 100, at least 1
-        perPage = Math.min(perPage, 100);
-        perPage = Math.max(perPage, 1);
+        int perPageTmp = Math.min(perPage, 100);
+        perPageTmp = Math.max(perPageTmp, 1);
 
-        // only support order by name or date
-        if (!"name".equals(orderBy) && !"date".equals(orderBy)) {
-            throw new Exception("Don't support order by: " + orderBy);
-        }
+        checkReleaseGroupPagedArgs(orderBy, direction);
 
-        // only support asc & desc
-        if (!"asc".equals(direction) && !"desc".equals(direction)) {
-            throw new Exception("Don't support sort direction: " + direction);
-        }
+        List<Map<String, Object>> groups = findReleaseGroupsPaged(artistGid,
+                orderBy, direction, curPageTmp, perPageTmp);
 
-        UUID gid = UUID.fromString(artistGid);
+        Map<String, Object> result = wrapResultForReleaseGroups(groups);
 
-        Map<String, Object> param = new HashMap<String, Object>();
-        param.put("artistGid", gid);
-        param.put("offset", curPage * perPage);
-        param.put("amount", perPage);
-        param.put("order_by", orderBy);
-        param.put("direction", direction);
-        List<Map<String, Object>> groups = releaseGroupMapper
-                .findReleasesByReleaseGroup(param);
+        return result;
+    }
 
-        Map<String, Object> result = new HashMap<String, Object>();
+    private Map<String, Object> wrapResultForReleaseGroups(
+            List<Map<String, Object>> groups) {
+        Map<String, Object> result = new HashMap<>();
         result.put("release-group-total-count", 0);
-        List<Map<String, Object>> resGroups = new ArrayList<Map<String, Object>>(
-                groups.size());
+        List<Map<String, Object>> resGroups = new ArrayList<>(groups.size());
         for (Map<String, Object> group : groups) {
-            result.put("release-group-total-count", group.get("total_row_count"));
-            Map<String, Object> resGroup = new HashMap<String, Object>();
+            result.put("release-group-total-count",
+                    group.get("total_row_count"));
+            Map<String, Object> resGroup = new HashMap<>();
             resGroup.put("id", group.get("gid"));
             resGroup.put("primary-type", group.get("primary_type"));
             resGroup.put("title", group.get("name"));
@@ -110,21 +101,46 @@ public class ArtistServiceImpl implements ArtistService {
             Object year = group.get("first_release_date_year");
             Object month = group.get("first_release_date_month");
             Object day = group.get("first_release_date_day");
-            if (year != null) {
+            if (year != null && month != null && day != null) {
+                date = "" + year + "-" + month + "-" + day;
+            } else if (year != null && month != null) {
+                date = "" + year + "-" + month;
+            } else if (year != null) {
                 date = "" + year;
-                if (month != null) {
-                    date += "-" + month;
-                    if (day != null) {
-                        date += "-" + day;
-                    }
-                }
             }
             resGroup.put("first-release-date", date);
             resGroups.add(resGroup);
         }
         result.put("release-groups", resGroups);
-
         return result;
+    }
+
+    private List<Map<String, Object>> findReleaseGroupsPaged(String artistGid,
+            String orderBy, String direction, int curPageTmp, int perPageTmp) {
+        UUID gid = UUID.fromString(artistGid);
+        Map<String, Object> param = new HashMap<>();
+        param.put("artistGid", gid);
+        param.put("offset", curPageTmp * perPageTmp);
+        param.put("amount", perPageTmp);
+        param.put("order_by", orderBy);
+        param.put("direction", direction);
+        List<Map<String, Object>> groups = releaseGroupMapper
+                .findReleasesByReleaseGroup(param);
+        return groups;
+    }
+
+    private void checkReleaseGroupPagedArgs(String orderBy, String direction) {
+        // only support order by name or date
+        if (!"name".equals(orderBy) && !"date".equals(orderBy)) {
+            throw new IllegalArgumentException("Don't support order by: "
+                    + orderBy);
+        }
+
+        // only support asc & desc
+        if (!"asc".equals(direction) && !"desc".equals(direction)) {
+            throw new IllegalArgumentException("Don't support sort direction: "
+                    + direction);
+        }
     }
 
 }
