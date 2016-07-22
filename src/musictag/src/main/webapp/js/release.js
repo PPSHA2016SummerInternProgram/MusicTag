@@ -1,8 +1,72 @@
 $(function() {
 
+	clearBasicInfo();
 	getTracklistFromServer();
 	getReleaseCoverFromServer();
+	getReleaseArtistinfoFromServer();
+	getReleasevoteFromServer();
 });
+
+function clearBasicInfo() {
+	$('[data-artist-name]').text('');
+	$('[data-date]').text('');
+	$('[data-release-name]').text('');
+	$('[data-rate]').html('');
+}
+
+function getReleaseArtistinfoFromServer() {
+	var url = 'artistinfo';
+	sendAjax(url, null, receivedArtistinfo);
+}
+
+function receivedArtistinfo(data) {
+	if (!data.success) {
+		return;
+	}
+	var artistName = getArtistName(data);
+	var date = getValue(data, 'data', 'date');
+	var releaseName = getValue(data, 'data', 'title');
+	$('[data-artist-name]').text(artistName);
+	$('[data-date]').text(date.split('-')[0]);
+	$('[data-release-name]').text(releaseName);
+}
+
+function getArtistName(data) {
+	var artistCredit = getValue(data, 'data', 'artist-credit');
+	if (!artistCredit || artistCredit.length === 0) {
+		return '';
+	}
+	var artistName = getValue(artistCredit[0], 'name');
+	if (!artistName) {
+		artistName = getValue(artistCredit[0], 'artist', 'name');
+	}
+	return artistName;
+}
+
+function getReleasevoteFromServer() {
+	var url = 'releasevote';
+	sendAjax(url, null, receivedReleasevote);
+}
+
+function receivedReleasevote(data) {
+	if (!data.success) {
+		return;
+	}
+	var rating = getValue(data, 'data', 'rating', 'value');
+	if (!rating) {
+		rating = 0;
+	}
+	$('[data-rate]').html('');
+	for (var i = 0; i < 5; i++) {
+		if (i < rating) {
+			$('[data-rate]').append(
+					'<span class="glyphicon glyphicon-star"></span>');
+		} else {
+			$('[data-rate]').append(
+					'<span class="glyphicon glyphicon-star-empty"></span>');
+		}
+	}
+}
 
 function getReleaseCoverFromServer() {
 	var uuid = getUuid();
@@ -14,7 +78,6 @@ function getReleaseCoverFromServer() {
 }
 
 function receivedReleaseCover(data) {
-	console.log(data);
 	if (!data.success) {
 		return;
 	}
@@ -22,13 +85,12 @@ function receivedReleaseCover(data) {
 	if (!src) {
 		return;
 	}
-	console.log(src);
 	$('[data-release-cover]').attr('src', src);
 }
 
 function findReleaseCoverSrc(data) {
 	var images = getValue(data, 'data', 'images');
-	if(!images || images.length === 0){
+	if (!images || images.length === 0) {
 		return '';
 	}
 	var image = images[0];
@@ -48,7 +110,6 @@ function getTracklistFromServer() {
 }
 
 function receivedBasicInfo(data) {
-	console.log(data);
 	if (!data.success) {
 		return;
 	}
