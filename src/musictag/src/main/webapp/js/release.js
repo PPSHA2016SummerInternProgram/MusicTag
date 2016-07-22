@@ -1,7 +1,46 @@
 $(function() {
 
 	getTracklistFromServer();
+	getReleaseCoverFromServer();
 });
+
+function getReleaseCoverFromServer() {
+	var uuid = getUuid();
+	if (!uuid) {
+		return;
+	}
+	var url = ContextPath + '/cover-art-archive/release/' + uuid;
+	sendAjax(url, null, receivedReleaseCover);
+}
+
+function receivedReleaseCover(data) {
+	console.log(data);
+	if (!data.success) {
+		return;
+	}
+	var src = findReleaseCoverSrc(data);
+	if (!src) {
+		return;
+	}
+	console.log(src);
+	$('[data-release-cover]').attr('src', src);
+}
+
+function findReleaseCoverSrc(data) {
+	var images = getValue(data, 'data', 'images');
+	if(!images || images.length === 0){
+		return '';
+	}
+	var image = images[0];
+	var src = getValue(image, 'thumbnails', 'small');
+	if (!src) {
+		src = getValue(image, 'thumbnails', 'large');
+	}
+	if (!src) {
+		src = getValue(image, 'image');
+	}
+	return src;
+}
 
 function getTracklistFromServer() {
 	var url = 'tracklist';

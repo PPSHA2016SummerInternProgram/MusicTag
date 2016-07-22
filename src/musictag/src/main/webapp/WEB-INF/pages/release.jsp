@@ -20,8 +20,8 @@
 	<div class="container release-container">
 		<div>
 			<div class="release-cover">
-				<img width="160" class="avatar"
-					src="http://img2-ak.lst.fm/i/u/174s/8cc09636be566a39be4a2c1d2a4aae20.jpg">
+				<img width="160" class="avatar" data-release-cover
+					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
 			</div>
 			<div class="release-info">
 				<div class="artist-name">周杰倫</div>
