@@ -82,6 +82,11 @@
 	color: #9da9a8;
 }
 
+.track-table .more {
+	padding-left: 0;
+	padding-right: 0;
+}
+
 .track-table .more:hover {
 	width: 50px;
 	color: #9da9a8;

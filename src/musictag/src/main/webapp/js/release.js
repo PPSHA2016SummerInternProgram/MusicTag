@@ -1,4 +1,5 @@
 $(function() {
+	addMoreControlListener();
 	addMoreListener();
 });
 
@@ -13,5 +14,14 @@ function addMoreListener() {
 			name.attr(flag, 'hide');
 			name.find('.detail').fadeIn(500);
 		}
+	});
+}
+
+function addMoreControlListener() {
+	$('.track-table tr').on('mouseover', function() {
+		$(this).find('[data-more] a').show();
+	});
+	$('.track-table tr').on('mouseout', function() {
+		$(this).find('[data-more] a').hide();
 	});
 }

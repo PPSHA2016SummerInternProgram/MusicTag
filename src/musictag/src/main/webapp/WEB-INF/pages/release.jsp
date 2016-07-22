@@ -63,8 +63,8 @@
 							</div>
 						</div>
 					</td>
-					<td class="more" data-more="true"><a>more <span
-							class="glyphicon glyphicon-chevron-down"></span>
+					<td class="more" data-more="true"><a style="display: none;">more
+							<span class="glyphicon glyphicon-chevron-down"></span>
 					</a></td>
 					<td class="time">3:59</td>
 					<td class="rate"><span class="glyphicon glyphicon-star"></span><span
@@ -98,8 +98,8 @@
 							</div>
 						</div>
 					</td>
-					<td class="more" data-more="true"><a>more <span
-							class="glyphicon glyphicon-chevron-down"></span>
+					<td class="more" data-more="true"><a style="display: none;">more
+							<span class="glyphicon glyphicon-chevron-down"></span>
 					</a></td>
 					<td class="time">3:59</td>
 					<td class="rate"><span class="glyphicon glyphicon-star"></span><span
@@ -133,8 +133,8 @@
 							</div>
 						</div>
 					</td>
-					<td class="more" data-more="true"><a>more <span
-							class="glyphicon glyphicon-chevron-down"></span>
+					<td class="more" data-more="true"><a style="display: none;">more
+							<span class="glyphicon glyphicon-chevron-down"></span>
 					</a></td>
 					<td class="time">3:59</td>
 					<td class="rate"><span class="glyphicon glyphicon-star"></span><span
