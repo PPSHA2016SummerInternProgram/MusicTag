@@ -1,4 +1,4 @@
-ContextPath = '/musictag';
+var ContextPath = '/musictag';
 
 /**
  * Get the URL params. For example:
@@ -39,7 +39,6 @@ function sendAjax(url, requestData, callback) {
 			}
 		},
 		error : function(jqueryXHR) {
-			console.log('error: ' + jqueryXHR.status);
 		}
 	})
 }
