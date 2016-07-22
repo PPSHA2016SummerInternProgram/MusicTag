@@ -13,6 +13,6 @@ public interface ReleaseDao {
 	 * @return
 	 * @throws IOException
 	 */
-	public Map<String, Object> vote(String gid) throws Exception;
+	Map<String, Object> vote(String gid) throws Exception;
 
 }

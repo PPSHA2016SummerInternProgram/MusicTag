@@ -91,7 +91,7 @@ public final class MusicTagUtil {
 		con.setRequestMethod("GET");
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(
-				con.getInputStream()));
+				con.getInputStream(), "UTF-8"));
 		String line;
 		StringBuilder response = new StringBuilder();
 		while ((line = reader.readLine()) != null) {
