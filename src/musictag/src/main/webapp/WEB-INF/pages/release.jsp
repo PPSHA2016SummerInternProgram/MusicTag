@@ -37,8 +37,9 @@
 			</div>
 		</div>
 		<div style="max-width: 840px;">
-			<h2>Tracklist</h2>
-			<table class="table track-table">
+			<h2 style="margin-left: 165px">Tracklist</h2>
+			<table class="table track-table" style="display: none;"
+				data-track-table>
 				<tr>
 					<td class="id">1</td>
 					<td class="name" data-name>我的地盤
