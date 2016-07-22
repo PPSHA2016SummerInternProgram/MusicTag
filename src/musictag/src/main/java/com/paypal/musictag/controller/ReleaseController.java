@@ -11,30 +11,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.paypal.musictag.service.ReleaseGroupService;
+import com.paypal.musictag.service.ReleaseService;
 import com.paypal.musictag.util.MusicTagUtil;
 import com.paypal.musictag.util.ResponseCode;
 
+
 @Controller
-@RequestMapping("/release-group")
-public class ReleaseGroupController {
-    
-    private static final Logger logger = LoggerFactory.getLogger(ReleaseGroupController.class);
+@RequestMapping("/release")
+public class ReleaseController {
+	
+	
+	private static final Logger logger = LoggerFactory
+            .getLogger(ReleaseController.class);
+	
+	@Autowired
+    private ReleaseService releaseServiceImpl;
+	
+	@RequestMapping(value = "/{gid}/tracklist", method = RequestMethod.GET)
+	@ResponseBody
+    public Map<String, Object> tracklist(@PathVariable("gid") String gid) {
 
-    @Autowired
-    private ReleaseGroupService releaseGroupServiceImpl;
-
-    @RequestMapping(value = "/{gid}/releases", method = RequestMethod.GET)
-    @ResponseBody
-    public Map<String, Object> releases(@PathVariable("gid") String gid) {
-        try{
+        logger.info("tracklist");
+        try {
             return MusicTagUtil.createResultMap(true,
-                    releaseGroupServiceImpl.releases(gid), ResponseCode.SUCCESS);
+                    releaseServiceImpl.vote(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
-            // TODO: better handling of exceptions
             logger.error(null, e);
             return MusicTagUtil.createResultMap(false, null, e.getMessage(),
                     ResponseCode.NOT_PROVIDED);
         }
-    }
+	}
 }
+
