@@ -28,5 +28,4 @@ public final class CoverArtArchiveAPI {
 		String json = MusicTagUtil.getJsonFromURL(requestUrl);
 		return MusicTagUtil.jsontoMap(json);
 	}
-
 }

@@ -1,8 +1,13 @@
 package com.paypal.musictag.dao;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+
 public interface ReleaseGroupDao {
-	Map<String, Object> releases(String releaseGroupId) throws IOException;
+	Map<String, Object> releases(String releaseGroupId) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
 }

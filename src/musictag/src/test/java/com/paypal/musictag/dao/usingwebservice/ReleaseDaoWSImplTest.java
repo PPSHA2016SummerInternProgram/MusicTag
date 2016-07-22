@@ -1,7 +1,6 @@
 package com.paypal.musictag.dao.usingwebservice;
 
 import java.io.IOException;
-import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.ReleaseDao;
 import com.paypal.musictag.values.StaticValues;
 
@@ -22,8 +20,6 @@ public class ReleaseDaoWSImplTest extends TestCase {
 	ReleaseDao releaseDaoWSImpl;
 
     private Exception exception = new Exception("An exception is needed.");
-
-    
 
     @Test
     public void testvote() throws Exception {

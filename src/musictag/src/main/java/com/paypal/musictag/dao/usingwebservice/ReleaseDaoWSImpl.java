@@ -1,18 +1,23 @@
 package com.paypal.musictag.dao.usingwebservice;
 
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ReleaseDao;
 import com.paypal.musictag.dao.usingwebservice.api.MusicTagServiceAPI;
+import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 
 @Service("releaseDaoWSImpl")
 public class ReleaseDaoWSImpl implements ReleaseDao {
 
 	
-	public Map<String, Object> vote(String gid) throws Exception{
+	public Map<String, Object> vote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException{
 		
 		Map<String, String> params = new HashMap<String, String>();
 

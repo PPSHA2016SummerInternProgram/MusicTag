@@ -37,7 +37,7 @@ public class ReleaseController {
                     releaseServiceImpl.vote(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.NOT_PROVIDED);
         }
 	}

@@ -33,7 +33,7 @@ public class ReleaseGroupController {
         } catch (Exception e) {
             // TODO: better handling of exceptions
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.NOT_PROVIDED);
         }
     }

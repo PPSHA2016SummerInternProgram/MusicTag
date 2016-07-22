@@ -1,5 +1,7 @@
 package com.paypal.musictag.controller;
 
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.util.MusicTagUtil;
 import com.paypal.musictag.util.ResponseCode;
@@ -33,27 +38,28 @@ public class ArtistController {
 
         logger.info("profile");
         try {
-            return MusicTagUtil.createResultMap(true,
-                    artistServiceImpl.profile(gid), ResponseCode.SUCCESS);
-        } catch (Exception e) {
-            logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+			return MusicTagUtil.createResultMap(true,
+			        artistServiceImpl.profile(gid), ResponseCode.SUCCESS);
+		} catch (NetConnectionException e) {
+			logger.error(null, e);
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.NOT_PROVIDED);
-        }
+		}
     }
 
     @RequestMapping(value = "/{gid}/rel-links", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> relLinks(@PathVariable("gid") String gid) {
 
-        try {
-            return MusicTagUtil.createResultMap(true,
-                    artistServiceImpl.relLinks(gid), null);
-        } catch (Exception e) {
-            logger.error(null, e);
+    	 try {
+			return MusicTagUtil.createResultMap(true,
+			         artistServiceImpl.relLinks(gid), null);
+		} catch (NetConnectionException | NetContentNotFoundException | JsonMappingException | MalformedURLException
+				| ProtocolException e1) {
+			logger.error(null, e1);
             return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.NOT_PROVIDED);
-        }
+		}
     }
 
     @RequestMapping(value = "/{gid}/image", method = RequestMethod.GET)
@@ -65,7 +71,7 @@ public class ArtistController {
                     artistServiceImpl.image(gid), null);
         } catch (Exception e) {
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.NOT_PROVIDED);
         }
     }
@@ -79,7 +85,7 @@ public class ArtistController {
                     artistServiceImpl.basicInfo(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.ERR_NOT_FOUND);
         }
     }
@@ -92,7 +98,7 @@ public class ArtistController {
                     artistServiceImpl.releaseGroup(gid), ResponseCode.SUCCESS);
         } catch (Exception e) {
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.ERR_NOT_FOUND);
         }
     }
@@ -111,7 +117,7 @@ public class ArtistController {
                             direction), ResponseCode.SUCCESS);
         } catch (Exception e) {
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(),
+            return MusicTagUtil.createResultMap(false, null,
                     ResponseCode.ERR_NOT_FOUND);
         }
     }

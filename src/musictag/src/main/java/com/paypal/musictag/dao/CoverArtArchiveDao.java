@@ -1,9 +1,14 @@
 package com.paypal.musictag.dao;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+
 public interface CoverArtArchiveDao {
-	Map<String, Object> releaseCover(String releaseGid) throws IOException;
-	Map<String, Object> releaseGroupCover(String releaseGroupGid) throws IOException;
+	Map<String, Object> releaseCover(String releaseGid) throws JsonMappingException, NetConnectionException, NetContentNotFoundException, MalformedURLException, ProtocolException;
+	Map<String, Object> releaseGroupCover(String releaseGroupGid) throws JsonMappingException, NetConnectionException, NetContentNotFoundException, MalformedURLException, ProtocolException;
 }

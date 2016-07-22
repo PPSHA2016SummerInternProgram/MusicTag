@@ -50,29 +50,24 @@ public final class MusicTagUtil {
 	public static Properties getProperties() {
 		return properties;
 	}
-
+	
+	/**
+	 * 
+	 * @param success
+	 * @param data
+	 * @param code can't be null
+	 * @return
+	 */
 	public static Map<String, Object> createResultMap(boolean success,
 			Object data, ResponseCode code) {
-		Map<String, Object> map = new HashMap<>();
-		map.put("success", success);
-		map.put("data", data);
-		if (code != null) {
-			map.put("errorMessage", code.getMsg());
-			map.put("responseCode", code.getValue());
-		}else {
-			map.put("errorMessage", ResponseCode.NOT_PROVIDED.getMsg());
-			map.put("responseCode", ResponseCode.NOT_PROVIDED.getValue());
+		if (code == null) {
+			throw new IllegalArgumentException("response code can't be null");
 		}
-		return map;
-	}
-	
-	public static Map<String, Object> createResultMap(boolean success,
-			Object data, String errorMessage, ResponseCode code) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("success", success);
 		map.put("data", data);
-		map.put("errorMessage", errorMessage == null ? ResponseCode.NOT_PROVIDED.getMsg() : errorMessage);
-		map.put("responseCode", code == null ? ResponseCode.NOT_PROVIDED : code.getValue());
+		map.put("errorMessage", code.getMsg());
+		map.put("responseCode", code.getValue());
 		return map;
 	}
 

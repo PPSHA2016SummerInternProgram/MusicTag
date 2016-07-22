@@ -45,7 +45,7 @@ public class CoverArtArchiveController {
                     coverArtArchiveServiceImpl.releaseGroupCover(gid), ResponseCode.SUCCESS);
         } catch (IOException e) {
             logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, e.getMessage(), ResponseCode.ERR_NOT_FOUND);
+            return MusicTagUtil.createResultMap(false, null, ResponseCode.ERR_NOT_FOUND);
         }
     }
 }
