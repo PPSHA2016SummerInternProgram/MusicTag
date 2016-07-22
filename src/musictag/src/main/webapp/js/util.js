@@ -27,7 +27,7 @@ function getUrlVars() {
  * @param requestData
  * @param callback
  */
-function sendAjax(url, requestData, callback) {
+function sendAjax(url, requestData, callback, args) {
 	$.ajax({
 		url : url,
 		type : 'get',
@@ -35,7 +35,11 @@ function sendAjax(url, requestData, callback) {
 		data : requestData,
 		success : function(data) {
 			if (callback) {
-				callback(data);
+				if(args){
+					callback(data, args);
+				}else{
+					callback(data);
+				}
 			}
 		},
 		error : function(jqueryXHR) {

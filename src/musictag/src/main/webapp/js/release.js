@@ -144,29 +144,10 @@ function findMaxRating(recordings) {
 
 function createRecordingHtml(recording, id, ratingMax) {
 	var html = '';
-	html += '<tr>';
+	html += '<tr data-recording-id="' + getValue(recording, 'id') + '">';
 	html += '<td class="id">' + id + '</td>';
 	html += '<td class="name" data-name>' + getValue(recording, 'title');
-	html += '	<div class="detail" style="display: none;">';
-	html += '		<div>';
-	html += '			arranger: <a>林邁可</a>';
-	html += '		</div>';
-	html += '		<div>';
-	html += '			background vocals and lead vocals: <a>林邁可</a>';
-	html += '		</div>';
-	html += '		<div>';
-	html += '			background vocals arranger: <a>周杰倫</a>';
-	html += '		</div>';
-	html += '		<div>';
-	html += '			mixer: <a>林邁可</a>';
-	html += '		</div>';
-	html += '		<div>';
-	html += '			recorded by: <a>楊瑞代</a>';
-	html += '		</div>';
-	html += '		<div>';
-	html += '			lyricist: <a>方文山</a>';
-	html += '		</div>';
-	html += '	</div>';
+	html += '<div class="detail" style="display: none;"></div>';
 	html += '</td>';
 	html += '<td class="more" data-more="true"><a style="display: none;">more';
 	html += '		<span class="glyphicon glyphicon-chevron-down"></span>';
@@ -211,17 +192,31 @@ function randomInt(min, max) {
 }
 
 function addMoreListener() {
-	$('[data-more]').off('click').on('click', function() {
-		var name = $(this).closest('tr').find('.name');
-		var flag = 'data-name';
-		if (name.attr(flag) === 'hide') {
-			name.attr(flag, 'show');
-			name.find('.detail').fadeOut(300);
-		} else {
-			name.attr(flag, 'hide');
-			name.find('.detail').fadeIn(300);
-		}
-	});
+	$('[data-more]')
+			.off('click')
+			.on(
+					'click',
+					function() {
+						var tr = $(this).closest('tr');
+						var name = tr.find('.name');
+						var flag = 'data-name';
+						if (name.attr(flag) === 'show') {
+							name.attr(flag, 'hide');
+							tr
+									.find('[data-more] a')
+									.html(
+											'more <span class="glyphicon glyphicon-chevron-down"></span>');
+							name.find('.detail').fadeOut(300);
+						} else {
+							name.attr(flag, 'show');
+							tr
+									.find('[data-more] a')
+									.html(
+											'less <span class="glyphicon glyphicon-chevron-up"></span>');
+							name.find('.detail').fadeIn(300);
+							showMoreData(tr);
+						}
+					});
 }
 
 function addMoreControlListener() {
@@ -231,4 +226,38 @@ function addMoreControlListener() {
 	$('.track-table tr').off('mouseout').on('mouseout', function() {
 		$(this).find('[data-more] a').hide();
 	});
+}
+
+function showMoreData(tr) {
+	var recordingId = tr.attr('data-recording-id');
+	if (!tr.find('.detail').html()) {
+		getRecordingWorkArtistRels(tr, recordingId);
+	}
+}
+
+function getRecordingWorkArtistRels(tr, recordingId) {
+	var url = ContextPath + '/recording/' + recordingId + '/work-artist-rels';
+	sendAjax(url, null, receivedRecordingWorkArtistRels, tr);
+}
+
+function receivedRecordingWorkArtistRels(data, tr) {
+	var html = createRelHtml(data['data']);
+	tr.find('.detail').append(html);
+}
+
+function createRelHtml(data) {
+	var html = '';
+	var relations = getValue(data, 'relations');
+	for (var i = 0; !isEmpty(relations) && i < relations.length; i++) {
+		var relation = relations[i];
+		var type = getValue(relation, 'type');
+		var artist = getValue(relation, 'artist', 'name');
+		var targetType = getValue(relation, 'target-type');
+		if (type && artist && targetType === 'artist') {
+			html += '<div>' + type + ': <a>' + artist + '</a></div>';
+		} else if (getValue(relation, 'work')) {
+			html += createRelHtml(getValue(relation, 'work'));
+		}
+	}
+	return html;
 }
