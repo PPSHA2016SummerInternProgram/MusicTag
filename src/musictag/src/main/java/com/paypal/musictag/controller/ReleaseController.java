@@ -41,5 +41,10 @@ public class ReleaseController {
                     ResponseCode.NOT_PROVIDED);
         }
 	}
+	
+    @RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
+    public String tracklist() {
+        return "/WEB-INF/pages/release.jsp";
+    }
 }
 
