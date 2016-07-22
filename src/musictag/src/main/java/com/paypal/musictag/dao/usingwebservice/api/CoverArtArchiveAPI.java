@@ -1,9 +1,13 @@
 package com.paypal.musictag.dao.usingwebservice.api;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 import com.paypal.musictag.util.MusicTagUtil;
 
 /**
@@ -17,12 +21,11 @@ import com.paypal.musictag.util.MusicTagUtil;
 public final class CoverArtArchiveAPI {
 	private static final String URL = "http://coverartarchive.org/";
 
-	public static Map<String, Object> sendRequest(String subUrl, String gid) throws IOException {
+	public static Map<String, Object> sendRequest(String subUrl, String gid) throws JsonMappingException, MalformedURLException, NetConnectionException, NetContentNotFoundException, ProtocolException {
 		StringBuilder url = new StringBuilder(URL).append(subUrl).append(gid);
 
 		URL requestUrl = new URL(url.toString());
 		String json = MusicTagUtil.getJsonFromURL(requestUrl);
-
 		return MusicTagUtil.jsontoMap(json);
 	}
 

@@ -1,10 +1,14 @@
 package com.paypal.musictag.dao.usingwebservice.api;
 
-import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
+import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 import com.paypal.musictag.util.MusicTagUtil;
 
 /**
@@ -14,12 +18,15 @@ import com.paypal.musictag.util.MusicTagUtil;
  * @author delliu
  */
 public final class MusicTagServiceAPI {
-
+	
+	private MusicTagServiceAPI(){
+		
+	}
 	static final String URL = MusicTagUtil.getProperties().getProperty(
 			"musicbrainzWebServiceURL");
 
 	public static Map<String, Object> sendRequest(String subUrl,
-			Map<String, String> params) throws IOException {
+			Map<String, String> params) throws MalformedURLException, NetConnectionException, NetContentNotFoundException, ProtocolException, JsonMappingException {
 
 		// Build URL
 		StringBuilder url = new StringBuilder(URL).append(subUrl).append("?");
