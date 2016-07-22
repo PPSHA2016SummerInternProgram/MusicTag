@@ -2,7 +2,8 @@ package com.paypal.musictag.controller;
 
 import java.util.Map;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,8 @@ import com.paypal.musictag.util.ResponseCode;
 @Controller
 @RequestMapping("/release-group")
 public class ReleaseGroupController {
-    private static final Logger logger = Logger.getLogger(ReleaseGroupController.class);
+    
+    private static final Logger logger = LoggerFactory.getLogger(ReleaseGroupController.class);
 
     @Autowired
     private ReleaseGroupService releaseGroupServiceImpl;
