@@ -12,4 +12,8 @@ import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundExcep
 public interface ReleaseService {
 	
 	Map<String, Object> vote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+	
+	Map<String, Object> artistinfo(String gid) throws Exception;
+	
+	Map<String, Object> releasevote(String gid) throws Exception;
 }

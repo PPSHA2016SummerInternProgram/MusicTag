@@ -25,5 +25,15 @@ public class ReleaseServiceImpl implements ReleaseService{
 	public Map<String, Object> vote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException{
 		return releaseDaoWSImpl.vote(gid);
 	}
+	
+	@Override
+	public Map<String, Object> artistinfo(String gid) throws Exception{
+		return releaseDaoWSImpl.artistinfo(gid);
+	}
+	
+	@Override
+	public Map<String, Object> releasevote(String gid) throws Exception{
+		return releaseDaoWSImpl.releasevote(gid);
+	}
 }
 

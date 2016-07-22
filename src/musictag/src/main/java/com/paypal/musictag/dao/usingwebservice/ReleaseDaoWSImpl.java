@@ -27,8 +27,45 @@ public class ReleaseDaoWSImpl implements ReleaseDao {
 
 		Map<String, Object> result = MusicTagServiceAPI.sendRequest("recording", params);
 
-		System.out.println(result);
-
 		return result;
 	}	
+	
+	public Map<String, Object> artistinfo(String gid) throws Exception{
+		
+		Map<String, String> params = new HashMap<String, String>();
+		
+		params.put("inc", "artists");
+
+		Map<String, Object> result = MusicTagServiceAPI.sendRequest("release/"+gid, params);
+
+		return result;
+	}
+	
+	public Map<String, Object> releasevote(String gid) throws Exception{
+		
+		Map<String, String> paramsFindReleaseGroup = new HashMap<String, String>();
+		
+		paramsFindReleaseGroup.put("inc", "release-groups");
+
+		Map<String, Object> resultreleaseGroup = MusicTagServiceAPI.sendRequest("release/"+gid, paramsFindReleaseGroup);
+
+		
+		@SuppressWarnings("unchecked")
+		Map<String, Object> releaseGroup = (Map<String, Object>)resultreleaseGroup.get("release-group");
+		
+
+		String releaseGroupGid= (String)releaseGroup.get("id");
+		
+		
+
+		Map<String, String> paramsFindReleaseVote = new HashMap<String, String>();
+		
+		paramsFindReleaseVote.put("inc", "ratings");
+
+		Map<String, Object> result = MusicTagServiceAPI.sendRequest("release-group/"+releaseGroupGid, paramsFindReleaseVote);
+		
+		return result;
+
+	}
+	
 }
