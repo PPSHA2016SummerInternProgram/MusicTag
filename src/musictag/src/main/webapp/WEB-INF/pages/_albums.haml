@@ -1,3 +1,4 @@
+= '<%@ page language="java" pageEncoding="UTF-8"%>'
 .panel.panel-default
   .panel-heading
     / Nav tabs
@@ -36,6 +37,23 @@
     #album-frames.tab-pane.fade{:role => 'tabpanel'}
       .panel-body.row
     #pagination.text-center{data: {enumerable: '#albums'}}
+
+  #releases-modal.modal.fade{:role => "dialog", :tabindex => "-1"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4.modal-title Choose one version to browse
+        .modal-body
+          %table.table.table-hover
+            %thead
+              %th #
+              %th Title
+              %th Status
+              %th Country
+              %th Date
+            %tbody
 
 
 

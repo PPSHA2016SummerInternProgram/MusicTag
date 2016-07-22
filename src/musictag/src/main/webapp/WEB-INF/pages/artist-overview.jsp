@@ -97,7 +97,7 @@
 			<div style="clear: both"></div>
 		</div>
 		<div id="albums-wrapper" style="display: none">
-			<%@ include file="_albums.html"%>
+			<%@ include file="_albums.jsp"%>
 		</div>
 	</div>
 

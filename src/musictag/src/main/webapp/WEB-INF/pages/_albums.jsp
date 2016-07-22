@@ -1,3 +1,4 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
 <div class='panel panel-default'>
   <div class='panel-heading'>
     <!-- Nav tabs -->
@@ -53,5 +54,29 @@
       <div class='panel-body row'></div>
     </div>
     <div class='text-center' data-enumerable='#albums' id='pagination'></div>
+  </div>
+  <div class='modal fade' id='releases-modal' role='dialog' tabindex='-1'>
+    <div class='modal-dialog'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>×</span>
+          </button>
+          <h4 class='modal-title'>Choose one version to browse</h4>
+        </div>
+        <div class='modal-body'>
+          <table class='table table-hover'>
+            <thead>
+              <th>#</th>
+              <th>Title</th>
+              <th>Status</th>
+              <th>Country</th>
+              <th>Date</th>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

@@ -3,7 +3,7 @@
 
     // TODO: lack html escape
     window.TagBuilder = function(tag, attrs, content){
-        if(content === undefined) content = '';
+        if(content === undefined || content === null) content = '';
         if(!(attrs instanceof Object)) attrs = {};
         var dataAttrs = {};
         if( attrs.data instanceof Object ) {
