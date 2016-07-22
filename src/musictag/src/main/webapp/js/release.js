@@ -16,9 +16,11 @@ function receivedBasicInfo(data) {
 
 	$('[data-track-table]').html('');
 	var recordings = getValue(data, 'data', 'recordings');
+	var ratingMax = findMaxRating(recordings);
 	for (var i = 0; !isEmpty(recordings) && i < recordings.length; i++) {
 		var recording = recordings[i];
-		$('[data-track-table]').append(createRecordingHtml(recording, i + 1));
+		$('[data-track-table]').append(
+				createRecordingHtml(recording, i + 1, ratingMax));
 	}
 	$('[data-track-table]').fadeIn(300);
 
@@ -26,7 +28,21 @@ function receivedBasicInfo(data) {
 	addMoreListener();
 }
 
-function createRecordingHtml(recording, id) {
+function findMaxRating(recordings) {
+	var max = 0;
+	for (var i = 0; !isEmpty(recordings) && i < recordings.length; i++) {
+		var recording = recordings[i];
+		var playAmount = getValue(recording, 'play-amount');
+		if (!playAmount) {
+			playAmount = randomInt(100, 5000); // fake data now
+			recording['play-amount'] = playAmount;
+		}
+		max = Math.max(playAmount, max);
+	}
+	return max;
+}
+
+function createRecordingHtml(recording, id, ratingMax) {
 	var html = '';
 	html += '<tr>';
 	html += '<td class="id">' + id + '</td>';
@@ -65,7 +81,7 @@ function createRecordingHtml(recording, id) {
 	}
 	html += '<td class="time">' + time + '</td>';
 
-	var votes = getValue(recording, 'rating', 'votes-count');
+	var votes = getValue(recording, 'rating', 'value');
 	if (!votes) {
 		votes = 0;
 	}
@@ -78,7 +94,14 @@ function createRecordingHtml(recording, id) {
 		}
 	}
 	html += '</td>';
-	html += '<td class="play-amount">' + randomInt(100, 5000) + '</td>';
+
+	// fake data now
+	var playAmount = getValue(recording, 'play-amount');
+	var ratingMax = 5000;
+	var percent = 30 + (playAmount / ratingMax * 70);
+
+	html += '<td class="play-amount"><div style="padding:5px; min-width:50px;width:'
+			+ percent + '%;  background:#ccc">' + playAmount + '</div></td>';
 	html += '</tr>';
 	return html;
 }
