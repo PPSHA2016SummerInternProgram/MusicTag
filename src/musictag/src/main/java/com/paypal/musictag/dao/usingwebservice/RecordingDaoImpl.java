@@ -33,7 +33,7 @@ public class RecordingDaoImpl implements RecordingDao {
 
     @Override
     public Map<String, Object> full(String recordingId) throws NetContentNotFoundException, MalformedURLException, JsonMappingException, NetConnectionException, ProtocolException {
-        return queryWithInc(recordingId, "ratings+artist-rels+work-rels+work-level-rels+releases");
+        return queryWithInc(recordingId, "tags+ratings+artist-rels+work-rels+work-level-rels+releases+artist-credits");
     }
 
     private Map<String, Object> queryWithInc(String recordingId, String include) throws MalformedURLException, JsonMappingException, ProtocolException, NetConnectionException, NetContentNotFoundException {
