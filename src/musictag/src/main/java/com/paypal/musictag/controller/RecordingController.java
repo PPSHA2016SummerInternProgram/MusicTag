@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,8 +30,13 @@ public class RecordingController {
 
     @Autowired
     private RecordingService recordingServiceImpl;
-
-    @RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
+    
+    @RequestMapping(value="/{gid}/", method = RequestMethod.GET)
+    public String recording(ModelMap model){
+    	return "/WEB-INF/pages/song.jsp";
+    }
+    
+    @RequestMapping(value = "/{gid}/basic-info", method = RequestMethod.GET)
     @ResponseBody
     public Map<String, Object> basic(@PathVariable("gid") String recordingId) {
         try {
@@ -39,6 +45,7 @@ public class RecordingController {
         } catch (NetConnectionException | MalformedURLException | JsonMappingException |
                 NetContentNotFoundException | ProtocolException e) {
             logger.error(null, e);
+            e.printStackTrace();
             return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
         }
     }
