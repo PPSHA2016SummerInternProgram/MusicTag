@@ -42,7 +42,7 @@ function sendAjax(url, requestData, callback, args) {
 				}
 			}
 		},
-		error : function(jqueryXHR) {
+		error : function() {
 		}
 	})
 }
@@ -54,11 +54,7 @@ function sendAjax(url, requestData, callback, args) {
  * @returns {Boolean}
  */
 function isEmpty(obj) {
-	if (obj) {
-		return false;
-	} else {
-		return true;
-	}
+	return obj ? false : true;
 }
 
 function getValue() {
