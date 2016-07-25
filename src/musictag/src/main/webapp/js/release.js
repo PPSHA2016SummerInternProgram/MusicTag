@@ -40,6 +40,10 @@ function getArtistPageLink(artistGid){
 	return ContextPath + '/artist/' + artistGid + '/';
 }
 
+function getRecordingPageLink(recordingGid) {
+	return ContextPath + '/recording/' + recordingGid + '/';
+}
+
 function getArtistGid(data){
 	var artistCredit = getValue(data, 'data', 'artist-credit');
 	if (!artistCredit || artistCredit.length === 0) {
@@ -161,9 +165,10 @@ function findMaxRating(recordings) {
 
 function createRecordingHtml(recording, id, ratingMax) {
 	var html = '';
-	html += '<tr data-recording-id="' + getValue(recording, 'id') + '">';
+	var recordingGid = getValue(recording, 'id');
+	html += '<tr data-recording-id="' + recordingGid + '">';
 	html += '<td class="id">' + id + '</td>';
-	html += '<td class="name" data-name>' + getValue(recording, 'title');
+	html += '<td class="name" data-name><a class="title" href="' + getRecordingPageLink(recordingGid) + '">' + getValue(recording, 'title') + '</a>';
 	html += '<div class="detail" style="display: none;"></div>';
 	html += '</td>';
 	html += '<td class="more" data-more="true"><a style="display: none;">more';
