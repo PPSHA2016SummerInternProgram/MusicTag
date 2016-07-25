@@ -6,8 +6,6 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -25,8 +23,6 @@ import com.paypal.musictag.util.ResponseCode;
 @Controller
 @RequestMapping("/recording")
 public class RecordingController {
-    private static final Logger logger = LoggerFactory
-            .getLogger(ArtistController.class);
 
     @Autowired
     private RecordingService recordingServiceImpl;
