@@ -52,6 +52,7 @@ public class ReleaseControllerTest {
 		assertNotEquals(map.get("data"), null);
 	}
 
+	/*
 	@Test
 	public void testTracklistPage() {
 		Map<?, ?> map = releaseController.tracklist(null);
@@ -61,4 +62,13 @@ public class ReleaseControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
+	*/
+	
+	@Test
+	public void testTracklistPage() {
+		String page = releaseController.tracklistpage(null);
+		assertEquals(page, "/WEB-INF/pages/release.jsp");
+	}
+	
+
 }
