@@ -2,8 +2,6 @@ package com.paypal.musictag.dao.usingwebservice;
 
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
