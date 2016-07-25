@@ -1,7 +1,7 @@
 $(document).ready(function() {
     // initialize albums display
     var albumsWrapper = $('#albums-wrapper');
-    var albums = $('#albums')
+    var albums = $('#albums');
     window.Paginator(albums, function(index, perPage, orderBy, direction){
 
         var builder = window.TagBuilder;
@@ -91,7 +91,7 @@ $(document).ready(function() {
         container.empty();
 
         $.getJSON(ContextPath + "/release-group/" + releaseGroupId + "/releases", function(json){
-            if(json.success == true) {
+            if(json.success === true) {
                 var releases = json.data.releases;
                 releases.forEach(function(r, index){
                     var builder = window.TagBuilder;

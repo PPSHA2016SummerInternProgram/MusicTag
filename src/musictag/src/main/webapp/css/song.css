@@ -1,0 +1,19 @@
+.song-container {
+	margin-top: -120px;
+	z-index:
+}
+
+.song-basic-info {
+	margin-top: 20px;
+	margin-left: 190px;
+	margin-right: 0px;
+}
+.song-key {
+	width: 120px;
+	float: left;
+}
+.song-value {
+	margin-left: 80px;
+	min-width: 100px;
+	min-height: 20px;
+}

@@ -27,7 +27,7 @@ function getUrlVars() {
  * @param requestData
  * @param callback
  */
-function sendAjax(url, requestData, callback) {
+function sendAjax(url, requestData, callback, args) {
 	$.ajax({
 		url : url,
 		type : 'get',
@@ -35,7 +35,11 @@ function sendAjax(url, requestData, callback) {
 		data : requestData,
 		success : function(data) {
 			if (callback) {
-				callback(data);
+				if(args){
+					callback(data, args);
+				}else{
+					callback(data);
+				}
 			}
 		},
 		error : function(jqueryXHR) {
@@ -69,4 +73,19 @@ function getValue() {
 		}
 	}
 	return json;
+}
+
+/**
+ * Parse the URL, and return UUID. If not found, return ''
+ */
+function getUuid() {
+	var path = location.pathname;
+	var paths = path.split('/');
+	for (var i = 0; i < paths.length; i++) {
+		if (/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
+				.test(paths[i])) {
+			return paths[i];
+		}
+	}
+	return '';
 }

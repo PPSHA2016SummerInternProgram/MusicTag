@@ -18,16 +18,16 @@
 		<div class="artist-background-top"></div>
 	</div>
 	<div class="container release-container">
-		<div>
+		<div style="height: 120px;">
 			<div class="release-cover">
-				<img width="160" class="avatar"
-					src="http://img2-ak.lst.fm/i/u/174s/8cc09636be566a39be4a2c1d2a4aae20.jpg">
+				<img width="160" class="avatar" data-release-cover
+					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
 			</div>
 			<div class="release-info">
-				<div class="artist-name">周杰倫</div>
-				<div class="release-name">七里香</div>
-				<div class="date">2004</div>
-				<div class="rate">
+				<div class="artist-name" data-artist-name>周杰倫</div>
+				<div class="release-name" data-release-name>七里香</div>
+				<div class="date" data-date>2004</div>
+				<div class="rate" data-rate>
 					<span class="glyphicon glyphicon-star"></span><span
 						class="glyphicon glyphicon-star"></span><span
 						class="glyphicon glyphicon-star-empty"></span><span
