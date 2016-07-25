@@ -295,14 +295,16 @@ function recordingWorkArtistGroupByType(data, group){
 function createRelHtml(group) {
 	var html = '';
 	for(var type in group) {
-		var arr = group[type];
-		html += '<div>' + type + ': ';
-		for(var i=0; i<arr.length; i++) {
-			var artistGid = arr[i]['artist-gid'];
-			var artistName = arr[i]['artist-name'];
-			html += '<a href="' + getArtistPageLink(artistGid) + '">' + artistName + '</a> ';
+		if (group.hasOwnProperty(type)) {
+			var arr = group[type];
+			html += '<div>' + type + ': ';
+			for(var i=0; i<arr.length; i++) {
+				var artistGid = arr[i]['artist-gid'];
+				var artistName = arr[i]['artist-name'];
+				html += '<a href="' + getArtistPageLink(artistGid) + '">' + artistName + '</a> ';
+			}
+			html += '</div>';
 		}
-		html += '</div>';
 	}
 	return html;
 }
