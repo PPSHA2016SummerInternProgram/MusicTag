@@ -29,8 +29,15 @@
 	border-radius: 50%;
 }
 
+.img-circle-wrapper {
+	overflow: hidden;
+	border-radius: 50%;
+}
+
 .release-cover {
 	float: left;
+	width: 160px;
+	height: 160px;
 }
 
 .release-info {
