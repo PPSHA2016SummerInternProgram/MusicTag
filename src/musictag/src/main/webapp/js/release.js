@@ -176,9 +176,7 @@ function createRecordingHtml(recording, id, ratingMax) {
 	}
 	html += '</td>';
 
-	// fake data now
 	var playAmount = getValue(recording, 'play-amount');
-	var ratingMax = 5000;
 	var percent = 30 + (playAmount / ratingMax * 70);
 
 	html += '<td class="play-amount"><div style="padding:5px; min-width:50px;width:'
