@@ -45,6 +45,10 @@
 	color: white;
 }
 
+.release-info a{
+	color: white;
+}
+
 .release-info .artist-name {
 	font-size: 18px;
 	line-height: 24px;

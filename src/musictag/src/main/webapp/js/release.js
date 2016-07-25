@@ -23,12 +23,29 @@ function receivedArtistinfo(data) {
 	if (!data.success) {
 		return;
 	}
+	var artistGid = getArtistGid(data);
 	var artistName = getArtistName(data);
 	var date = getValue(data, 'data', 'date');
 	var releaseName = getValue(data, 'data', 'title');
-	$('[data-artist-name]').text(artistName);
+	$('[data-artist-name]').html(createAristPageLink(artistGid, artistName));
 	$('[data-date]').text(date.split('-')[0]);
 	$('[data-release-name]').text(releaseName);
+}
+
+function createAristPageLink(artistGid, artistName){
+	return '<a href="' + getArtistPageLink(artistGid) + '">' + artistName + '</a>';
+}
+
+function getArtistPageLink(artistGid){
+	return ContextPath + '/artist/' + artistGid + '/';
+}
+
+function getArtistGid(data){
+	var artistCredit = getValue(data, 'data', 'artist-credit');
+	if (!artistCredit || artistCredit.length === 0) {
+		return '';
+	}
+	return getValue(artistCredit[0], 'artist', 'id');
 }
 
 function getArtistName(data) {
@@ -106,10 +123,10 @@ function findReleaseCoverSrc(data) {
 
 function getTracklistFromServer() {
 	var url = 'tracklist';
-	sendAjax(url, null, receivedBasicInfo);
+	sendAjax(url, null, receivedTracklist);
 }
 
-function receivedBasicInfo(data) {
+function receivedTracklist(data) {
 	if (!data.success) {
 		return;
 	}
@@ -250,9 +267,10 @@ function createRelHtml(data) {
 		var relation = relations[i];
 		var type = getValue(relation, 'type');
 		var artist = getValue(relation, 'artist', 'name');
+		var artistGid = getValue(relation, 'artist', 'id');
 		var targetType = getValue(relation, 'target-type');
 		if (type && artist && targetType === 'artist') {
-			html += '<div>' + type + ': <a>' + artist + '</a></div>';
+			html += '<div>' + type + ': <a href="' + getArtistPageLink(artistGid) + '">' + artist + '</a></div>';
 		} else if (getValue(relation, 'work')) {
 			html += createRelHtml(getValue(relation, 'work'));
 		}
