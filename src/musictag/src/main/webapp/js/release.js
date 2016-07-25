@@ -256,12 +256,13 @@ function getRecordingWorkArtistRels(tr, recordingId) {
 }
 
 function receivedRecordingWorkArtistRels(data, tr) {
-	var html = createRelHtml(data['data']);
+	var group = {};
+	recordingWorkArtistGroupByType(data['data'], group);
+	var html = createRelHtml(group);
 	tr.find('.detail').append(html);
 }
 
-function createRelHtml(data) {
-	var html = '';
+function recordingWorkArtistGroupByType(data, group){
 	var relations = getValue(data, 'relations');
 	for (var i = 0; !isEmpty(relations) && i < relations.length; i++) {
 		var relation = relations[i];
@@ -270,10 +271,33 @@ function createRelHtml(data) {
 		var artistGid = getValue(relation, 'artist', 'id');
 		var targetType = getValue(relation, 'target-type');
 		if (type && artist && targetType === 'artist') {
-			html += '<div>' + type + ': <a href="' + getArtistPageLink(artistGid) + '">' + artist + '</a></div>';
+			var item = {
+					'artist-gid' : artistGid,
+					'type' : type,
+					'artist-name' : artist
+			};
+			if(group[type]){
+				group[type].push(item);
+			}else{
+				group[type] = [item];
+			}
 		} else if (getValue(relation, 'work')) {
-			html += createRelHtml(getValue(relation, 'work'));
+			recordingWorkArtistGroupByType(getValue(relation, 'work'), group);
 		}
+	}
+}
+
+function createRelHtml(group) {
+	var html = '';
+	for(var type in group) {
+		var arr = group[type];
+		html += '<div>' + type + ': ';
+		for(var i=0; i<arr.length; i++) {
+			var artistGid = arr[i]['artist-gid'];
+			var artistName = arr[i]['artist-name'];
+			html += '<a href="' + getArtistPageLink(artistGid) + '">' + artistName + '</a> ';
+		}
+		html += '</div>';
 	}
 	return html;
 }
