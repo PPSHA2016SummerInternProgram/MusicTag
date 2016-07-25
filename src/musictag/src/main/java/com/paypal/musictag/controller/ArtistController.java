@@ -43,7 +43,7 @@ public class ArtistController {
 	public Map<String, Object> relLinks(@PathVariable("gid") String gid) {
 
 		try {
-			return MusicTagUtil.createResultMap(true, artistServiceImpl.relLinks(gid), null);
+			return MusicTagUtil.createResultMap(true, artistServiceImpl.relLinks(gid), ResponseCode.SUCCESS);
 		} catch (NetConnectionException | NetContentNotFoundException | JsonMappingException | MalformedURLException
 				| ProtocolException e) {
 			return MusicTagUtil.createResultMap(false, null, ResponseCode.getResponseCode(e));
@@ -55,7 +55,7 @@ public class ArtistController {
 	public Map<String, Object> image(@PathVariable("gid") String gid) {
 
 		try {
-			return MusicTagUtil.createResultMap(true, artistServiceImpl.image(gid), null);
+			return MusicTagUtil.createResultMap(true, artistServiceImpl.image(gid), ResponseCode.SUCCESS);
 		} catch (NetConnectionException e) {
 			return MusicTagUtil.createResultMap(false, null, ResponseCode.getResponseCode(e));
 		}
