@@ -44,9 +44,7 @@ public class RecordingController {
                     recordingServiceImpl.basic(recordingId), ResponseCode.SUCCESS);
         } catch (NetConnectionException | MalformedURLException | JsonMappingException |
                 NetContentNotFoundException | ProtocolException e) {
-            logger.error(null, e);
-            e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
+			return MusicTagUtil.createResultMap(false, null, ResponseCode.getResponseCode(e));
         }
     }
 
@@ -57,36 +55,32 @@ public class RecordingController {
             return MusicTagUtil.createResultMap(true,
                     recordingServiceImpl.releases(recordingId), ResponseCode.SUCCESS);
         } catch (NetConnectionException | MalformedURLException | JsonMappingException |
-                NetContentNotFoundException | ProtocolException e) {
-            logger.error(null, e);
-            e.printStackTrace();
-            return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
+                NetContentNotFoundException | ProtocolException e) { 
+			return MusicTagUtil.createResultMap(false, null, ResponseCode.getResponseCode(e));
         }
     }
 
     @RequestMapping(value = "/{gid}/work-artist-rels", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> workArtistRels(@PathVariable("gid") String recordingId) throws Exception {
+    public Map<String, Object> workArtistRels(@PathVariable("gid") String recordingId) {
         try {
             return MusicTagUtil.createResultMap(true,
                     recordingServiceImpl.workArtistRels(recordingId), ResponseCode.SUCCESS);
         } catch (NetConnectionException | MalformedURLException | JsonMappingException |
                 NetContentNotFoundException | ProtocolException e) {
-            logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
+			return MusicTagUtil.createResultMap(false, null, ResponseCode.getResponseCode(e));
         }
     }
 
     @RequestMapping(value = "/{gid}/full", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, Object> full(@PathVariable("gid") String recordingId) throws Exception {
+    public Map<String, Object> full(@PathVariable("gid") String recordingId) {
         try {
             return MusicTagUtil.createResultMap(true,
                     recordingServiceImpl.full(recordingId), ResponseCode.SUCCESS);
         } catch (NetConnectionException | MalformedURLException | JsonMappingException |
                 NetContentNotFoundException | ProtocolException e) {
-            logger.error(null, e);
-            return MusicTagUtil.createResultMap(false, null, ResponseCode.NOT_PROVIDED);
+			return MusicTagUtil.createResultMap(false, null, ResponseCode.getResponseCode(e));
         }
     }
 }
