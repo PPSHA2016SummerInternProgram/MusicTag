@@ -23,12 +23,29 @@ function receivedArtistinfo(data) {
 	if (!data.success) {
 		return;
 	}
+	var artistGid = getArtistGid(data);
 	var artistName = getArtistName(data);
 	var date = getValue(data, 'data', 'date');
 	var releaseName = getValue(data, 'data', 'title');
-	$('[data-artist-name]').text(artistName);
+	$('[data-artist-name]').html(createAristPageLink(artistGid, artistName));
 	$('[data-date]').text(date.split('-')[0]);
 	$('[data-release-name]').text(releaseName);
+}
+
+function createAristPageLink(artistGid, artistName){
+	return '<a href="' + getArtistPageLink(artistGid) + '">' + artistName + '</a>';
+}
+
+function getArtistPageLink(artistGid){
+	return ContextPath + '/artist/' + artistGid + '/';
+}
+
+function getArtistGid(data){
+	var artistCredit = getValue(data, 'data', 'artist-credit');
+	if (!artistCredit || artistCredit.length === 0) {
+		return '';
+	}
+	return getValue(artistCredit[0], 'artist', 'id');
 }
 
 function getArtistName(data) {
@@ -106,10 +123,10 @@ function findReleaseCoverSrc(data) {
 
 function getTracklistFromServer() {
 	var url = 'tracklist';
-	sendAjax(url, null, receivedBasicInfo);
+	sendAjax(url, null, receivedTracklist);
 }
 
-function receivedBasicInfo(data) {
+function receivedTracklist(data) {
 	if (!data.success) {
 		return;
 	}
@@ -176,9 +193,7 @@ function createRecordingHtml(recording, id, ratingMax) {
 	}
 	html += '</td>';
 
-	// fake data now
 	var playAmount = getValue(recording, 'play-amount');
-	var ratingMax = 5000;
 	var percent = 30 + (playAmount / ratingMax * 70);
 
 	html += '<td class="play-amount"><div style="padding:5px; min-width:50px;width:'
@@ -241,23 +256,48 @@ function getRecordingWorkArtistRels(tr, recordingId) {
 }
 
 function receivedRecordingWorkArtistRels(data, tr) {
-	var html = createRelHtml(data['data']);
+	var group = {};
+	recordingWorkArtistGroupByType(data['data'], group);
+	var html = createRelHtml(group);
 	tr.find('.detail').append(html);
 }
 
-function createRelHtml(data) {
-	var html = '';
+function recordingWorkArtistGroupByType(data, group){
 	var relations = getValue(data, 'relations');
 	for (var i = 0; !isEmpty(relations) && i < relations.length; i++) {
 		var relation = relations[i];
 		var type = getValue(relation, 'type');
 		var artist = getValue(relation, 'artist', 'name');
+		var artistGid = getValue(relation, 'artist', 'id');
 		var targetType = getValue(relation, 'target-type');
 		if (type && artist && targetType === 'artist') {
-			html += '<div>' + type + ': <a>' + artist + '</a></div>';
+			var item = {
+					'artist-gid' : artistGid,
+					'type' : type,
+					'artist-name' : artist
+			};
+			if(group[type]){
+				group[type].push(item);
+			}else{
+				group[type] = [item];
+			}
 		} else if (getValue(relation, 'work')) {
-			html += createRelHtml(getValue(relation, 'work'));
+			recordingWorkArtistGroupByType(getValue(relation, 'work'), group);
 		}
+	}
+}
+
+function createRelHtml(group) {
+	var html = '';
+	for(var type in group) {
+		var arr = group[type];
+		html += '<div>' + type + ': ';
+		for(var i=0; i<arr.length; i++) {
+			var artistGid = arr[i]['artist-gid'];
+			var artistName = arr[i]['artist-name'];
+			html += '<a href="' + getArtistPageLink(artistGid) + '">' + artistName + '</a> ';
+		}
+		html += '</div>';
 	}
 	return html;
 }

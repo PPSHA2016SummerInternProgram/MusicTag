@@ -20,7 +20,7 @@
 	</div>
 	<div class="container release-container">
 		<div style="height: 120px;">
-			<div class="release-cover">
+			<div class="release-cover img-circle-wrapper">
 				<img width="160" class="avatar" data-release-cover
 					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
 			</div>

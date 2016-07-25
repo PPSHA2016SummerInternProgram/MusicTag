@@ -35,14 +35,14 @@ function sendAjax(url, requestData, callback, args) {
 		data : requestData,
 		success : function(data) {
 			if (callback) {
-				if(args){
+				if (args) {
 					callback(data, args);
-				}else{
+				} else {
 					callback(data);
 				}
 			}
 		},
-		error : function(jqueryXHR) {
+		error : function() {
 		}
 	})
 }
@@ -54,11 +54,7 @@ function sendAjax(url, requestData, callback, args) {
  * @returns {Boolean}
  */
 function isEmpty(obj) {
-	if (obj) {
-		return false;
-	} else {
-		return true;
-	}
+	return obj ? false : true;
 }
 
 function getValue() {
@@ -66,7 +62,7 @@ function getValue() {
 		return '';
 	var json = arguments[0];
 	for (var i = 1; i < arguments.length; i++) {
-		if (json[arguments[i]] !== undefined) {
+		if (json[arguments[i]] !== undefined && json[arguments[i]] != null) {
 			json = json[arguments[i]];
 		} else {
 			return '';

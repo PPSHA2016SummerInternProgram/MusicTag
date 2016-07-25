@@ -26,7 +26,7 @@ public interface ReleaseDao {
 	 */
 	Map<String, Object> vote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
 
-	Map<String, Object> artistinfo(String gid) throws Exception;
+	Map<String, Object> artistinfo(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
 	
-	Map<String, Object> releasevote(String gid) throws Exception;
+	Map<String, Object> releasevote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
 }

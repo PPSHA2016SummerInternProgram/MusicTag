@@ -21,7 +21,7 @@
 	background-size: cover;
 	background-position: center 20%;
 	background-image:
-		url(http://img2-ak.lst.fm/i/u/ar0/936984cdd65e41409305518c25a1c6f0.jpg);
+		url(../images/default_artist_header.jpg);
 	background-position: center 20%;
 }
 
@@ -29,12 +29,23 @@
 	border-radius: 50%;
 }
 
+.img-circle-wrapper {
+	overflow: hidden;
+	border-radius: 50%;
+}
+
 .release-cover {
 	float: left;
+	width: 160px;
+	height: 160px;
 }
 
 .release-info {
 	margin-left: 180px;
+	color: white;
+}
+
+.release-info a{
 	color: white;
 }
 

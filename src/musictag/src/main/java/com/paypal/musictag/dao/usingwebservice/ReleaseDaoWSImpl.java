@@ -30,7 +30,7 @@ public class ReleaseDaoWSImpl implements ReleaseDao {
 		return result;
 	}	
 	
-	public Map<String, Object> artistinfo(String gid) throws Exception{
+	public Map<String, Object> artistinfo(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException {
 		
 		Map<String, String> params = new HashMap<String, String>();
 		
@@ -41,7 +41,7 @@ public class ReleaseDaoWSImpl implements ReleaseDao {
 		return result;
 	}
 	
-	public Map<String, Object> releasevote(String gid) throws Exception{
+	public Map<String, Object> releasevote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException{
 		
 		Map<String, String> paramsFindReleaseGroup = new HashMap<String, String>();
 		
