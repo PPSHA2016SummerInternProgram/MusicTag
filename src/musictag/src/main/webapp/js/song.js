@@ -1,7 +1,6 @@
 $(function() {
 	clearBasicInfo();
 	getRecordingFull()
-	getReleaseCoverFromServer();
 });
 
 function clearBasicInfo() {
@@ -18,12 +17,11 @@ function clearBasicInfo() {
 	$('[data-song-versions').text('');
 }
 
-function getReleaseCoverFromServer() {
-	var uuid = getUuid();
-	if (!uuid) {
+function getReleaseCoverFromServer(releaseId) {
+	if (!releaseId) {
 		return;
 	}
-	var url = ContextPath + '/cover-art-archive/release/' + uuid;
+	var url = ContextPath + '/cover-art-archive/release/' + releaseId;
 	sendAjax(url, null, receivedReleaseCover);
 }
 
@@ -116,6 +114,9 @@ function receivedRecordingFull(data) {
 
 	// get releases
 	var releases = getValue(data, "data", "releases");
+	if(releases && releases.length > 0){
+		getReleaseCoverFromServer(releases[0].id);
+	}
 	updateContainingReleases(releases);
 }
 
@@ -138,8 +139,8 @@ function createContainingReleasesHtml(release){
 		html = '<tr>'+
 			 		'<td>' + createIdTitleLinkElem(release, 'release') + '</td>'+
 			 		'<td>' + createArtistLinkElem(release['artist-credit'][0]['artist']) +'</td>'+
-			 		'<td>' + release.date+'</td>'+
-			 		'<td>'+ release.country+'</td>'+
+			 		'<td>' + (!release.date ? '' : release.date) + '</td>'+
+			 		'<td>'+ (!release.country ? '' : release.country)+'</td>'+
 		 		'</tr>';
 	}
 	return html;
