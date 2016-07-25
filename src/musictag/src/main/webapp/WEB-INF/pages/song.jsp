@@ -21,7 +21,7 @@
  		<div class="artist-background-top"></div>
  	</div>
 	<div class = "container song-container">
- 		<div>
+ 		<div style="height:120px">
  			<div class="release-cover">
  				<img width="160" class="avatar" data-release-cover
  					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
