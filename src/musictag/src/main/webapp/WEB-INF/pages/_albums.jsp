@@ -79,4 +79,20 @@
       </div>
     </div>
   </div>
+  <div class='modal fade' id='release-group-modal' role='dialog' tabindex='-1'>
+    <div class='modal-dialog'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button aria-label='Close' class='close' data-dismiss='modal' type='button'>
+            <span aria-hidden='true'>×</span>
+          </button>
+          <h4 class='modal-title'>No further information</h4>
+        </div>
+        <div class='modal-body'>
+          <span class='glyphicon glyphicon-exclamation-sign'></span>
+          Sorry, there is no further information about this album.
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

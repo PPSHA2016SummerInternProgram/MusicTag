@@ -85,3 +85,13 @@ function getUuid() {
 	}
 	return '';
 }
+
+window.UrlHelper = {
+    'contextPath': '/musictag',
+	'releasesUrl': function(releaseGroupId) {
+		return UrlHelper.contextPath + "/release-group/" + releaseGroupId + "/releases";
+	},
+	'releaseUrl': function (releaseId) {
+		return UrlHelper.contextPath + "/release/" + releaseId + "/";
+	}
+};

@@ -55,6 +55,13 @@
               %th Date
             %tbody
 
-
-
-
+  #release-group-modal.modal.fade{:role => "dialog", :tabindex => "-1"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4.modal-title No further information
+        .modal-body
+          %span.glyphicon.glyphicon-exclamation-sign
+          Sorry, there is no further information about this album.

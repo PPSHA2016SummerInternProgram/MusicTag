@@ -37,4 +37,11 @@
     width: 90%;
     overflow-x: hidden;
   }
+  .thumbnail:hover {
+    cursor: pointer;
+  }
+}
+
+.clickable:hover {
+  cursor: pointer;
 }
