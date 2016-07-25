@@ -85,11 +85,11 @@ function receivedRecordingFull(data) {
 	var relations = getValue(data, "data", "relations");
 	var work = null;
 	var producerArtists = [];
-	for (var i = 0; i < relations.length; i++) {
-		if (getValue(relations[i], "type") === "performance") {
-			work = getValue(relations[i], "work");
-		} else if (getValue(relations[i], "type") === "producer") {
-			producerArtists.push(getValue(relations[i], "artist"));
+	for (var j = 0; j < relations.length; j++) {
+		if (getValue(relations[j], "type") === "performance") {
+			work = getValue(relations[j], "work");
+		} else if (getValue(relations[j], "type") === "producer") {
+			producerArtists.push(getValue(relations[j], "artist"));
 		}
 	}
 
@@ -99,13 +99,13 @@ function receivedRecordingFull(data) {
 	var publisherArtist = null; // can't find now;
 	if (work !== null) {
 		var workRelations = getValue(work, "relations");
-		for (var i = 0; workRelations !== '' && i < workRelations.length; i++) {
-			if (getValue(workRelations[i], "type") === "composer") {
-				composerArtist = getValue(workRelations[i], "artist");
-			} else if (getValue(workRelations[i], "type") === "lyricist") {
-				lyricistArtist = getValue(workRelations[i], "artist");
-			} else if (getValue(workRelations[i], "type") === "other version") {
-				translationWorks.push(getValue(workRelations[i], "work"));
+		for (var k = 0; workRelations !== '' && k < workRelations.length; k++) {
+			if (getValue(workRelations[k], "type") === "composer") {
+				composerArtist = getValue(workRelations[k], "artist");
+			} else if (getValue(workRelations[k], "type") === "lyricist") {
+				lyricistArtist = getValue(workRelations[k], "artist");
+			} else if (getValue(workRelations[k], "type") === "other version") {
+				translationWorks.push(getValue(workRelations[k], "work"));
 			}
 		}
 	}
