@@ -1,11 +1,11 @@
 package com.paypal.musictag.dao.usingdb;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-
-import junit.framework.TestCase;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import com.paypal.musictag.values.StaticValues;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration({ "classpath*:/spring-mvc.xml" })
 @Service("ReleaseGroupMapperTest")
-public class ReleaseGroupMapperTest extends TestCase {
+public class ReleaseGroupMapperTest  {
 
     @Autowired
     private ReleaseGroupMapper releaseGroupMapper;
