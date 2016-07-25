@@ -9,11 +9,11 @@
 	margin-right: 0px;
 }
 .song-key {
-	width: 120px;
+	width: 200px;
 	float: left;
 }
 .song-value {
-	margin-left: 80px;
+	margin-left: 200px;
 	min-width: 100px;
 	min-height: 20px;
 }
