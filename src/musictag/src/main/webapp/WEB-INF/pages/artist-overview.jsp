@@ -6,6 +6,8 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/release.css" />
+<link rel="stylesheet" type="text/css"
     href="<%=request.getContextPath()%>/css/albums.css" />
 <link rel="stylesheet" type="text/css"
     href="<%=request.getContextPath()%>/css/artist-overview.css" />
@@ -20,19 +22,32 @@
 <body>
 
 	<%@ include file="_navbar.html"%>
-
-	<div class="container">
-		<div class="artist-overview" data-artist-overview style="margin-top:50px;">
-			<div class="artist-image">
+	<div class="artist-background">
+		<div class="artist-background-top"></div>
+	</div>
+	<div class="container " style="margin-top:-120px;">
+		<div style="height: 120px;">
+			<div class="release-cover img-circle-wrapper">
 				<img width="160" data-artist-overview-image
-					src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Jay_Chou_in_Seoul.jpg/220px-Jay_Chou_in_Seoul.jpg">
+					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
 			</div>
+		</div>
+
+		<div class="artist-overview" data-artist-overview style="margin-top:-100px;">
+			
+			
 			<div class="artist-overview-basic-info">
-				<p class="artist-overview-name" data-artist-overview-name>周杰倫</p>
+				<div class = "container" >
+				<p class="artist-overview-name" style = "font-size:30px;color:white;" data-artist-overview-name>周杰倫</p>
+				</div>
+				
+				<div style="margin-top:-30px;">
 				<div class="artist-overview-key">Gender:</div>
 				<div class="artist-overview-value" data-artist-overview-gender>Male</div>
 				<div class="artist-overview-key">Area:</div>
 				<div class="artist-overview-value" data-artist-overview-area>Taiwan</div>
+				
+				
 				<div class="artist-overview-key">Profile:</div>
 				<div class="artist-overview-value">
 					<div class="artist-overview-profile-less"
@@ -96,10 +111,14 @@
 				</div>
 			</div>
 			<div style="clear: both"></div>
+		</div> 
 		</div>
+		
+		
 		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.jsp"%>
 		</div>
+		
 	</div>
 
 
