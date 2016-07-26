@@ -10,6 +10,7 @@
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
+<script src="<%=request.getContextPath()%>/js/release_cover_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/release.js"></script>
 </head>
 <body>
