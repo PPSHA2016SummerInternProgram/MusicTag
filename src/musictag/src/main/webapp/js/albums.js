@@ -23,7 +23,7 @@ $(document).ready(function() {
 
                 data.forEach(function(rg){
                     var cnt = rg['release-count'];
-                    var dataAttr = null, hrefAttr = {};
+                    var dataAttr;
                     if(cnt === 0) dataAttr = {data: {toggle: 'modal', target: '#release-group-modal'}};
                     else if(cnt === 1) dataAttr = { data: {link: rg.id}};
                     else dataAttr = {data: {toggle: 'modal', target: '#releases-modal', 'release-group-id': rg.id}};
