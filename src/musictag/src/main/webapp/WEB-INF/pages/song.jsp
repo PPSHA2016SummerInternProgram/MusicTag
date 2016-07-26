@@ -12,6 +12,7 @@
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
 
+<script src="<%=request.getContextPath()%>/js/release_cover_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/song.js"></script>
 </head>
 
@@ -22,7 +23,7 @@
  	</div>
 	<div class = "container song-container">
  		<div style="height:120px">
- 			<div class="release-cover">
+ 			<div class="release-cover img-circle-wrapper" >
  				<img width="160" class="avatar" data-release-cover
  					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
  			</div>
