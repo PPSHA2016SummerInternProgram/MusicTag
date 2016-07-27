@@ -35,7 +35,7 @@
     </ul>
     <h4>Albums</h4>
   </div>
-  <div class='tab-content' data-direction='desc' data-order-by='name' data-pagination='#pagination' data-per-page='8' id='albums'>
+  <div class='tab-content' data-direction='asc' data-order-by='name' data-pagination='#pagination' data-per-page='8' id='albums'>
     <div class='tab-pane fade in active' id='album-table' role='tabpanel'>
       <div class='panel-body'>
         <table class='table table-hover' data-release-groups=''>

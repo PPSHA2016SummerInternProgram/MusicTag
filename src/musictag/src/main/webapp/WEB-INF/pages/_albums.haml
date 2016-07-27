@@ -24,7 +24,7 @@
               %option{data: {'order-by': 'date', 'direction': 'desc'}} Date(9-0)
     %h4 Albums
 
-  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'name', 'direction': 'desc'}}
+  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'name', 'direction': 'asc'}}
     #album-table.tab-pane.fade.in.active{:role => 'tabpanel'}
       .panel-body
         %table.table.table-hover{data: {'release-groups': ''}}
