@@ -1,25 +1,59 @@
 ;(function($, window, undefined){
     'use strict';
 
-    window.Paginator = function(enumerable, updatePage, customTemplate) {
+    window.Paginator = function(enumerable, url, updatePage, customTemplate) {
+        enumerable = $(enumerable);
+        // prepare config
+        var perPageParam = enumerable.data('per-page-param') || 'per-page';
+        var pageParam = enumerable.data('page-param') || 'cur-page';
+        var orderByParam = enumerable.data('order-by-param') || 'order-by';
+        var directionParam = enumerable.data('direction-param') || 'direction';
 
+        var curPageClass = enumerable.data('cur-page-class') || 'active';
         // pagination template
-        var template = function(amount) {
-            var pages = '';
-            for(var i = 0; i < amount; ++i) {
-                pages += TagBuilder('li', {data: {page: i+1}},
-                    TagBuilder('a', {href: '#'}, i+1)
+        var template = function(curPage, pageCnt, window) {
+            var ellipsis = TagBuilder('li', null, TagBuilder('a', null, TagBuilder('span', null, '...')));
+            var pageTemplate = function(index, isActive) {
+                return TagBuilder('li', $.extend({data: {page: index+1}}, isActive ? {class: curPageClass} : {}),
+                    TagBuilder('a', {href: '#'}, index+1)
                 );
+            };
+            var left = '', right = '';
+            var bg, end, last = pageCnt - 1;
+            if( window < pageCnt ) {
+                bg = curPage - (window % 2 === 0 ? Math.floor(window / 2) - 1 : Math.floor(window / 2));
+                end = bg + window - 1;
+                if( bg < 0 ) {
+                    end += -bg;
+                    bg = 0;
+                } else if (bg > 0) {
+                    left += pageTemplate(0, curPage === 0 ) + ellipsis;
+                }
+
+                if( end > last) {
+                    bg -= end - last;
+                    end = last;
+                } else if( end < last ){
+                    right += ellipsis + pageTemplate(last, curPage === last);
+                }
+            } else {
+               bg = 0; end = last;
             }
+
+            var pages = '';
+            for(var i = bg; i <= end; ++i) {
+                pages += pageTemplate(i, i === curPage);
+            }
+
             return '<nav>' +
               '<ul class="pagination">' +
-                '<li data-previous-page="">' +
+                '<li data-previous-page="" ' + (curPage === 0 ? 'class="disabled"' : '') + '>' +
                   '<a href="#" aria-label="Previous">' +
                     '<span aria-hidden="true">&laquo;</span>' +
                   '</a>' +
                 '</li>' +
-                    pages +
-                '<li data-next-page="">' +
+                    left + pages + right +
+                '<li data-next-page="" ' + (curPage === last ? 'class="disabled"' : '') + '>' +
                   '<a href="#" aria-label="Next">' +
                     '<span aria-hidden="true">&raquo;</span>' +
                   '</a>' +
@@ -36,21 +70,23 @@
             enumerable = $(enumerable);
             var pagination = $(enumerable.data('pagination'));
 
-            var perPage = enumerable.data('per-page') || 10;
-            var orderBy = enumerable.data('order-by') || '';
-            var direction = enumerable.data('direction') || '';
-            var curPageClass = enumerable.data('cur-page-class') || 'active';
+            var window = enumerable.data('window') || 5;
 
-            // update page
-            enumerable.hide();
-            var pageCnt = Math.ceil(updatePage(index, perPage, orderBy, direction) / perPage);
-            enumerable.fadeIn(1000);
+            var params = {};
+            params[pageParam] = index;
+            params[perPageParam] = enumerable.data(perPageParam) || 10;
+            params[orderByParam] = enumerable.data(orderByParam) || '';
+            params[directionParam] = enumerable.data(directionParam) || '';
 
-            // generate pagination
-            pagination.html(template(pageCnt));
-            if(index === 0) pagination.find('[data-previous-page]').addClass('disabled');
-            if(index === pageCnt - 1 ) pagination.find('[data-next-page]').addClass('disabled');
-            pagination.find('[data-page="' + (index + 1) + '"]').addClass(curPageClass);
+            $.getJSON(url, params, function(json){
+                // update page
+                enumerable.hide();
+                var pageCnt = Math.ceil(updatePage(json) / params[perPageParam]);
+                enumerable.fadeIn(1000);
+
+                // generate pagination
+                pagination.html(template(index, pageCnt, window));
+            });
         };
 
         window.Paginator.turnTo = turnTo;

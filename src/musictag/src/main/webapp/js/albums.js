@@ -2,78 +2,68 @@ $(document).ready(function() {
     // initialize albums display
     var albumsWrapper = $('#albums-wrapper');
     var albums = $('#albums');
-    window.Paginator(albums, function(index, perPage, orderBy, direction){
+    window.Paginator(albums, 'release-groups', function(groups){
 
         var builder = window.TagBuilder;
         var tbody = $('#album-table').find('tbody');
         var frames = $('#album-frames').find('.panel-body');
         tbody.empty();
         frames.empty();
-        var albumCnt = 0;
+        var albumCnt = groups.data['release-group-total-count'];
+        var imgMap = [];
+        var data = groups.data['release-groups'];
 
-        $.ajax({dataType: 'json',
-            url: 'release-groups',
-            data: {'cur-page': index, 'per-page': perPage, 'order-by': orderBy, 'direction': direction},
-            async: false,
-            success: function(groups){
+        data.forEach(function(rg){
+            var cnt = rg['release-count'];
+            var dataAttr;
+            if(cnt === 0) dataAttr = {data: {toggle: 'modal', target: '#release-group-modal'}};
+            else if(cnt === 1) dataAttr = { data: {link: rg.id}};
+            else dataAttr = {data: {toggle: 'modal', target: '#releases-modal', 'release-group-id': rg.id}};
 
-                albumCnt = groups.data['release-group-total-count'];
-                var imgMap = [];
-                var data = groups.data['release-groups'];
+            var html = $(builder('tr', {class: 'album-row'},
+                builder('td', null,
+                    builder('img', $.extend({class: 'album-cover clickable'}, dataAttr) ) +
+                    builder('span', {class: 'album-title'}, rg['title']) +
+                    (cnt > 1 ? builder('button', $.extend({class: 'btn btn-sm btn-primary'}, dataAttr),
+                        builder('span', {class: 'badge'}, cnt) + ' Versions') : '')
+                ) +
+                builder('td') +
+                builder('td', {class: 'first-release-date'}, rg['first-release-date']))
+            );
 
-                data.forEach(function(rg){
-                    var cnt = rg['release-count'];
-                    var dataAttr;
-                    if(cnt === 0) dataAttr = {data: {toggle: 'modal', target: '#release-group-modal'}};
-                    else if(cnt === 1) dataAttr = { data: {link: rg.id}};
-                    else dataAttr = {data: {toggle: 'modal', target: '#releases-modal', 'release-group-id': rg.id}};
+            imgMap[rg.id] = [html.find('img')];
+            html.appendTo(tbody);
 
-                    var html = $(builder('tr', {class: 'album-row'},
-                        builder('td', null,
-                            builder('img', $.extend({class: 'album-cover clickable'}, dataAttr) ) +
-                            builder('span', {class: 'album-title'}, rg['title']) +
-                            (cnt > 1 ? builder('button', $.extend({class: 'btn btn-sm btn-primary'}, dataAttr),
-                                builder('span', {class: 'badge'}, cnt) + ' Versions') : '')
-                        ) +
-                        builder('td') +
-                        builder('td', {class: 'first-release-date'}, rg['first-release-date']))
-                    );
+            var frame = $(builder('div', {class: 'album-frame col-xs-6 col-sm-4 col-md-3'},
+                builder('a',  $.extend({class: 'thumbnail'}, dataAttr),
+                    builder('div', {class: 'album-cover-wrapper'},
+                        builder('img', {class: 'album-cover'})
+                    ) +
+                    builder('span', {class: 'album-title'}, rg['title'])
+                ))
+            );
 
-                    imgMap[rg.id] = [html.find('img')];
-                    html.appendTo(tbody);
+            imgMap[rg.id][1] = frame.find('img');
+            frame.appendTo(frames);
 
-                    var frame = $(builder('div', {class: 'album-frame col-xs-6 col-sm-4 col-md-3'},
-                        builder('a',  $.extend({class: 'thumbnail'}, dataAttr),
-                            builder('div', {class: 'album-cover-wrapper'},
-                                builder('img', {class: 'album-cover'})
-                            ) +
-                            builder('span', {class: 'album-title'}, rg['title'])
-                        ))
-                    );
-
-                    imgMap[rg.id][1] = frame.find('img');
-                    frame.appendTo(frames);
-
-                    var url = ContextPath + '/cover-art-archive/release-group/' + rg.id;
-                    var defaultAlbumCover = '/images/default_album_cover.jpg';
-                    $.getJSON(url, function(json){
-                        if(json.success === true) {
-                            var downloadingImage = new Image();
-                            downloadingImage.onload = function () {
-                                imgMap[rg.id][0].attr('src', this.src);
-                                imgMap[rg.id][1].attr('src', this.src);
-                            };
-                            downloadingImage.src = json.data.images[0].thumbnails.large;
-                        } else {
-                            imgMap[rg.id][0].attr('src', ContextPath + defaultAlbumCover);
-                            imgMap[rg.id][1].attr('src', ContextPath + defaultAlbumCover);
-                        }
-                    }).fail(function () {
-                        imgMap[rg.id][0].attr('src', ContextPath + defaultAlbumCover);
-                        imgMap[rg.id][1].attr('src', ContextPath + defaultAlbumCover);
-                    });
-                });
-            }
+            var url = ContextPath + '/cover-art-archive/release-group/' + rg.id;
+            var defaultAlbumCover = '/images/default_album_cover.jpg';
+            $.getJSON(url, function(json){
+                if(json.success === true) {
+                    var downloadingImage = new Image();
+                    downloadingImage.onload = function () {
+                        imgMap[rg.id][0].attr('src', this.src);
+                        imgMap[rg.id][1].attr('src', this.src);
+                    };
+                    downloadingImage.src = json.data.images[0].thumbnails.large;
+                } else {
+                    imgMap[rg.id][0].attr('src', ContextPath + defaultAlbumCover);
+                    imgMap[rg.id][1].attr('src', ContextPath + defaultAlbumCover);
+                }
+            }).fail(function () {
+                imgMap[rg.id][0].attr('src', ContextPath + defaultAlbumCover);
+                imgMap[rg.id][1].attr('src', ContextPath + defaultAlbumCover);
+            });
         });
 
         return albumCnt;
