@@ -145,6 +145,7 @@ function createRecordingHtml(recording, id, ratingMax) {
 	if (length) {
 		var minutes = parseInt(length / 1000 / 60);
 		var seconds = parseInt(length / 1000 % 60);
+		seconds = seconds < 10 ? '0' + seconds : seconds;
 		time = minutes + ':' + seconds;
 	}
 	html += '<td class="time">' + time + '</td>';

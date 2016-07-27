@@ -139,6 +139,7 @@ function updateRecordingBasicInfo(artistName, recordingName, length, rating,
 function millsecToMinutes(length) {
 	var min = Math.floor(length / 60000);
 	var sec = Math.floor((length % 60000) / 1000);
+	sec = sec < 10 ? '0' + sec : sec;
 	return min + ":" + sec;
 }
 
