@@ -68,7 +68,7 @@ public class LastfmCrawler {
 	private PsqlConnector psqlConnector;
 	private MongoConnector mongoConnector;
 
-	private int WORK_AMOUNT_MIN = 10;
+	private int WORK_AMOUNT_MIN = 0;
 
 	public LastfmCrawler() throws ClassNotFoundException, SQLException {
 		psqlConnector = new PsqlConnector();
@@ -90,6 +90,13 @@ public class LastfmCrawler {
 		if (workAmount < WORK_AMOUNT_MIN) {
 			logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount + "-->skip it.");
 		} else {
+
+			if (!mongoConnector.findArtist(gid).isEmpty()) {
+				logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount
+						+ "-->already exist in mongo, skip it.");
+				return;
+			}
+
 			logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount + "-->ready to crawl it.");
 			Map<String, Object> response = crawlInfo(ApiMethod.ARTIST_INFO, gid);
 
