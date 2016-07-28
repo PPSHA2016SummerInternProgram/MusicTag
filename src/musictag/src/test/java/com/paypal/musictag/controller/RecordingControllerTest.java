@@ -3,6 +3,7 @@ package com.paypal.musictag.controller;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
+import java.io.IOException;
 import java.util.Map;
 
 import org.junit.Test;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.paypal.musictag.exception.NetBadRequestException;
 import com.paypal.musictag.values.StaticValues;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -22,43 +24,50 @@ public class RecordingControllerTest {
 	private RecordingController recordingController;
 
 	@Test
-	public void testBasic() {
-		Map<?, ?> map = recordingController.basic(null);
-		assertEquals(map.get("success"), false);
-		assertEquals(map.get("responseCode"), 402);
-		map = recordingController.basic(StaticValues.recordingGid0);
+	public void testBasic() throws IOException {
+		Map<?, ?> map = recordingController.basic(StaticValues.recordingGid0);
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-
-	@Test
-	public void testReleases() {
-		Map<?, ?> map = recordingController.releases(null);
-		assertEquals(map.get("success"), false);
-		assertEquals(map.get("responseCode"), 402);
-		map = recordingController.releases(StaticValues.recordingGid0);
-		assertEquals(map.get("success"), true);
-		assertNotEquals(map.get("data"), null);
+	
+	@Test(expected=NetBadRequestException.class)
+	public void testBasicException() throws IOException{
+		recordingController.basic(null);
 	}
 
 	@Test
-	public void testWorkArtistRels() {
-		Map<?, ?> map = recordingController.workArtistRels(null);
-		assertEquals(map.get("success"), false);
-		assertEquals(map.get("responseCode"), 402);
-		map = recordingController.workArtistRels(StaticValues.recordingGid0);
+	public void testReleases() throws IOException {
+		Map<?, ?> map = recordingController.releases(StaticValues.recordingGid0);
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
+	
+	@Test(expected = NetBadRequestException.class)
+	public void testReleasesException() throws IOException{
+		recordingController.releases(null);
+	}
 
 	@Test
-	public void testFull() {
-		Map<?, ?> map = recordingController.full(null);
-		assertEquals(map.get("success"), false);
-		assertEquals(map.get("responseCode"), 402);
-		map = recordingController.full(StaticValues.recordingGid0);
+	public void testWorkArtistRels() throws IOException {
+		Map<?, ?> map = recordingController.workArtistRels(StaticValues.recordingGid0);
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
+	}
+	
+	@Test(expected=NetBadRequestException.class)
+	public void testWorkArtistRelsException() throws IOException{
+		recordingController.workArtistRels(null);
+	}
+
+	@Test
+	public void testFull() throws IOException {
+		Map<?, ?> map = recordingController.full(StaticValues.recordingGid0);
+		assertEquals(map.get("success"), true);
+		assertNotEquals(map.get("data"), null);
+	}
+	@Test(expected=NetBadRequestException.class)
+	public void testFullException() throws IOException{
+		recordingController.full(null);
 	}
 
 }

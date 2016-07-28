@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.NetConnectionException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
 
 public enum ResponseCode {
 	NOT_PROVIDED(100, "not provided"),

@@ -10,14 +10,15 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ReleaseDao;
 import com.paypal.musictag.dao.usingwebservice.api.MusicTagServiceAPI;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.exception.NetConnectionException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
 
 @Service("releaseDaoWSImpl")
 public class ReleaseDaoWSImpl implements ReleaseDao {
 
 	
-	public Map<String, Object> vote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException{
+	public Map<String, Object> vote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException, NetBadRequestException{
 		
 		Map<String, String> params = new HashMap<String, String>();
 
@@ -30,7 +31,7 @@ public class ReleaseDaoWSImpl implements ReleaseDao {
 		return result;
 	}	
 	
-	public Map<String, Object> artistinfo(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException {
+	public Map<String, Object> artistinfo(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException, NetBadRequestException {
 		
 		Map<String, String> params = new HashMap<String, String>();
 		
@@ -41,7 +42,7 @@ public class ReleaseDaoWSImpl implements ReleaseDao {
 		return result;
 	}
 	
-	public Map<String, Object> releasevote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException{
+	public Map<String, Object> releasevote(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException, NetBadRequestException{
 		
 		Map<String, String> paramsFindReleaseGroup = new HashMap<String, String>();
 		

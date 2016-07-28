@@ -1,7 +1,6 @@
 package com.paypal.musictag.service.impl;
 
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +10,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.util.ReleaseesCountsMapResultHandler;
 
@@ -28,26 +24,26 @@ public class ArtistServiceImpl implements ArtistService {
     private ReleaseGroupMapper releaseGroupMapper;
 
     @Override
-    public Map<String, Object> profile(String gid) throws NetConnectionException {
+    public Map<String, Object> profile(String gid) throws IOException {
         return artistDaoWSImpl.profile(gid);
     }
 
     @Override
-    public Map<String, Object> relLinks(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException {
+    public Map<String, Object> relLinks(String gid) throws IOException {
         return artistDaoWSImpl.relLinks(gid);
     }
 
     @Override
-    public Map<String, Object> image(String gid) throws NetConnectionException{
+    public Map<String, Object> image(String gid) throws IOException{
         return artistDaoWSImpl.image(gid);
     }
 
     @Override
-    public Map<String, Object> basicInfo(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException {
+    public Map<String, Object> basicInfo(String gid) throws IOException{
         return artistDaoWSImpl.basicInfo(gid);
     }
 
-    public Map<String, Object> releaseGroup(String artistGid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException {
+    public Map<String, Object> releaseGroup(String artistGid) throws IOException{
         Map<String, Object> res = artistDaoWSImpl.releaseGroup(artistGid);
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> releaseGroups = (List<Map<String, Object>>) res
@@ -72,7 +68,7 @@ public class ArtistServiceImpl implements ArtistService {
 
     @Override
     public Map<String, Object> releaseGroupPaged(String artistGid, int curPage,
-            int perPage, String orderBy, String direction) throws Exception {
+            int perPage, String orderBy, String direction) {
 
         int curPageTmp = Math.max(curPage, 0);
 

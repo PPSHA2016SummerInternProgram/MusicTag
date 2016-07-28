@@ -6,8 +6,9 @@ import java.net.URL;
 import java.util.Map;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.exception.NetConnectionException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
 import com.paypal.musictag.util.MusicTagUtil;
 
 /**
@@ -21,7 +22,7 @@ import com.paypal.musictag.util.MusicTagUtil;
 public final class CoverArtArchiveAPI {
 	private static final String URL = "http://coverartarchive.org/";
 
-	public static Map<String, Object> sendRequest(String subUrl, String gid) throws JsonMappingException, MalformedURLException, NetConnectionException, NetContentNotFoundException, ProtocolException {
+	public static Map<String, Object> sendRequest(String subUrl, String gid) throws MalformedURLException, NetConnectionException, NetContentNotFoundException, NetBadRequestException, ProtocolException, JsonMappingException {
 		StringBuilder url = new StringBuilder(URL).append(subUrl).append(gid);
 
 		URL requestUrl = new URL(url.toString());

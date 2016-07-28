@@ -1,7 +1,6 @@
 package com.paypal.musictag.dao.usingwebservice;
 
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
+import java.io.IOException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,10 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ArtistDao;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
 import com.paypal.musictag.values.StaticValues;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -23,76 +21,78 @@ public class ArtistDaoWSImplTest {
 	ArtistDao artistDaoWSImpl;
 
 	@Test
-	public void testProfile() throws NetConnectionException {
+	public void testProfile() throws IOException {
 		artistDaoWSImpl.profile(StaticValues.artistGid0);
 		artistDaoWSImpl.profile(StaticValues.artistGid1);
 	}
 
-	@Test(expected = NetConnectionException.class)
-	public void testProfileException() throws NetConnectionException {
+	@Test(expected = NetContentNotFoundException.class)
+	public void testProfileException() throws IOException {
+		artistDaoWSImpl.profile(StaticValues.artistGidNoWikiExtract);
+	}
+	
+	@Test(expected = NetBadRequestException.class)
+	public void testProfileBadRequestException() throws IOException {
 		artistDaoWSImpl.profile(null);
 	}
 
 	@Test
-	public void testRelLinks() throws NetConnectionException, NetContentNotFoundException, JsonMappingException,
-			MalformedURLException, ProtocolException {
+	public void testRelLinks() throws IOException {
 		artistDaoWSImpl.relLinks(StaticValues.artistGid0);
 		artistDaoWSImpl.relLinks(StaticValues.artistGid1);
 	}
 
-	@Test(expected = NetContentNotFoundException.class)
-	public void testRelLinksException() throws NetConnectionException, NetContentNotFoundException,
-			JsonMappingException, MalformedURLException, ProtocolException {
+	@Test(expected = NetBadRequestException.class)
+	public void testRelLinksBadRequestException() throws IOException {
 		artistDaoWSImpl.relLinks(null);
 	}
 
 	@Test
-	public void testRelLinksImage() throws NetConnectionException {
+	public void testRelLinksImage() throws IOException {
 		artistDaoWSImpl.image(StaticValues.artistGid0);
 		artistDaoWSImpl.image(StaticValues.artistGid1);
 	}
 
-	@Test(expected = NetConnectionException.class)
-	public void testRelLinksImageException() throws NetConnectionException {
+	@Test(expected = NetContentNotFoundException.class)
+	public void testRelLinksImageException() throws IOException {
+		artistDaoWSImpl.image(StaticValues.artistGidNoCommonImg);
+	}
+	
+	@Test(expected = NetBadRequestException.class)
+	public void testRelLinksImageBadRequestException() throws IOException {
 		artistDaoWSImpl.image(null);
 	}
 
 	@Test
-	public void testBasicInfo() throws NetConnectionException, NetContentNotFoundException, JsonMappingException,
-			MalformedURLException, ProtocolException {
+	public void testBasicInfo() throws IOException {
 		artistDaoWSImpl.basicInfo(StaticValues.artistGid0);
 		artistDaoWSImpl.basicInfo(StaticValues.artistGid1);
 	}
 
-	@Test(expected = NetContentNotFoundException.class)
-	public void testBasicInfoException0() throws NetConnectionException, NetContentNotFoundException,
-			JsonMappingException, MalformedURLException, ProtocolException {
+	@Test(expected = NetBadRequestException.class)
+	public void testBasicInfoException0() throws IOException {
 		artistDaoWSImpl.basicInfo("some one not exists");
 	}
 
-	@Test(expected = NetContentNotFoundException.class)
-	public void testBasicInfoException1() throws NetConnectionException, NetContentNotFoundException,
-			JsonMappingException, MalformedURLException, ProtocolException {
+	@Test(expected = NetBadRequestException.class)
+	public void testBasicInfoException1() throws IOException {
 		artistDaoWSImpl.basicInfo(null);
 	}
 
 	@Test
-	public void testReleaseGroup() throws NetConnectionException, NetContentNotFoundException, JsonMappingException,
-			MalformedURLException, ProtocolException {
+	public void testReleaseGroup() throws IOException {
 		artistDaoWSImpl.releaseGroup(StaticValues.artistGid0);
 		artistDaoWSImpl.releaseGroup(StaticValues.artistGid1);
 
 	}
 
-	@Test(expected = NetContentNotFoundException.class)
-	public void testReleaseGroupException0() throws NetConnectionException, NetContentNotFoundException,
-			JsonMappingException, MalformedURLException, ProtocolException {
+	@Test(expected = NetBadRequestException.class)
+	public void testReleaseGroupBadRequestException0() throws IOException {
 		artistDaoWSImpl.releaseGroup("some one not exists");
 	}
 
-	@Test(expected = NetContentNotFoundException.class)
-	public void testReleaseGroupException1() throws NetConnectionException, NetContentNotFoundException,
-			JsonMappingException, MalformedURLException, ProtocolException {
+	@Test(expected = NetBadRequestException.class)
+	public void testReleaseGroupBadRequestException1() throws IOException {
 		artistDaoWSImpl.releaseGroup(null);
 	}
 }

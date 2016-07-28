@@ -1,13 +1,7 @@
 package com.paypal.musictag.dao;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 
 public interface ArtistDao {
 
@@ -16,32 +10,27 @@ public interface ArtistDao {
      * 
      * @param artistGid
      * @return
-     * @throws NetConnectionException 
+     * @throws IOException 
      */
-    Map<String, Object> profile(String artistGid) throws NetConnectionException;
+    Map<String, Object> profile(String artistGid) throws IOException;
 
     /**
      * Find rel-links for artist.
      * 
      * @param artistGid
      * @return
-     * @throws ProtocolException 
-     * @throws MalformedURLException 
-     * @throws JsonMappingException 
-     * @throws NetContentNotFoundException 
-     * @throws NetConnectionException 
+     * @throws IOException
      */
-    Map<String, Object> relLinks(String artistGid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+    Map<String, Object> relLinks(String artistGid) throws IOException;
 
     /**
      * Find the image src for artist.
      * 
      * @param artistGid
      * @return
-     * @throws NetConnectionException 
      * @throws IOException
      */
-    Map<String, Object> image(String artistGid) throws NetConnectionException;
+    Map<String, Object> image(String artistGid) throws IOException;
 
     /**
      * Find basic information of an artist by his/her global ID.
@@ -50,14 +39,9 @@ public interface ArtistDao {
      * 
      * @param artistGid
      * @return
-     * @throws ProtocolException 
-     * @throws MalformedURLException 
-     * @throws JsonMappingException 
-     * @throws NetContentNotFoundException 
-     * @throws NetConnectionException 
      * @throws IOException
      */
-    Map<String, Object> basicInfo(String artistGid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+    Map<String, Object> basicInfo(String artistGid) throws IOException;
 
     /**
      * Find all release-groups (Albums) of an artist by his/her global ID.
@@ -66,12 +50,7 @@ public interface ArtistDao {
      * 
      * @param artistGid
      * @return
-     * @throws ProtocolException 
-     * @throws MalformedURLException 
-     * @throws JsonMappingException 
-     * @throws NetContentNotFoundException 
-     * @throws NetConnectionException 
      * @throws IOException
      */
-    Map<String, Object> releaseGroup(String artistGid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+    Map<String, Object> releaseGroup(String artistGid) throws IOException;
 }

@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.exception.NetConnectionException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
 import com.paypal.musictag.util.MusicTagUtil;
 
 /**
@@ -26,7 +27,7 @@ public final class MusicTagServiceAPI {
 			"musicbrainzWebServiceURL");
 
 	public static Map<String, Object> sendRequest(String subUrl,
-			Map<String, String> params) throws MalformedURLException, NetConnectionException, NetContentNotFoundException, ProtocolException, JsonMappingException {
+			Map<String, String> params) throws MalformedURLException, NetConnectionException, NetContentNotFoundException, ProtocolException, JsonMappingException, NetBadRequestException {
 
 		// Build URL
 		StringBuilder url = new StringBuilder(URL).append(subUrl).append("?");

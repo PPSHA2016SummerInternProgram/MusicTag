@@ -1,17 +1,13 @@
 package com.paypal.musictag.service.impl;
 
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
+import java.io.IOException;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.paypal.musictag.service.ReleaseGroupService;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ReleaseGroupDao;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.service.ReleaseGroupService;
 
 @Service("releaseGroupServiceImpl")
 public class ReleaseGroupServiceImpl implements ReleaseGroupService{
@@ -19,7 +15,7 @@ public class ReleaseGroupServiceImpl implements ReleaseGroupService{
     private ReleaseGroupDao releaseGroupDaoWSImpl;
 
     @Override
-    public Map<String, Object> releases(String releaseGroupId) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException{
+    public Map<String, Object> releases(String releaseGroupId) throws IOException{
         return releaseGroupDaoWSImpl.releases(releaseGroupId);
     }
 }

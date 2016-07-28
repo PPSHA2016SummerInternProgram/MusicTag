@@ -1,24 +1,19 @@
 package com.paypal.musictag.service;
 
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
+import java.io.IOException;
 import java.util.Map;
-
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
 
 public interface ArtistService {
 
-    Map<String, Object> profile(String gid) throws NetConnectionException;
+    Map<String, Object> profile(String gid) throws IOException;
 
-    Map<String, Object> relLinks(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+    Map<String, Object> relLinks(String gid) throws IOException;
 
-    Map<String, Object> image(String gid) throws NetConnectionException;
+    Map<String, Object> image(String gid) throws IOException;
 
-    Map<String, Object> basicInfo(String gid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+    Map<String, Object> basicInfo(String gid) throws IOException;
 
-    Map<String, Object> releaseGroup(String artistGid) throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException;
+    Map<String, Object> releaseGroup(String artistGid) throws IOException;
 
     /**
      * 返回分好页的ReleaseGroups。

@@ -12,24 +12,22 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
+import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.paypal.musictag.controller.ArtistController;
-import com.paypal.musictag.dao.usingwebservice.exception.NetConnectionException;
-import com.paypal.musictag.dao.usingwebservice.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.exception.NetConnectionException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
+import com.paypal.musictag.exception.ResourceNotFoundException;
 
 public final class MusicTagUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(ArtistController.class);
-    
     private MusicTagUtil() {
         // Just Empty
     }
@@ -38,11 +36,11 @@ public final class MusicTagUtil {
 	static {
 		Resource resource = null;
 		Properties props = null;
+		resource = new ClassPathResource("musictag.properties");
 		try {
-			resource = new ClassPathResource("musictag.properties");
 			props = PropertiesLoaderUtils.loadProperties(resource);
 		} catch (IOException e) {
-			logger.error(null, e);
+			throw new ResourceNotFoundException("can't load musictag.properties", e);
 		}
 		properties = props;
 	}
@@ -51,27 +49,14 @@ public final class MusicTagUtil {
 		return properties;
 	}
 	
-	/**
-	 * 
-	 * @param success
-	 * @param data
-	 * @param code can't be null
-	 * @return
-	 */
-	public static Map<String, Object> createResultMap(boolean success,
-			Object data, ResponseCode code) {
-		if (code == null) {
-			throw new IllegalArgumentException("response code can't be null");
-		}
+	public static Map<String, Object> wrapResult(Object data){
 		Map<String, Object> map = new HashMap<>();
-		map.put("success", success);
 		map.put("data", data);
-		map.put("errorMessage", code.getMsg());
-		map.put("responseCode", code.getValue());
+		map.put("success", true);
 		return map;
 	}
 
-	public static String getJsonFromURL(URL url) throws NetConnectionException, ProtocolException, NetContentNotFoundException{
+	public static String getJsonFromURL(URL url) throws NetConnectionException, ProtocolException, NetContentNotFoundException, NetBadRequestException{
 		// Send request and get response
 		HttpURLConnection con = null;
 		if ("true".equals(properties.get("useProxy"))) {
@@ -83,33 +68,37 @@ public final class MusicTagUtil {
 			try {
 				con = (HttpURLConnection) url.openConnection(proxy);
 			} catch (IOException e) {
-				logger.error("Connect to {} using proxy. Cause: {}",url.toString(), e);
-				throw new NetConnectionException();
+				throw new NetConnectionException("url: " + url.toString() + " using proxy.", e);
 			}
 		} else {
 			try {
 				con = (HttpURLConnection) url.openConnection();
 			} catch (IOException e) {
-				logger.error("connect to {}. Cause: {}", url.toString(), e);
-				throw new NetConnectionException();
+				throw new NetConnectionException("url: " + url.toString(), e);
 			}
 		}
 		
+		con.setRequestMethod("GET");
+		
+		int code = -1;
 		try {
-			con.setRequestMethod("GET");
-		} catch (ProtocolException e) {
-			logger.error("set request method to Get. {}", e);
-			throw e;
+			code = con.getResponseCode();
+		} catch (IOException e1) {
+			throw new NetConnectionException("url: " + url, e1);
 		}
-
+		if (code == HttpStatus.NOT_FOUND.value()) {
+			throw new NetContentNotFoundException("url: " + url);
+		}else if (code != HttpStatus.OK.value()) {
+			throw new NetBadRequestException("url: " + url);
+		}
+		
 		String response;
 		InputStream stream = null;
 		try {
 			stream = con.getInputStream();
 			response = IOUtils.toString(stream, "UTF-8");
 		} catch (IOException e) {
-			logger.error("read from {}. Cause: {}", url.toString(), e);
-			throw new NetContentNotFoundException();
+			throw new NetContentNotFoundException("url: " + url.toString(), e);
 		}finally {
 			 IOUtils.closeQuietly(stream);
 		}
@@ -135,8 +124,7 @@ public final class MusicTagUtil {
 		try {
 			map = mapper.readValue(json, typeRef);
 		} catch (IOException e) {
-			logger.error("Json to map error. Json: {} Cause: {}", json, e);
-			throw new JsonMappingException(json);
+			throw new JsonMappingException(json, e);
 		}
 		return map;
 	}
