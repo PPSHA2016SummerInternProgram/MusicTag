@@ -131,8 +131,12 @@ public class LastfmCrawler {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, UnknownHostException {
+		int threadAmount = 2;
+		if (args.length > 0) {
+			threadAmount = Integer.parseInt(args[0]);
+		}
 		LastfmCrawler crawler = new LastfmCrawler();
-		crawler.startCrawling(5);
+		crawler.startCrawling(threadAmount);
 	}
 
 }
