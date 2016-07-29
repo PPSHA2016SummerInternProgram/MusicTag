@@ -96,12 +96,12 @@ final public class PsqlConnector {
 					+ "    WHERE entity0 in (select id from a)\n" + ") s\n" + ") t\n" + "on a.id = t.id\n"
 					+ "group by a.gid, a.id\n" + ";";
 
-			query = "select gid, id, 0 as count from artist limit " + cacheAmount + " offset " + offset;
+			query = "select gid, id, 0 as count from artist order by gid limit " + cacheAmount + " offset " + offset;
 
 			resultSet = statement.executeQuery(query);
-			
+
 			saveOffset();
-			
+
 			offset += cacheAmount;
 
 			// Still no artist
