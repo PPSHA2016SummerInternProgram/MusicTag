@@ -10,11 +10,16 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+
+import com.paypal.musictag.exception.NoArtistException;
 
 final public class PsqlConnector {
 
@@ -24,13 +29,14 @@ final public class PsqlConnector {
 	private final static String username = "musicbrainz";
 	private final static String password = "musicbrainz";
 
-	private final static String offsetFile = "logs/offset.log";
+	private final static String offsetFile = "logs/artist.log";
 
 	private Connection connection;
 	private Statement statement;
 	private ResultSet resultSet = null;
 	private int cacheAmount = 100;
 	private int offset = 0;
+	private int seq = 0;
 
 	/**
 	 * Connection to database and sustain a connection and statement.
@@ -53,6 +59,7 @@ final public class PsqlConnector {
 		try {
 			reader = new Scanner(new File(offsetFile));
 			offset = reader.nextInt();
+			seq += offset;
 		} catch (Exception e) {
 			// just empty, nothing to handle
 		} finally {
@@ -70,6 +77,14 @@ final public class PsqlConnector {
 		} finally {
 			IOUtils.closeQuietly(writer);
 		}
+	}
+
+	synchronized public List<Map<String, Object>> findAllReleases(String artistGid) throws SQLException {
+		UUID id = UUID.fromString(artistGid);
+		String query = "SELECT DISTINCT ON (release.id)\n" + "    release.gid\n" + "FROM release\n"
+				+ "JOIN artist_credit_name acn ON acn.artist_credit = release.artist_credit\n"
+				+ "JOIN artist on acn.artist = artist.id\n" + "WHERE artist.gid = '" + id + "'";
+		return this.resultSetToList(statement.executeQuery(query));
 	}
 
 	/**
@@ -93,17 +108,41 @@ final public class PsqlConnector {
 					+ "    JOIN link ON ar.link = link.id\n" + "    JOIN link_type lt ON lt.id = link.link_type\n"
 					+ "    WHERE entity0 in (select id from a)\n" + ") s\n" + ") t\n" + "on a.id = t.id\n"
 					+ "group by a.gid, a.id\n" + ";";
+
+			query = "select gid, id, 0 as count from artist order by gid limit " + cacheAmount + " offset " + offset;
+
 			resultSet = statement.executeQuery(query);
-			offset += cacheAmount;
 
 			saveOffset();
+
+			offset += cacheAmount;
 
 			// Still no artist
 			if (!resultSet.next()) {
 				throw new NoArtistException();
 			}
 		}
-		return resultSetToHashMap(resultSet);
+
+		++seq;
+
+		Map<String, Object> map = resultSetToHashMap(resultSet);
+		map.put("seq", seq);
+		return map;
+	}
+
+	/**
+	 * Convert a result set to list.
+	 * 
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
+		List<Map<String, Object>> list = new ArrayList<>();
+		while (rs.next()) {
+			list.add(resultSetToHashMap(rs));
+		}
+		return list;
 	}
 
 	/**
@@ -125,9 +164,13 @@ final public class PsqlConnector {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoArtistException {
 		PsqlConnector psqlConnector = new PsqlConnector();
-		for (int i = 0; i < 1000; i++) {
-			Map<?, ?> artist = psqlConnector.nextArtist();
-			System.out.println(i + ": " + artist.get("gid") + ", " + artist.get("id") + ", " + artist.get("count"));
-		}
+		List<?> list = psqlConnector.findAllReleases("3ff72a59-f39d-411d-9f93-2d4a86413013");
+		System.out.println(list);
+		// for (int i = 0; i < 1000; i++) {
+		// Map<?, ?> artist = psqlConnector.nextArtist();
+		// System.out.println(i + ": " + artist.get("gid") + ", " +
+		// artist.get("id") + ", " + artist.get("count")
+		// + ", " + artist.get("seq"));
+		// }
 	}
 }
