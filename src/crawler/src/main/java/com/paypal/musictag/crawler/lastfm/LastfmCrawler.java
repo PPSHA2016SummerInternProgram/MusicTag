@@ -98,7 +98,7 @@ public class LastfmCrawler {
 		}
 	}
 
-	private int LISTENER_FILTER = 10000;
+	private int LISTENER_FILTER = 0;
 
 	private void crawlAlbum() throws NoArtistException, SQLException {
 		Map<String, Object> artist = artistConnector.nextArtist();
