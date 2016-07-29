@@ -8,47 +8,84 @@
                       from artist
                            left join gender on artist.gender = gender.id
                            left join area on artist.area = area.id
-                           left join artist_type on artist.type = artist_type.id
-                      where artist.id = 35536
-                      limit 100"
+                           left join artist_type on artist.type = artist_type.id"
                 deltaQuery="select id from artist where last_updated > '${dataimporter.last_index_time}'" >
             <entity name="artist_alias"
                     query="select name from artist_alias where artist ='${artist.id}'" >
-                <field name="alias" column="name" />
+                <field name="aliases" column="name" />
             </entity>
-
         </entity>
 
         <entity name="release" pk="mbid"
                 query="select release.id as id, concat(release.gid, '') as mbid, 'release' as entity_type, release.name as name, release.comment as comment,
-                              release.quality as quality, release.last_updated as last_updated,
-                              artist_credit.name as artist_credit, release_status.name as status, language.name as language
+                              release.artist_credit as artist_credit, release.quality as quality, release.last_updated as last_updated,
+                              release_status.name as status, language.name as language
                       from release
                            left join artist_credit on release.artist_credit = artist_credit.id
                            left join release_status on release.status = release_status.id
                            left join language on release.language = language.id
-                      where artist.id=35536
+                           join artist_credit_name on artist_credit_name.artist_credit = release.artist_credit
+                           join artist on artist.id = artist_credit_name.artist
+                      where artist.id = 35536
                       limit 100">
             <entity name="release_alias"
                     query="select name from release_alias where release ='${release.id}'" >
-                <field name="alias" column="name" />
+                <field name="aliases" column="name" />
+            </entity>
+            <entity name="release_artist"
+                    query="select artist.id as id, concat(artist.gid, '') as mbid, artist.name as name
+                          from artist_credit_name as acn 
+                               join artist on artist.id = acn.artist
+                          where acn.artist_credit = '${release.artist_credit}'
+                          order by acn.position">
+                <entity name="release_artist_alias"
+                        query="select name from artist_alias where artist ='${release_artist.id}'">
+                    <field name="artists_aliases" column="name"/>
+                </entity>
+                <field name="artists_mbid" column="mbid"/>
+                <field name="artists_name" column="name"/>
             </entity>
         </entity>
 
         <entity name="recording" pk="mbid"
-                query="select recording.id as id, concat(recording.gid, '') as mbid, 'recording' as entity_type, recording.name as name,
-                              recording.length as length, recording.comment as comment, recording.last_updated as last_updated, recording.video as is_video,
-                              artist_credit.name as artist_credit
+                query="select recording.id as id, concat(recording.gid, '') as mbid, 'recording' as entity_type, recording.name as name, recording.artist_credit as artist_credit,
+                              recording.length as length, recording.comment as comment, recording.last_updated as last_updated, recording.video as is_video
                       from recording
                            left join artist_credit on recording.artist_credit = artist_credit.id
-                      where artist.id=35536
+                           join artist_credit_name on artist_credit_name.artist_credit = recording.artist_credit
+                           join artist on artist.id = artist_credit_name.artist
+                      where artist.id = 35536
                       limit 100">
             <entity name="recording_alias"
                     query="select name from recording_alias where recording ='${recording.id}'" >
-                <field name="alias" column="name" />
+                <field name="aliases" column="name" />
             </entity>
-
+            <entity name="recording_artist"
+                    query="select artist.id as id, concat(artist.gid, '') as mbid, artist.name as name
+                          from artist_credit_name as acn 
+                               join artist on artist.id = acn.artist
+                          where acn.artist_credit = '${recording.artist_credit}'
+                          order by acn.position">
+                <entity name="recording_artist_alias"
+                        query="select name from artist_alias where artist ='${recording_artist.id}'">
+                    <field name="artists_aliases" column="name"/>
+                </entity>
+                <field name="artists_mbid" column="mbid"/>
+                <field name="artists_name" column="name"/>
+            </entity>
+            <entity name="recording_release"
+                    query="select release.id as id, concat(release.gid, '') as mbid, release.name as name
+                          from track
+                               join medium on medium.id = track.medium
+                               join release on release.id = medium.release
+                          where track.recording = '${recording.id}'">
+                <entity name="recording_release_alias"
+                        query="select name from release_alias where release ='${recording_release.id}'">
+                    <field name="releases_aliases" column="name"/>
+                </entity>
+                <field name="releases_mbid" column="mbid"/>
+                <field name="releases_name" column="name"/>
+            </entity>
         </entity>
-
     </document>
 </dataConfig>
