@@ -16,6 +16,8 @@ import java.util.Scanner;
 
 import org.apache.commons.io.IOUtils;
 
+import com.paypal.musictag.exception.NoArtistException;
+
 final public class PsqlConnector {
 
 	private final static String hostname = "10.24.53.72";

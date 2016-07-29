@@ -11,8 +11,8 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.paypal.musictag.exception.NoArtistException;
 import com.paypal.musictag.mongo.ArtistConnector;
-import com.paypal.musictag.psql.NoArtistException;
 import com.paypal.musictag.psql.PsqlConnector;
 import com.paypal.musictag.util.CrawlerUtil;
 

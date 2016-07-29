@@ -1,4 +1,4 @@
-package com.paypal.musictag.psql;
+package com.paypal.musictag.exception;
 
 public class NoArtistException extends Exception {
 

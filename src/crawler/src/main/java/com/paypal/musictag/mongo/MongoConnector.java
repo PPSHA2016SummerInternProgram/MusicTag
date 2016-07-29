@@ -126,10 +126,10 @@ class MongoConnector {
 		return list;
 	}
 
-	public static void main(String[] args) throws UnknownHostException {
-		// MongoConnector connection = new MongoConnector("lastfm.artist");
-		// List<?> artists =
-		// connection.findArtist("881a3dca-7c80-487e-8360-3427d2ad18bd");
-		// System.out.println(artists);
-	}
+	// public static void main(String[] args) throws UnknownHostException {
+	// MongoConnector connection = new MongoConnector("lastfm.artist");
+	// List<?> artists =
+	// connection.findArtist("881a3dca-7c80-487e-8360-3427d2ad18bd");
+	// System.out.println(artists);
+	// }s
 }
