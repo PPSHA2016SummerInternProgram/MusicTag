@@ -31,6 +31,7 @@ final public class PsqlConnector {
 	private ResultSet resultSet = null;
 	private int cacheAmount = 100;
 	private int offset = 0;
+	private int seq = 0;
 
 	/**
 	 * Connection to database and sustain a connection and statement.
@@ -53,6 +54,7 @@ final public class PsqlConnector {
 		try {
 			reader = new Scanner(new File(offsetFile));
 			offset = reader.nextInt();
+			seq += offset;
 		} catch (Exception e) {
 			// just empty, nothing to handle
 		} finally {
@@ -93,17 +95,26 @@ final public class PsqlConnector {
 					+ "    JOIN link ON ar.link = link.id\n" + "    JOIN link_type lt ON lt.id = link.link_type\n"
 					+ "    WHERE entity0 in (select id from a)\n" + ") s\n" + ") t\n" + "on a.id = t.id\n"
 					+ "group by a.gid, a.id\n" + ";";
-			resultSet = statement.executeQuery(query);
-			offset += cacheAmount;
 
+			query = "select gid, id, 0 as count from artist limit " + cacheAmount + " offset " + offset;
+
+			resultSet = statement.executeQuery(query);
+			
 			saveOffset();
+			
+			offset += cacheAmount;
 
 			// Still no artist
 			if (!resultSet.next()) {
 				throw new NoArtistException();
 			}
 		}
-		return resultSetToHashMap(resultSet);
+
+		++seq;
+
+		Map<String, Object> map = resultSetToHashMap(resultSet);
+		map.put("seq", seq);
+		return map;
 	}
 
 	/**
@@ -127,7 +138,8 @@ final public class PsqlConnector {
 		PsqlConnector psqlConnector = new PsqlConnector();
 		for (int i = 0; i < 1000; i++) {
 			Map<?, ?> artist = psqlConnector.nextArtist();
-			System.out.println(i + ": " + artist.get("gid") + ", " + artist.get("id") + ", " + artist.get("count"));
+			System.out.println(i + ": " + artist.get("gid") + ", " + artist.get("id") + ", " + artist.get("count")
+					+ ", " + artist.get("seq"));
 		}
 	}
 }

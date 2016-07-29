@@ -57,6 +57,7 @@ public class LastfmCrawler {
 				try {
 					crawlArtist();
 				} catch (SQLException | IOException | InterruptedException e) {
+					logger.error("Crawl Artist Error");
 					logger.error(null, e);
 				} catch (NoArtistException e) {
 					logger.error(null, e);
@@ -87,19 +88,26 @@ public class LastfmCrawler {
 	private void crawlArtist() throws SQLException, NoArtistException, IOException, InterruptedException {
 		Map<String, Object> artist = psqlConnector.nextArtist();
 		String gid = String.valueOf(artist.get("gid"));
-		String id = String.valueOf(artist.get("id"));
-		long workAmount = (long) artist.get("count");
+		// String id = String.valueOf(artist.get("id"));
+		long workAmount = ((Number) artist.get("count")).intValue();
+		int seq = (int) artist.get("seq");
+		logger.info("seq=" + seq + ", artistGid=" + gid);
 		if (workAmount < WORK_AMOUNT_MIN) {
-			logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount + "-->skip it.");
+			logger.info(gid + ", work amount is" + workAmount + ", skip it");
 		} else {
 
 			if (mongoConnector.isAlreadyFoundArtist(gid)) {
-				logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount
-						+ "-->already exist in mongo, skip it.");
+				logger.info(gid + ", already exist in " + MongoCollectionName.LAST_FM_ARTIST.getName() + ", skip it.");
 				return;
 			}
 
-			logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount + "-->ready to crawl it.");
+			if (mongoConnector.isAlreadyNotFoundArtist(gid)) {
+				logger.info(gid + ", already exist in " + MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName()
+						+ ", skip it.");
+				return;
+			}
+
+			logger.info(gid + ", ready to crawl it.");
 			Map<String, Object> response = crawlInfo(ApiMethod.ARTIST_INFO, gid);
 
 			// rate limit, so try again
@@ -116,13 +124,13 @@ public class LastfmCrawler {
 
 	private void saveArtist(String gid, Map<String, Object> response) {
 		if (response == null || response.containsKey("error") || !response.containsKey("artist")) {
-			logger.error("failed to get information of artist " + gid + "-->"
-					+ (response == null ? null : response.toString()));
+			logger.info(gid + ", error" + (response == null ? null : response.toString()));
 			Map<String, Object> map = new HashMap<>();
 			map.put("gid", gid);
 			map.put("error", response);
 			mongoConnector.insertArtistNotFound(map);
 		} else {
+			logger.info(gid + ", ok.");
 			@SuppressWarnings("unchecked")
 			Map<String, Object> artist = (Map<String, Object>) response.get("artist");
 			artist.put("gid", gid);
@@ -138,7 +146,7 @@ public class LastfmCrawler {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, UnknownHostException {
-		int threadAmount = 2;
+		int threadAmount = 1;
 		if (args.length > 0) {
 			threadAmount = Integer.parseInt(args[0]);
 		}

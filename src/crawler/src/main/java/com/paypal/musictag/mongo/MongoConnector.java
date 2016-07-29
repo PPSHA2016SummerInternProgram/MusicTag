@@ -44,7 +44,13 @@ final public class MongoConnector {
 		if (!fillDBObjectList(cursor).isEmpty()) {
 			return true;
 		}
-		cursor = notFoundCollection.find(filter);
+		return false;
+	}
+
+	public boolean isAlreadyNotFoundArtist(String gid) {
+		BasicDBObject filter = new BasicDBObject();
+		filter.put("gid", gid);
+		FindIterable<Document> cursor = notFoundCollection.find(filter);
 		if (!fillDBObjectList(cursor).isEmpty()) {
 			return true;
 		}
