@@ -155,7 +155,6 @@ public class LastfmCrawler {
 				error.put("error", response);
 				albumConnector.insertOneIntoNotFoundTable(error);
 			}
-			System.out.println(response);
 		} catch (IOException e) {
 			logger.error(null, e);
 		}
