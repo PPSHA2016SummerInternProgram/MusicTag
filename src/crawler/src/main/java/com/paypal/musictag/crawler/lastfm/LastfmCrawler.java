@@ -3,6 +3,7 @@ package com.paypal.musictag.crawler.lastfm;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -22,7 +23,7 @@ public class LastfmCrawler {
 			+ "&format=json";
 
 	enum MongoCollectionName {
-		LAST_FM_ARTIST("lastfm.artist");
+		LAST_FM_ARTIST("lastfm.artist"), LAST_FM_ARTIST_NOF_FOUND("lastfm.artist.notfound");
 		private String collectionName;
 
 		MongoCollectionName(String name) {
@@ -75,7 +76,8 @@ public class LastfmCrawler {
 	}
 
 	public void startCrawling(int threadAmount) throws UnknownHostException {
-		mongoConnector = new MongoConnector(MongoCollectionName.LAST_FM_ARTIST.getName());
+		mongoConnector = new MongoConnector(MongoCollectionName.LAST_FM_ARTIST.getName(),
+				MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName());
 		ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
 		for (int i = 0; i < threadAmount; i++) {
 			executor.execute(crawlTask);
@@ -91,7 +93,7 @@ public class LastfmCrawler {
 			logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount + "-->skip it.");
 		} else {
 
-			if (!mongoConnector.findArtist(gid).isEmpty()) {
+			if (mongoConnector.isAlreadyFoundArtist(gid)) {
 				logger.info("artistGid=" + gid + ", id=" + id + ", workAmount=" + workAmount
 						+ "-->already exist in mongo, skip it.");
 				return;
@@ -113,21 +115,19 @@ public class LastfmCrawler {
 	}
 
 	private void saveArtist(String gid, Map<String, Object> response) {
-		if (response == null || response.containsKey("error")) {
+		if (response == null || response.containsKey("error") || !response.containsKey("artist")) {
 			logger.error("failed to get information of artist " + gid + "-->"
 					+ (response == null ? null : response.toString()));
-			return;
+			Map<String, Object> map = new HashMap<>();
+			map.put("gid", gid);
+			map.put("error", response);
+			mongoConnector.insertArtistNotFound(map);
+		} else {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> artist = (Map<String, Object>) response.get("artist");
+			artist.put("gid", gid);
+			mongoConnector.insertArtist(artist);
 		}
-
-		if (!response.containsKey("artist")) {
-			logger.error("failed to get information of artist " + gid + "-->" + response.toString());
-		}
-
-		@SuppressWarnings("unchecked")
-		Map<String, Object> artist = (Map<String, Object>) response.get("artist");
-
-		artist.put("gid", gid);
-		mongoConnector.insertArtist(artist);
 
 	}
 
