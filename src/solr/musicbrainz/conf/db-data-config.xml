@@ -1,0 +1,37 @@
+<dataConfig>
+    <dataSource driver="org.postgresql.Driver" url="jdbc:postgresql://10.24.53.72:5432/musicbrainz_db" user="musicbrainz" password="musicbrainz"/>
+      <document>
+        <entity name="artist" pk="mbid" 
+                query="select concat(artist.gid, '') as mbid, 'artist' as entity_type, artist.name as name, 
+                              artist.sort_name as sort_name, artist.comment as comment, artist.last_updated as last_updated,
+                              gender.name as gender, area.name as area, artist_type.name as type
+                      from artist 
+                      join gender on artist.gender = gender.id 
+                      join area on artist.area = area.id 
+                      join artist_type on artist.type = artist_type.id 
+                      limit 100"
+                deltaQuery="select id from artist where last_updated > '${dataimporter.last_index_time}'" >
+        </entity>
+
+        <entity name="release" pk="mbid"
+          query="select concat(release.gid, '') as mbid, 'release' as entity_type, release.name as name, release.comment as comment, 
+                        release.quality as quality, release.last_updated as last_updated, 
+                        artist_credit.name as artist_credit, release_status.name as status, language.name as language
+                from release 
+                join artist_credit on release.artist_credit = artist_credit.id 
+                join release_status on release.status = release_status.id 
+                join language on release.language = language.id 
+                limit 100">
+        </entity>
+
+        <entity name="recording" pk="mbid"
+          query="select concat(recording.gid, '') as mbid, 'recording' as entity_type, recording.name as name, 
+                        recording.length as length, recording.comment as comment, recording.last_updated as last_updated, recording.video as is_video,
+                        artist_credit.name as artist_credit
+                from recording
+                join artist_credit on recording.artist_credit = artist_credit.id
+                limit 100">
+        </entity>
+
+    </document>
+</dataConfig>
