@@ -6,12 +6,16 @@ import static org.junit.Assert.assertNotEquals;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.paypal.musictag.exception.NetBadRequestException;
 import com.paypal.musictag.values.StaticValues;
@@ -21,8 +25,11 @@ import com.paypal.musictag.values.StaticValues;
 @Service("ReleaseControllerTest")
 public class ReleaseControllerTest {
 
+	
 	@Autowired
 	private ReleaseController releaseController;
+
+
 
 	@Test
 	public void testTracklist() throws IOException {
@@ -74,7 +81,8 @@ public class ReleaseControllerTest {
 	
 	@Test
 	public void testTracklistPage() {
-		String page = releaseController.tracklistpage(null);
+		HttpServletRequest request = new MockHttpServletRequest();
+		String page = releaseController.tracklistpage(null,StaticValues.releaseGid0,request);
 		assertEquals(page, "/WEB-INF/pages/release.jsp");
 	}
 	
