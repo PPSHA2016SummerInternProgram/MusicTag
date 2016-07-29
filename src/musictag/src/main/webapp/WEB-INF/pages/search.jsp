@@ -24,7 +24,17 @@
 <body>
 
 	<%@ include file="_navbar.html"%>
-	<div class="container" style="margin-top:120px;">
+	<div class="container" style="margin-top:80px;">
+			<div class="container">
+				<form class="navbar-form" style="text-align:center;" role="search">
+					<div class="form-group">
+						<input type="text" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default">Submit</button>
+				</form>
+			</div>
+	
+	
 		<ul class="nav nav-tabs">
   			<li role="presentation" class="active"><a href="#">Trackings</a></li>
   			<li role="presentation"><a href="#">Artists</a></li>
@@ -66,9 +76,6 @@
 	
 		
 
-		<div id="albums-wrapper" style="display: none">
-			<%@ include file="_albums.jsp"%>
-		</div>
 	</div>
 
 </body>
