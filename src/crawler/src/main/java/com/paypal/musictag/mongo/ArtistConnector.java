@@ -15,10 +15,11 @@ public final class ArtistConnector extends MongoConnector {
 	private final static String artistTableName = MongoCollectionName.LAST_FM_ARTIST.getName();
 	private final static String artistNotFoundTableName = MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName();
 
-	private int offset = 10000;
+	private int offset = 0;
 	private int cacheAmount = 100;
 	private FindIterable<Document> artists = null;
 	private MongoCursor<Document> cursor = null;
+	private int seq = 0;
 
 	public ArtistConnector() throws UnknownHostException {
 		super(artistTableName, artistNotFoundTableName);
@@ -57,7 +58,10 @@ public final class ArtistConnector extends MongoConnector {
 			}
 		}
 
-		return cursor.next();
+		Map<String, Object> artist = cursor.next();
+		artist.put("seq", ++seq);
+
+		return artist;
 	}
 
 	public static void main(String[] args) throws UnknownHostException {

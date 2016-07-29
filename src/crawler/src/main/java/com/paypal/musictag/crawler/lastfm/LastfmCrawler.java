@@ -37,7 +37,7 @@ public class LastfmCrawler {
 
 	private static final Logger logger = LoggerFactory.getLogger(LastfmCrawler.class);
 
-	private Runnable crawlTask = new Runnable() {
+	private Runnable crawlArtistTask = new Runnable() {
 		@Override
 		public void run() {
 			while (true) {
@@ -54,8 +54,21 @@ public class LastfmCrawler {
 		}
 	};
 
+	private Runnable crawlAlbumTask = new Runnable() {
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					crawlAlbum();
+				} catch (NoArtistException e) {
+					break;
+				}
+			}
+		}
+	};
+
 	private PsqlConnector psqlConnector;
-	private ArtistConnector mongoConnector;
+	private ArtistConnector artistConnector;
 
 	private int WORK_AMOUNT_MIN = 0;
 
@@ -63,12 +76,43 @@ public class LastfmCrawler {
 		psqlConnector = new PsqlConnector();
 	}
 
-	public void startCrawling(int threadAmount) throws UnknownHostException {
-		mongoConnector = new ArtistConnector();
+	public void startCrawlingArtistInfo(int threadAmount) throws UnknownHostException {
+		artistConnector = new ArtistConnector();
 		ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
 		for (int i = 0; i < threadAmount; i++) {
-			executor.execute(crawlTask);
+			executor.execute(crawlArtistTask);
 		}
+	}
+
+	public void startCrawlingAlbumInfo(int threadAmount) throws UnknownHostException {
+		artistConnector = new ArtistConnector();
+		ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
+		for (int i = 0; i < threadAmount; i++) {
+			executor.execute(crawlAlbumTask);
+		}
+	}
+
+	private int LISTENER_FILTER = 10000;
+
+	private void crawlAlbum() throws NoArtistException {
+		Map<String, Object> artist = artistConnector.nextArtist();
+		String gid = String.valueOf(artist.get("gid"));
+		int seq = (int) artist.get("seq");
+		logger.info("seq=" + seq + ", artistGid=" + gid);
+		if (!artist.containsKey("stats")) {
+			logger.info(gid + ", no stats found, skip it.");
+			return;
+		}
+
+		@SuppressWarnings("unchecked")
+		Map<String, Object> stats = (Map<String, Object>) artist.get("stats");
+		int listeners = Integer.parseInt(String.valueOf(stats.get("listeners")));
+		if (listeners < LISTENER_FILTER) {
+			logger.info(gid + ", listeners is not enough, skip it.");
+			return;
+		}
+
+		logger.info(gid + ", ready to crawl ablums of the artist.");
 	}
 
 	private void crawlArtist() throws SQLException, NoArtistException, IOException, InterruptedException {
@@ -82,13 +126,13 @@ public class LastfmCrawler {
 			logger.info(gid + ", work amount is" + workAmount + ", skip it");
 		} else {
 
-			if (mongoConnector.isAlreadyFound(gid)) {
-				logger.info(gid + ", already exist in " + mongoConnector.getArtistTableName() + ", skip it.");
+			if (artistConnector.isAlreadyFound(gid)) {
+				logger.info(gid + ", already exist in " + artistConnector.getArtistTableName() + ", skip it.");
 				return;
 			}
 
-			if (mongoConnector.isAlreadyNotFound(gid)) {
-				logger.info(gid + ", already exist in " + mongoConnector.getArtistNotFoundTablename() + ", skip it.");
+			if (artistConnector.isAlreadyNotFound(gid)) {
+				logger.info(gid + ", already exist in " + artistConnector.getArtistNotFoundTablename() + ", skip it.");
 				return;
 			}
 
@@ -113,13 +157,13 @@ public class LastfmCrawler {
 			Map<String, Object> map = new HashMap<>();
 			map.put("gid", gid);
 			map.put("error", response);
-			mongoConnector.insertOneIntoNotFoundTable(map);
+			artistConnector.insertOneIntoNotFoundTable(map);
 		} else {
 			logger.info(gid + ", ok.");
 			@SuppressWarnings("unchecked")
 			Map<String, Object> artist = (Map<String, Object>) response.get("artist");
 			artist.put("gid", gid);
-			mongoConnector.insertOneIntoFoundTable(artist);
+			artistConnector.insertOneIntoFoundTable(artist);
 		}
 
 	}
@@ -132,11 +176,25 @@ public class LastfmCrawler {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, UnknownHostException {
 		int threadAmount = 1;
-		if (args.length > 0) {
-			threadAmount = Integer.parseInt(args[0]);
+		String type = null;
+		if (args.length == 0) {
+			type = "album";
+			threadAmount = 1;
+		} else if (args.length == 2) {
+			type = args[0];
+			threadAmount = Integer.parseInt(args[1]);
 		}
+
 		LastfmCrawler crawler = new LastfmCrawler();
-		crawler.startCrawling(threadAmount);
+
+		if ("artist".equals(type)) {
+			crawler.startCrawlingArtistInfo(threadAmount);
+		} else if ("album".equals(type)) {
+			crawler.startCrawlingAlbumInfo(threadAmount);
+		} else {
+			System.out.println("cannot support: " + type);
+		}
+
 	}
 
 }

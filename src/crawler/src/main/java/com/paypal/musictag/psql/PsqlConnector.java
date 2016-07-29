@@ -10,9 +10,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
 
@@ -76,6 +79,14 @@ final public class PsqlConnector {
 		}
 	}
 
+	synchronized public List<Map<String, Object>> findAllReleases(String artistGid) throws SQLException {
+		UUID id = UUID.fromString(artistGid);
+		String query = "SELECT DISTINCT ON (release.id)\n" + "    release.gid\n" + "FROM release\n"
+				+ "JOIN artist_credit_name acn ON acn.artist_credit = release.artist_credit\n"
+				+ "JOIN artist on acn.artist = artist.id\n" + "WHERE artist.gid = '" + id + "'";
+		return this.resultSetToList(statement.executeQuery(query));
+	}
+
 	/**
 	 * Thread safe. Return the next artist (include gid, id, work-amount).
 	 * 
@@ -120,6 +131,21 @@ final public class PsqlConnector {
 	}
 
 	/**
+	 * Convert a result set to list.
+	 * 
+	 * @param rs
+	 * @return
+	 * @throws SQLException
+	 */
+	private List<Map<String, Object>> resultSetToList(ResultSet rs) throws SQLException {
+		List<Map<String, Object>> list = new ArrayList<>();
+		while (rs.next()) {
+			list.add(resultSetToHashMap(rs));
+		}
+		return list;
+	}
+
+	/**
 	 * Convert a result set to map.
 	 * 
 	 * @param rs
@@ -138,10 +164,13 @@ final public class PsqlConnector {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoArtistException {
 		PsqlConnector psqlConnector = new PsqlConnector();
-		for (int i = 0; i < 1000; i++) {
-			Map<?, ?> artist = psqlConnector.nextArtist();
-			System.out.println(i + ": " + artist.get("gid") + ", " + artist.get("id") + ", " + artist.get("count")
-					+ ", " + artist.get("seq"));
-		}
+		List<?> list = psqlConnector.findAllReleases("3ff72a59-f39d-411d-9f93-2d4a86413013");
+		System.out.println(list);
+		// for (int i = 0; i < 1000; i++) {
+		// Map<?, ?> artist = psqlConnector.nextArtist();
+		// System.out.println(i + ": " + artist.get("gid") + ", " +
+		// artist.get("id") + ", " + artist.get("count")
+		// + ", " + artist.get("seq"));
+		// }
 	}
 }
