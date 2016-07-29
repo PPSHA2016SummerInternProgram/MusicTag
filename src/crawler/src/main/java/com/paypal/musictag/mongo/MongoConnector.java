@@ -20,34 +20,46 @@ final public class MongoConnector {
 
 	private final MongoClient mongoClient;
 	private final MongoDatabase mongoDatabase;
-	private final String collectionName;
+	private final String foundCollectionName;
 	private final String noExistCollectionName;
-	private final MongoCollection<Document> collection;
+	private final MongoCollection<Document> foundCollection;
 	private final MongoCollection<Document> notFoundCollection;
 
-	public MongoConnector(String collectionName, String notFoundCollectionName) throws UnknownHostException {
+	public MongoConnector(String foundCollectionName, String notFoundCollectionName) throws UnknownHostException {
 
-		this.collectionName = collectionName;
+		this.foundCollectionName = foundCollectionName;
 		this.noExistCollectionName = notFoundCollectionName;
 
 		mongoClient = new MongoClient(host, port);
 		mongoDatabase = mongoClient.getDatabase(databaseName);
-		collection = mongoDatabase.getCollection(this.collectionName);
+		foundCollection = mongoDatabase.getCollection(this.foundCollectionName);
 		notFoundCollection = mongoDatabase.getCollection(this.noExistCollectionName);
 
 	}
 
-	public boolean isAlreadyFoundArtist(String gid) {
+	/**
+	 * Is the gid exist in found table.
+	 * 
+	 * @param gid
+	 * @return
+	 */
+	public boolean isAlreadyFound(String gid) {
 		BasicDBObject filter = new BasicDBObject();
 		filter.put("gid", gid);
-		FindIterable<Document> cursor = collection.find(filter);
+		FindIterable<Document> cursor = foundCollection.find(filter);
 		if (!fillDBObjectList(cursor).isEmpty()) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean isAlreadyNotFoundArtist(String gid) {
+	/**
+	 * Is the gid exist in not-found table.
+	 * 
+	 * @param gid
+	 * @return
+	 */
+	public boolean isAlreadyNotFound(String gid) {
 		BasicDBObject filter = new BasicDBObject();
 		filter.put("gid", gid);
 		FindIterable<Document> cursor = notFoundCollection.find(filter);
@@ -57,29 +69,29 @@ final public class MongoConnector {
 		return false;
 	}
 
-	private List<Map<String, Object>> findArtist(String gid) {
+	private List<Map<String, Object>> findOneInFoundTable(String gid) {
 		BasicDBObject filter = new BasicDBObject();
 		filter.put("gid", gid);
-		FindIterable<Document> cursor = collection.find(filter);
+		FindIterable<Document> cursor = foundCollection.find(filter);
 		return fillDBObjectList(cursor);
 	}
 
-	private List<Map<String, Object>> findArtistNotFound(String gid) {
+	private List<Map<String, Object>> findOneInNotFoundTable(String gid) {
 		BasicDBObject filter = new BasicDBObject();
 		filter.put("gid", gid);
 		FindIterable<Document> cursor = notFoundCollection.find(filter);
 		return fillDBObjectList(cursor);
 	}
 
-	public void insertArtist(Map<String, Object> artist) {
-		if (findArtist(String.valueOf(artist.get("gid"))).isEmpty()) {
-			collection.insertOne(new Document(artist));
+	public void insertOneIntoFoundTable(Map<String, Object> one) {
+		if (findOneInFoundTable(String.valueOf(one.get("gid"))).isEmpty()) {
+			foundCollection.insertOne(new Document(one));
 		}
 	}
 
-	public void insertArtistNotFound(Map<String, Object> artist) {
-		if (findArtistNotFound(String.valueOf(artist.get("gid"))).isEmpty()) {
-			notFoundCollection.insertOne(new Document(artist));
+	public void insertOneIntoNotFoundTable(Map<String, Object> one) {
+		if (findOneInNotFoundTable(String.valueOf(one.get("gid"))).isEmpty()) {
+			notFoundCollection.insertOne(new Document(one));
 		}
 	}
 

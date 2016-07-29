@@ -96,12 +96,12 @@ public class LastfmCrawler {
 			logger.info(gid + ", work amount is" + workAmount + ", skip it");
 		} else {
 
-			if (mongoConnector.isAlreadyFoundArtist(gid)) {
+			if (mongoConnector.isAlreadyFound(gid)) {
 				logger.info(gid + ", already exist in " + MongoCollectionName.LAST_FM_ARTIST.getName() + ", skip it.");
 				return;
 			}
 
-			if (mongoConnector.isAlreadyNotFoundArtist(gid)) {
+			if (mongoConnector.isAlreadyNotFound(gid)) {
 				logger.info(gid + ", already exist in " + MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName()
 						+ ", skip it.");
 				return;
@@ -128,13 +128,13 @@ public class LastfmCrawler {
 			Map<String, Object> map = new HashMap<>();
 			map.put("gid", gid);
 			map.put("error", response);
-			mongoConnector.insertArtistNotFound(map);
+			mongoConnector.insertOneIntoNotFoundTable(map);
 		} else {
 			logger.info(gid + ", ok.");
 			@SuppressWarnings("unchecked")
 			Map<String, Object> artist = (Map<String, Object>) response.get("artist");
 			artist.put("gid", gid);
-			mongoConnector.insertArtist(artist);
+			mongoConnector.insertOneIntoFoundTable(artist);
 		}
 
 	}
