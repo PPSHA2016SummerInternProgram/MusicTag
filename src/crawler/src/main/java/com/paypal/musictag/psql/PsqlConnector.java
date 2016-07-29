@@ -29,7 +29,7 @@ final public class PsqlConnector {
 	private final static String username = "musicbrainz";
 	private final static String password = "musicbrainz";
 
-	private final static String offsetFile = "logs/offset.log";
+	private final static String offsetFile = "logs/artist.log";
 
 	private Connection connection;
 	private Statement statement;

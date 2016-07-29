@@ -1,8 +1,14 @@
 package com.paypal.musictag.mongo;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Map;
+import java.util.Scanner;
 
+import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
@@ -13,16 +19,20 @@ import com.paypal.musictag.exception.NoArtistException;
 public final class ArtistConnector extends MongoConnector {
 
 	private final static String artistTableName = MongoCollectionName.LAST_FM_ARTIST.getName();
-	private final static String artistNotFoundTableName = MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName();
+	private final static String artistNotFoundTableName = MongoCollectionName.LAST_FM_ARTIST_NOT_FOUND.getName();
+
+	private final static String offsetFile = "logs/album.log";
 
 	private int offset = 0;
-	private int cacheAmount = 100;
+	private int cacheAmount = 10;
 	private FindIterable<Document> artists = null;
 	private MongoCursor<Document> cursor = null;
 	private int seq = 0;
 
 	public ArtistConnector() throws UnknownHostException {
 		super(artistTableName, artistNotFoundTableName);
+
+		readOffset();
 	}
 
 	public String getArtistTableName() {
@@ -51,6 +61,8 @@ public final class ArtistConnector extends MongoConnector {
 			artists = getFoundCollection().find().projection(key).skip(offset).limit(cacheAmount);
 			cursor = artists.iterator();
 
+			saveOffset();
+
 			offset += cacheAmount;
 
 			if (!cursor.hasNext()) {
@@ -74,6 +86,31 @@ public final class ArtistConnector extends MongoConnector {
 			}
 		} catch (NoArtistException e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void readOffset() {
+		Scanner reader = null;
+		try {
+			reader = new Scanner(new File(offsetFile));
+			offset = reader.nextInt();
+			seq += offset;
+		} catch (Exception e) {
+			// just empty, nothing to handle
+		} finally {
+			IOUtils.closeQuietly(reader);
+		}
+	}
+
+	private void saveOffset() {
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(offsetFile));
+			writer.write(String.valueOf(offset));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(writer);
 		}
 	}
 }

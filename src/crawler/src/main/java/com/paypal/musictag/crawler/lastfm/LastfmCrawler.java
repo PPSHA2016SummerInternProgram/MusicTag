@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.paypal.musictag.exception.NoArtistException;
+import com.paypal.musictag.mongo.AlbumConnector;
 import com.paypal.musictag.mongo.ArtistConnector;
 import com.paypal.musictag.psql.PsqlConnector;
 import com.paypal.musictag.util.CrawlerUtil;
@@ -23,7 +25,7 @@ public class LastfmCrawler {
 			+ "&format=json";
 
 	enum ApiMethod {
-		ARTIST_INFO("artist.getinfo"), ALBUM_INFO("artist.getalbum"), TRACK_INFO("artist.gettrack");
+		ARTIST_INFO("artist.getinfo"), ALBUM_INFO("album.getinfo"), TRACK_INFO("track.getinfo");
 		private String methodName;
 
 		ApiMethod(String method) {
@@ -62,6 +64,8 @@ public class LastfmCrawler {
 					crawlAlbum();
 				} catch (NoArtistException e) {
 					break;
+				} catch (SQLException e) {
+					logger.error(null, e);
 				}
 			}
 		}
@@ -69,6 +73,7 @@ public class LastfmCrawler {
 
 	private PsqlConnector psqlConnector;
 	private ArtistConnector artistConnector;
+	private AlbumConnector albumConnector;
 
 	private int WORK_AMOUNT_MIN = 0;
 
@@ -86,6 +91,7 @@ public class LastfmCrawler {
 
 	public void startCrawlingAlbumInfo(int threadAmount) throws UnknownHostException {
 		artistConnector = new ArtistConnector();
+		albumConnector = new AlbumConnector();
 		ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
 		for (int i = 0; i < threadAmount; i++) {
 			executor.execute(crawlAlbumTask);
@@ -94,7 +100,7 @@ public class LastfmCrawler {
 
 	private int LISTENER_FILTER = 10000;
 
-	private void crawlAlbum() throws NoArtistException {
+	private void crawlAlbum() throws NoArtistException, SQLException {
 		Map<String, Object> artist = artistConnector.nextArtist();
 		String gid = String.valueOf(artist.get("gid"));
 		int seq = (int) artist.get("seq");
@@ -112,7 +118,47 @@ public class LastfmCrawler {
 			return;
 		}
 
-		logger.info(gid + ", ready to crawl ablums of the artist.");
+		crawlAllAlbums(gid);
+	}
+
+	private void crawlAllAlbums(String artistGid) throws SQLException {
+		logger.info(artistGid + ", ready to crawl ablums of the artist.");
+		List<Map<String, Object>> releases = psqlConnector.findAllReleases(artistGid);
+		logger.info(artistGid + ", has " + releases.size() + " releases.");
+		for (Map<String, Object> release : releases) {
+			crawlOneAlbum(String.valueOf(release.get("gid")));
+		}
+	}
+
+	private void crawlOneAlbum(String releaseGid) {
+		try {
+			if (albumConnector.isAlreadyFound(releaseGid)) {
+				logger.info(releaseGid + ", already exist in " + albumConnector.getAblumTableName() + ", skip it.");
+				return;
+			}
+			if (albumConnector.isAlreadyNotFound(releaseGid)) {
+				logger.info(
+						releaseGid + ", already exist in " + albumConnector.getAlbumNotFoundTablename() + ", skip it.");
+				return;
+			}
+
+			Map<String, Object> response = crawlInfo(ApiMethod.ALBUM_INFO, releaseGid);
+			if (response.containsKey("album")) {
+
+				@SuppressWarnings("unchecked")
+				Map<String, Object> album = (Map<String, Object>) response.get("album");
+				album.put("gid", releaseGid);
+				albumConnector.insertOneIntoFoundTable(album);
+			} else {
+				Map<String, Object> error = new HashMap<>();
+				error.put("gid", releaseGid);
+				error.put("error", response);
+				albumConnector.insertOneIntoNotFoundTable(error);
+			}
+			System.out.println(response);
+		} catch (IOException e) {
+			logger.error(null, e);
+		}
 	}
 
 	private void crawlArtist() throws SQLException, NoArtistException, IOException, InterruptedException {
@@ -170,7 +216,7 @@ public class LastfmCrawler {
 
 	private Map<String, Object> crawlInfo(ApiMethod method, String mbid) throws IOException {
 		String urlString = String.format(API_URL, method.getMethod(), mbid);
-		logger.info("crawling artist-->" + urlString);
+		logger.info("crawling --> " + urlString);
 		return CrawlerUtil.jsontoMap(CrawlerUtil.getJsonFromURL(urlString));
 	}
 
@@ -186,6 +232,8 @@ public class LastfmCrawler {
 		}
 
 		LastfmCrawler crawler = new LastfmCrawler();
+
+		System.out.println("type: " + type + ", threadAmount: " + threadAmount);
 
 		if ("artist".equals(type)) {
 			crawler.startCrawlingArtistInfo(threadAmount);
