@@ -144,12 +144,15 @@ public class LastfmCrawler {
 
 			Map<String, Object> response = crawlInfo(ApiMethod.ALBUM_INFO, releaseGid);
 			if (response.containsKey("album")) {
+				logger.info(releaseGid + ", ok.");
 
 				@SuppressWarnings("unchecked")
 				Map<String, Object> album = (Map<String, Object>) response.get("album");
 				album.put("gid", releaseGid);
 				albumConnector.insertOneIntoFoundTable(album);
 			} else {
+				logger.info(releaseGid + ", " + response + ".");
+
 				Map<String, Object> error = new HashMap<>();
 				error.put("gid", releaseGid);
 				error.put("error", response);
