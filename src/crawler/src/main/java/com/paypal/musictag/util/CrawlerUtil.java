@@ -1,11 +1,15 @@
 package com.paypal.musictag.util;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.apache.commons.io.IOUtils;
 
@@ -38,5 +42,30 @@ public class CrawlerUtil {
 		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
 		};
 		return mapper.readValue(json, typeRef);
+	}
+
+	public static int readInt(String fileName) {
+
+		Scanner reader = null;
+		try {
+			reader = new Scanner(new File(fileName));
+			return reader.nextInt();
+		} catch (Exception e) {
+			return 0;
+		} finally {
+			IOUtils.closeQuietly(reader);
+		}
+	}
+
+	public static void writeInt(String fileName, int num) {
+		BufferedWriter writer = null;
+		try {
+			writer = new BufferedWriter(new FileWriter(fileName));
+			writer.write(String.valueOf(num));
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			IOUtils.closeQuietly(writer);
+		}
 	}
 }

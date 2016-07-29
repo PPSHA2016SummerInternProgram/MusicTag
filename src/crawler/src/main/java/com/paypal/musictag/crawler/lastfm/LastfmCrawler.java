@@ -12,9 +12,11 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.paypal.musictag.exception.NoAlbumException;
 import com.paypal.musictag.exception.NoArtistException;
 import com.paypal.musictag.mongo.AlbumConnector;
 import com.paypal.musictag.mongo.ArtistConnector;
+import com.paypal.musictag.mongo.TrackConnector;
 import com.paypal.musictag.psql.PsqlConnector;
 import com.paypal.musictag.util.CrawlerUtil;
 
@@ -71,9 +73,25 @@ public class LastfmCrawler {
 		}
 	};
 
+	private Runnable crawlTrackTask = new Runnable() {
+		@Override
+		public void run() {
+			while (true) {
+				try {
+					crawlTrack();
+				} catch (NoAlbumException e) {
+					break;
+				} catch (SQLException e) {
+					logger.error(null, e);
+				}
+			}
+		}
+	};
+
 	private PsqlConnector psqlConnector;
 	private ArtistConnector artistConnector;
 	private AlbumConnector albumConnector;
+	private TrackConnector trackConnector;
 
 	private int WORK_AMOUNT_MIN = 0;
 
@@ -98,7 +116,80 @@ public class LastfmCrawler {
 		}
 	}
 
-	private int LISTENER_FILTER = 0;
+	public void startCrawlingTrackInfo(int threadAmount) throws UnknownHostException {
+		albumConnector = new AlbumConnector();
+		trackConnector = new TrackConnector();
+		ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
+		for (int i = 0; i < threadAmount; i++) {
+			executor.execute(crawlTrackTask);
+		}
+	}
+
+	private int ALBUM_LISTENER_FILTER = 0;
+
+	private void crawlTrack() throws NoAlbumException, SQLException {
+
+		Map<String, Object> album = albumConnector.nextAlbum();
+		String gid = String.valueOf(album.get("gid"));
+		int seq = (int) album.get("seq");
+		logger.info("seq=" + seq + ", albumGid=" + gid);
+		if (!album.containsKey("listeners")) {
+			logger.info(gid + ", no listeners found, skip it.");
+			return;
+		}
+
+		int listeners = Integer.parseInt(String.valueOf(album.get("listeners")));
+		if (listeners < ALBUM_LISTENER_FILTER) {
+			logger.info(gid + ", listeners is not enough, skip it.");
+			return;
+		}
+
+		crawlAllTracks(gid);
+	}
+
+	private void crawlAllTracks(String albumGid) throws SQLException {
+		logger.info(albumGid + ", ready to crawl tracks of the album.");
+		List<Map<String, Object>> recordings = psqlConnector.findAllRecordings(albumGid);
+		logger.info(albumGid + ", has " + recordings.size() + " recordings.");
+		for (Map<String, Object> recording : recordings) {
+			crawlOneTrack(String.valueOf(recording.get("gid")));
+		}
+	}
+
+	private void crawlOneTrack(String trackGid) {
+		try {
+			if (trackConnector.isAlreadyFound(trackGid)) {
+				logger.info(trackGid + ", already exist in " + trackConnector.getTrackTableName() + ", skip it.");
+				return;
+			}
+			if (trackConnector.isAlreadyNotFound(trackGid)) {
+				logger.info(
+						trackGid + ", already exist in " + trackConnector.getTrackNotFoundTableName() + ", skip it.");
+				return;
+			}
+
+			Map<String, Object> response = crawlInfo(ApiMethod.TRACK_INFO, trackGid);
+			if (response.containsKey("track")) {
+				logger.info(trackGid + ", ok.");
+
+				@SuppressWarnings("unchecked")
+				Map<String, Object> track = (Map<String, Object>) response.get("track");
+				track.put("gid", trackGid);
+				trackConnector.insertOneIntoFoundTable(track);
+			} else {
+				logger.info(trackGid + ", " + response + ".");
+
+				Map<String, Object> error = new HashMap<>();
+				error.put("gid", trackGid);
+				error.put("error", response);
+				trackConnector.insertOneIntoNotFoundTable(error);
+			}
+		} catch (IOException e) {
+			logger.error(null, e);
+		}
+	}
+
+	private int ARTIST_LISTENER_FILTER = 0;
 
 	private void crawlAlbum() throws NoArtistException, SQLException {
 		Map<String, Object> artist = artistConnector.nextArtist();
@@ -113,7 +204,7 @@ public class LastfmCrawler {
 		@SuppressWarnings("unchecked")
 		Map<String, Object> stats = (Map<String, Object>) artist.get("stats");
 		int listeners = Integer.parseInt(String.valueOf(stats.get("listeners")));
-		if (listeners < LISTENER_FILTER) {
+		if (listeners < ARTIST_LISTENER_FILTER) {
 			logger.info(gid + ", listeners is not enough, skip it.");
 			return;
 		}
@@ -226,7 +317,7 @@ public class LastfmCrawler {
 		int threadAmount = 1;
 		String type = null;
 		if (args.length == 0) {
-			type = "album";
+			type = "track";
 			threadAmount = 1;
 		} else if (args.length == 2) {
 			type = args[0];
@@ -241,6 +332,8 @@ public class LastfmCrawler {
 			crawler.startCrawlingArtistInfo(threadAmount);
 		} else if ("album".equals(type)) {
 			crawler.startCrawlingAlbumInfo(threadAmount);
+		} else if ("track".equals(type)) {
+			crawler.startCrawlingTrackInfo(threadAmount);
 		} else {
 			System.out.println("cannot support: " + type);
 		}

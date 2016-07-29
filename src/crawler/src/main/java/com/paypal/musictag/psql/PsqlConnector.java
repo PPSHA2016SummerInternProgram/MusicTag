@@ -1,9 +1,5 @@
 package com.paypal.musictag.psql;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,12 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.UUID;
 
-import org.apache.commons.io.IOUtils;
-
 import com.paypal.musictag.exception.NoArtistException;
+import com.paypal.musictag.util.CrawlerUtil;
 
 final public class PsqlConnector {
 
@@ -55,28 +49,22 @@ final public class PsqlConnector {
 	}
 
 	private void readOffset() {
-		Scanner reader = null;
-		try {
-			reader = new Scanner(new File(offsetFile));
-			offset = reader.nextInt();
-			seq += offset;
-		} catch (Exception e) {
-			// just empty, nothing to handle
-		} finally {
-			IOUtils.closeQuietly(reader);
-		}
+		offset = CrawlerUtil.readInt(offsetFile);
+		seq += offset;
 	}
 
 	private void saveOffset() {
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(offsetFile));
-			writer.write(String.valueOf(offset));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			IOUtils.closeQuietly(writer);
-		}
+		CrawlerUtil.writeInt(offsetFile, offset);
+	}
+
+	synchronized public List<Map<String, Object>> findAllRecordings(String releaseGid) throws SQLException {
+		UUID id = UUID.fromString(releaseGid);
+		String query = "SELECT recording.gid\n" + "FROM recording\n" + "WHERE recording.id IN\n"
+				+ "(SELECT track.recording\n" + "FROM track\n" + "WHERE track.medium IN\n" + "(SELECT medium.id\n"
+				+ "FROM medium\n" + "LEFT JOIN release\n" + "ON medium.release = release.id\n" + "WHERE release.gid = '"
+				+ id + "'\n" + "));";
+		return resultSetToList(statement.executeQuery(query));
+
 	}
 
 	synchronized public List<Map<String, Object>> findAllReleases(String artistGid) throws SQLException {
@@ -84,7 +72,7 @@ final public class PsqlConnector {
 		String query = "SELECT DISTINCT ON (release.id)\n" + "    release.gid\n" + "FROM release\n"
 				+ "JOIN artist_credit_name acn ON acn.artist_credit = release.artist_credit\n"
 				+ "JOIN artist on acn.artist = artist.id\n" + "WHERE artist.gid = '" + id + "'";
-		return this.resultSetToList(statement.executeQuery(query));
+		return resultSetToList(statement.executeQuery(query));
 	}
 
 	/**

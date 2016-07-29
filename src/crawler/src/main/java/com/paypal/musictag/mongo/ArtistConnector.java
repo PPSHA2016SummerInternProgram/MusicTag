@@ -1,20 +1,15 @@
 package com.paypal.musictag.mongo;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Map;
-import java.util.Scanner;
 
-import org.apache.commons.io.IOUtils;
 import org.bson.Document;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.paypal.musictag.exception.NoArtistException;
+import com.paypal.musictag.util.CrawlerUtil;
 
 public final class ArtistConnector extends MongoConnector {
 
@@ -90,27 +85,11 @@ public final class ArtistConnector extends MongoConnector {
 	}
 
 	private void readOffset() {
-		Scanner reader = null;
-		try {
-			reader = new Scanner(new File(offsetFile));
-			offset = reader.nextInt();
-			seq += offset;
-		} catch (Exception e) {
-			// just empty, nothing to handle
-		} finally {
-			IOUtils.closeQuietly(reader);
-		}
+		offset = CrawlerUtil.readInt(offsetFile);
+		seq += offset;
 	}
 
 	private void saveOffset() {
-		BufferedWriter writer = null;
-		try {
-			writer = new BufferedWriter(new FileWriter(offsetFile));
-			writer.write(String.valueOf(offset));
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			IOUtils.closeQuietly(writer);
-		}
+		CrawlerUtil.writeInt(offsetFile, offset);
 	}
 }
