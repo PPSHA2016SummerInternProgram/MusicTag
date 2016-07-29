@@ -24,7 +24,7 @@ public final class ArtistConnector extends MongoConnector {
 	private final static String offsetFile = "logs/album.log";
 
 	private int offset = 0;
-	private int cacheAmount = 10;
+	private int cacheAmount = 100;
 	private FindIterable<Document> artists = null;
 	private MongoCursor<Document> cursor = null;
 	private int seq = 0;
