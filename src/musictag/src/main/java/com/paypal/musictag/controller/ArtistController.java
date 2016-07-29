@@ -3,6 +3,10 @@ package com.paypal.musictag.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,7 +22,9 @@ import com.paypal.musictag.util.MusicTagUtil;
 @Controller
 @RequestMapping("/artist")
 public class ArtistController {
-
+	
+	private static Logger logger = Logger.getLogger(ArtistController.class);  
+	
 	@Autowired
 	private ArtistService artistServiceImpl;
 
@@ -62,7 +68,10 @@ public class ArtistController {
 	}
 
 	@RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
-	public String artistOverview(ModelMap model) {
+	public String artistOverview(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
+		
+		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/"+request.getRemoteAddr());
+		
 		return "/WEB-INF/pages/artist-overview.jsp";
 	}
 }

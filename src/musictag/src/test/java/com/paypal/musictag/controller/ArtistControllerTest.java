@@ -5,9 +5,12 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -120,7 +123,11 @@ public class ArtistControllerTest {
 
 	@Test
 	public void testArtistOverview() {
-		String page = artistController.artistOverview(null);
+				
+		HttpServletRequest request = new MockHttpServletRequest();
+		
+		String page = artistController.artistOverview(null, StaticValues.artistGid0, request);
+		
 		assertEquals(page, "/WEB-INF/pages/artist-overview.jsp");
 	}
 }

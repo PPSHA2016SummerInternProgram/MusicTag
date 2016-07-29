@@ -3,6 +3,9 @@ package com.paypal.musictag.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,6 +20,8 @@ import com.paypal.musictag.util.MusicTagUtil;
 @Controller
 @RequestMapping("/release")
 public class ReleaseController {
+	
+	private static Logger logger = Logger.getLogger(ReleaseController.class);  
 
 	@Autowired
 	private ReleaseService releaseServiceImpl;
@@ -42,8 +47,12 @@ public class ReleaseController {
 	}
 
 	@RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
-	public String tracklistpage(ModelMap model) {
+	public String tracklistpage(ModelMap model,@PathVariable("gid") String gid, HttpServletRequest request) {
+
+		logger.info("<<<UserRecords>>>/"+"ReleasePage/"+gid+"/"+request.getRemoteAddr());
+		
 		return "/WEB-INF/pages/release.jsp";
 	}
+	
 
 }
