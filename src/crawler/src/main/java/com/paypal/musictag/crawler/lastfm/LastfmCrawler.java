@@ -11,7 +11,7 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.paypal.musictag.mongo.MongoConnector;
+import com.paypal.musictag.mongo.ArtistConnector;
 import com.paypal.musictag.psql.NoArtistException;
 import com.paypal.musictag.psql.PsqlConnector;
 import com.paypal.musictag.util.CrawlerUtil;
@@ -21,19 +21,6 @@ public class LastfmCrawler {
 	final private static String API_KEY = "4c8fe16aebbb7f2394d538ccd131723e";
 	final private static String API_URL = "http://ws.audioscrobbler.com/2.0/?method=%s&mbid=%s&api_key=" + API_KEY
 			+ "&format=json";
-
-	enum MongoCollectionName {
-		LAST_FM_ARTIST("lastfm.artist"), LAST_FM_ARTIST_NOF_FOUND("lastfm.artist.notfound");
-		private String collectionName;
-
-		MongoCollectionName(String name) {
-			collectionName = name;
-		}
-
-		public String getName() {
-			return collectionName;
-		}
-	}
 
 	enum ApiMethod {
 		ARTIST_INFO("artist.getinfo"), ALBUM_INFO("artist.getalbum"), TRACK_INFO("artist.gettrack");
@@ -68,7 +55,7 @@ public class LastfmCrawler {
 	};
 
 	private PsqlConnector psqlConnector;
-	private MongoConnector mongoConnector;
+	private ArtistConnector mongoConnector;
 
 	private int WORK_AMOUNT_MIN = 0;
 
@@ -77,8 +64,7 @@ public class LastfmCrawler {
 	}
 
 	public void startCrawling(int threadAmount) throws UnknownHostException {
-		mongoConnector = new MongoConnector(MongoCollectionName.LAST_FM_ARTIST.getName(),
-				MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName());
+		mongoConnector = new ArtistConnector();
 		ExecutorService executor = Executors.newFixedThreadPool(threadAmount);
 		for (int i = 0; i < threadAmount; i++) {
 			executor.execute(crawlTask);
@@ -97,13 +83,12 @@ public class LastfmCrawler {
 		} else {
 
 			if (mongoConnector.isAlreadyFound(gid)) {
-				logger.info(gid + ", already exist in " + MongoCollectionName.LAST_FM_ARTIST.getName() + ", skip it.");
+				logger.info(gid + ", already exist in " + mongoConnector.getArtistTableName() + ", skip it.");
 				return;
 			}
 
 			if (mongoConnector.isAlreadyNotFound(gid)) {
-				logger.info(gid + ", already exist in " + MongoCollectionName.LAST_FM_ARTIST_NOF_FOUND.getName()
-						+ ", skip it.");
+				logger.info(gid + ", already exist in " + mongoConnector.getArtistNotFoundTablename() + ", skip it.");
 				return;
 			}
 

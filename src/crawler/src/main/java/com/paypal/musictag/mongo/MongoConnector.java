@@ -13,7 +13,20 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-final public class MongoConnector {
+enum MongoCollectionName {
+	LAST_FM_ARTIST("lastfm.artist"), LAST_FM_ARTIST_NOF_FOUND("lastfm.artist.notfound");
+	private String collectionName;
+
+	MongoCollectionName(String name) {
+		collectionName = name;
+	}
+
+	public String getName() {
+		return collectionName;
+	}
+}
+
+class MongoConnector {
 	private final static String host = "10.24.53.72";
 	private final static int port = 27017;
 	private final static String databaseName = "music-tag";
@@ -35,6 +48,10 @@ final public class MongoConnector {
 		foundCollection = mongoDatabase.getCollection(this.foundCollectionName);
 		notFoundCollection = mongoDatabase.getCollection(this.noExistCollectionName);
 
+	}
+
+	MongoCollection<Document> getFoundCollection() {
+		return foundCollection;
 	}
 
 	/**
