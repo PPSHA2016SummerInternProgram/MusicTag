@@ -2,11 +2,14 @@ package com.paypal.musictag.util;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.Proxy;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,9 +31,9 @@ import com.paypal.musictag.exception.ResourceNotFoundException;
 
 public final class MusicTagUtil {
 
-    private MusicTagUtil() {
-        // Just Empty
-    }
+	private MusicTagUtil() {
+		// Just Empty
+	}
 
 	static final Properties properties;
 	static {
@@ -48,23 +51,34 @@ public final class MusicTagUtil {
 	public static Properties getProperties() {
 		return properties;
 	}
-	
-	public static Map<String, Object> wrapResult(Object data){
+
+	public static Map<String, Object> wrapResult(Object data) {
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", data);
 		map.put("success", true);
 		return map;
 	}
 
-	public static String getJsonFromURL(URL url) throws NetConnectionException, ProtocolException, NetContentNotFoundException, NetBadRequestException{
-		// Send request and get response
+	public static String encodeURIComponent(String s) {
+		String result;
+		try {
+			result = URLEncoder.encode(s, "UTF-8").replaceAll("\\+", "%20").replaceAll("\\%21", "!")
+					.replaceAll("\\%27", "'").replaceAll("\\%28", "(").replaceAll("\\%29", ")").replaceAll("\\%7E", "~")
+					.replaceAll("\\%3D", "=").replaceAll("\\%26", "&").replaceAll("\\%2B", "+").replaceAll("\\%3A", ":")
+					.replaceAll("\\%2F", "/").replaceAll("\\%3F", "?");
+		} catch (UnsupportedEncodingException e) {
+			result = s;
+		}
+		return result;
+	}
+
+	private static String getJsonFromURL(URL url, boolean useProxy)
+			throws NetConnectionException, ProtocolException, NetContentNotFoundException, NetBadRequestException {
 		HttpURLConnection con = null;
-		if ("true".equals(properties.get("useProxy"))) {
+		if (useProxy) {
 			String proxyIp = properties.getProperty("proxyIp");
-			Integer proxyPort = Integer.parseInt(properties
-					.getProperty("proxyPort"));
-			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
-					proxyIp, proxyPort));
+			Integer proxyPort = Integer.parseInt(properties.getProperty("proxyPort"));
+			Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyIp, proxyPort));
 			try {
 				con = (HttpURLConnection) url.openConnection(proxy);
 			} catch (IOException e) {
@@ -77,9 +91,11 @@ public final class MusicTagUtil {
 				throw new NetConnectionException("url: " + url.toString(), e);
 			}
 		}
-		
+
+		// con.setRequestProperty("q", "+entity_type:release +\"周杰伦\"");
+
 		con.setRequestMethod("GET");
-		
+
 		int code = -1;
 		try {
 			code = con.getResponseCode();
@@ -88,10 +104,10 @@ public final class MusicTagUtil {
 		}
 		if (code == HttpStatus.NOT_FOUND.value()) {
 			throw new NetContentNotFoundException("url: " + url);
-		}else if (code != HttpStatus.OK.value()) {
+		} else if (code != HttpStatus.OK.value()) {
 			throw new NetBadRequestException("url: " + url);
 		}
-		
+
 		String response;
 		InputStream stream = null;
 		try {
@@ -99,11 +115,22 @@ public final class MusicTagUtil {
 			response = IOUtils.toString(stream, "UTF-8");
 		} catch (IOException e) {
 			throw new NetContentNotFoundException("url: " + url.toString(), e);
-		}finally {
-			 IOUtils.closeQuietly(stream);
+		} finally {
+			IOUtils.closeQuietly(stream);
 		}
-		
+
 		return response;
+	}
+
+	public static String getJsonFromURLWithoutProxy(URL url)
+			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException, ProtocolException {
+		return getJsonFromURL(url, false);
+	}
+
+	public static String getJsonFromURL(URL url)
+			throws NetConnectionException, ProtocolException, NetContentNotFoundException, NetBadRequestException {
+
+		return getJsonFromURL(url, "true".equals(properties.get("useProxy")));
 	}
 
 	/**
@@ -114,8 +141,7 @@ public final class MusicTagUtil {
 	 * @throws JsonMappingException
 	 */
 	@SuppressWarnings("deprecation")
-	public static Map<String, Object> jsontoMap(String json) throws JsonMappingException
-			 {
+	public static Map<String, Object> jsontoMap(String json) throws JsonMappingException {
 		JsonFactory factory = new JsonFactory();
 		ObjectMapper mapper = new ObjectMapper(factory);
 		TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {
