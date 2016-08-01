@@ -15,7 +15,6 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
 import com.paypal.musictag.exception.NetBadRequestException;
 import com.paypal.musictag.values.StaticValues;
