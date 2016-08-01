@@ -10,9 +10,10 @@ public interface SearchService {
 	 * each type.
 	 * 
 	 * @param key
+	 * @param perPage
 	 * @return
 	 */
-	Map<String, Object> searchAll(String key) throws IOException;
+	Map<String, Object> searchAll(String key, int perPage) throws IOException;
 
 	/**
 	 * Search one page for artist.

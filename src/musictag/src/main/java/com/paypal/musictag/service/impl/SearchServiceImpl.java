@@ -22,11 +22,11 @@ public class SearchServiceImpl implements SearchService {
 	private static Logger logger = Logger.getLogger(SearchServiceImpl.class);
 
 	@Override
-	public Map<String, Object> searchAll(String key) {
+	public Map<String, Object> searchAll(String key, int perPage) {
 		Map<String, Object> artist = null;
 		Map<String, Object> release = null;
 		Map<String, Object> recording = null;
-		int defaultPerPage = 20;
+		int defaultPerPage = perPage;
 		try {
 			artist = searchArtist(key, 0, defaultPerPage);
 		} catch (Exception e) {

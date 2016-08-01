@@ -28,8 +28,9 @@ public class SearchController {
 
 	@RequestMapping(value = "/all", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> searchAll(@RequestParam("key") String key) throws IOException {
-		return MusicTagUtil.wrapResult(searchServiceImpl.searchAll(key));
+	public Map<String, Object> searchAll(@RequestParam("key") String key, @RequestParam("perPage") int perPage)
+			throws IOException {
+		return MusicTagUtil.wrapResult(searchServiceImpl.searchAll(key, perPage));
 	}
 
 	@RequestMapping(value = "/artist", method = RequestMethod.GET)
