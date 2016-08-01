@@ -24,7 +24,7 @@
               %option{data: {'order-by': 'date', 'direction': 'desc'}} Date(9-0)
     %h4 Albums
 
-  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'order-by': 'name', 'direction': 'asc'}}
+  .tab-content#albums{data: {pagination: '#pagination', 'per-page': 8, 'window': 5, 'order-by': 'name', 'direction': 'asc'}}
     #album-table.tab-pane.fade.in.active{:role => 'tabpanel'}
       .panel-body
         %table.table.table-hover{data: {'release-groups': ''}}
@@ -36,7 +36,7 @@
           %tbody
     #album-frames.tab-pane.fade{:role => 'tabpanel'}
       .panel-body.row
-    #pagination.text-center{data: {enumerable: '#albums'}}
+    #pagination.text-center
 
   #releases-modal.modal.fade{:role => "dialog", :tabindex => "-1"}
     .modal-dialog

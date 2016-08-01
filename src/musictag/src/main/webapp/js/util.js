@@ -87,11 +87,27 @@ function getUuid() {
 }
 
 window.UrlHelper = {
-    'contextPath': '/musictag',
-	'releasesUrl': function(releaseGroupId) {
+    contextPath: '/musictag',
+	releasesUrl: function(releaseGroupId) {
 		return UrlHelper.contextPath + "/release-group/" + releaseGroupId + "/releases";
 	},
-	'releaseUrl': function (releaseId) {
+	releaseUrl: function(releaseId) {
 		return UrlHelper.contextPath + "/release/" + releaseId + "/";
+	},
+	artistUrl: function(artistId) {
+		return UrlHelper.contextPath + "/artist/" + artistId + "/";
+	},
+	recordingUrl: function(recordingId) {
+		return UrlHelper.contextPath + "/recording/" + recordingId + "/";
+	},
+	defaultArtistCoverUrl:  'http://p4.music.126.net/UK-Nt38gGjh_krcHwc1UmA==/6008831046001841.jpg'
+};
+
+window.OtherHelper = {
+	recordingLength: function( length ) {
+		var minutes = parseInt(length / 1000 / 60);
+		var seconds = parseInt(length / 1000 % 60);
+		seconds = seconds < 10 ? '0' + seconds : seconds;
+		return minutes + ':' + seconds;
 	}
 };

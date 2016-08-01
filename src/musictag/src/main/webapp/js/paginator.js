@@ -10,6 +10,7 @@
         var directionParam = enumerable.data('direction-param') || 'direction';
 
         var curPageClass = enumerable.data('cur-page-class') || 'active';
+
         // pagination template
         var template = function(curPage, pageCnt, window) {
             var ellipsis = TagBuilder('li', null, TagBuilder('a', null, TagBuilder('span', null, '...')));
@@ -94,6 +95,7 @@
         turnTo(enumerable, 0);
 
         var pagination = $(enumerable.data('pagination'));
+        pagination.data('enumerable', '#' + enumerable.attr('id'));
         // bind events
         pagination.on('click', '[data-page]', function(e) {
             if(!$(this).hasClass('active')) {

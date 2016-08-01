@@ -1,0 +1,30 @@
+#search-bar {
+  margin-bottom: 1rem; }
+
+#search-tabs {
+  margin-bottom: 1rem; }
+
+.artist-frame, .release-frame {
+  text-align: center; }
+  .artist-frame .cover-wrapper, .release-frame .cover-wrapper {
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%;
+    overflow-y: hidden; }
+  .artist-frame .cover, .release-frame .cover {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%; }
+  .artist-frame .title, .release-frame .title {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: inline-block;
+    width: 90%;
+    overflow-x: hidden; }
+  .artist-frame .thumbnail:hover, .release-frame .thumbnail:hover {
+    cursor: pointer; }
+
+.clickable:hover {
+  cursor: pointer; }
+
+/*# sourceMappingURL=search.css.map */
