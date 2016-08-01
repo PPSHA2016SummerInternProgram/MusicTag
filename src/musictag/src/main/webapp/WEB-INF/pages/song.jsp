@@ -4,10 +4,12 @@
 
 
 <head>
+<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/autocomplete.css">
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/release.css">
 <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/song.css">
+
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
@@ -17,7 +19,7 @@
 </head>
 
 <body>
-	<%@ include file="_navbar.html"%>
+	<%@ include file="_navbar_new.html"%>
  	<div class="artist-background">
  		<div class="artist-background-top"></div>
  	</div>

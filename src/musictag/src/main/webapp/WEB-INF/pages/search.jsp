@@ -34,7 +34,9 @@
 				</form>
 			</div>
 	
-	
+		<div class="search_count">
+			搜索“lin”，找到 9999 首单曲
+		</div>
 		<ul class="nav nav-tabs">
   			<li role="presentation" class="active"><a href="#">Trackings</a></li>
   			<li role="presentation"><a href="#">Artists</a></li>
