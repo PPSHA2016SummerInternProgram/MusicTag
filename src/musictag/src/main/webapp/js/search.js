@@ -104,7 +104,7 @@ $(document).ready(function() {
                 }
                 relatedReleases = TagBuilder('ul', {class: 'related-releases'}, relatedReleases);
                 var row = $(TagBuilder('tr', {class: 'recording-row'},
-                    TagBuilder('td', {class: 'name'}, TagBuilder('a', {href: releaseUrl}, doc.name)) +
+                    TagBuilder('td', {class: 'name'}, TagBuilder('i', {class: 'glyphicon glyphicon-music'}, '&nbsp;') + TagBuilder('a', {href: releaseUrl}, doc.name)) +
                     TagBuilder('td', {class: 'artists_name'}, doc.artists_name.join(',')) +
                     TagBuilder('td', {class: 'related_releases'}, relatedReleases) +
                     TagBuilder('td', {class: 'length'}, OtherHelper.recordingLength(doc.length)) ));
