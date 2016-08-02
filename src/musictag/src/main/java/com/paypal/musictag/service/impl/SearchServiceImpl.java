@@ -75,11 +75,13 @@ public class SearchServiceImpl implements SearchService {
 			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException, ProtocolException,
 			MalformedURLException, JsonMappingException {
 		StringBuilder url = new StringBuilder(String.valueOf(MusicTagUtil.getProperties().get("searchURL")));
-		url.append("?wt=json&");
-		url.append("q=entity_type:").append(entityType).append(" AND (").append("name:\"").append(key).append("\" ")
-				.append(key).append(")").append("&");
+//		url.append("?wt=json&");
+//		url.append("q=entity_type:").append(entityType).append(" AND (").append("name:\"").append(key).append("\" ")
+//				.append(key).append(")").append("&");
+		url.append(entityType).append("?q=").append(key).append("&");
 		url.append("start=").append(currPage * perPage).append("&");
 		url.append("rows=").append(perPage).append("&");
+		System.out.println(url.toString());
 		return MusicTagUtil.jsontoMap(
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
 
