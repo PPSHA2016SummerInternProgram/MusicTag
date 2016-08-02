@@ -19,7 +19,7 @@
 </head>
 
 <body>
-	<%@ include file="_navbar_new.html"%>
+	<%@ include file="_navbar.html"%>
  	<div class="artist-background">
  		<div class="artist-background-top"></div>
  	</div>
