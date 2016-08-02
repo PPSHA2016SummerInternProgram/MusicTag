@@ -29,7 +29,7 @@ function clearBasicInfo() {
 
 function getBasicInfoFromServer() {
 	var url = 'basic-info';
-	var data = {}
+	var data = {};
 	sendAjax(url, data, receivedBasicInfo);
 }
 

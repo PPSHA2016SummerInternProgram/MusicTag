@@ -3,9 +3,10 @@ package com.paypal.musictag.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,15 +15,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.paypal.musictag.service.SearchService;
 import com.paypal.musictag.util.MusicTagUtil;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/search")
 public class SearchController {
 
+	private static final Logger logger = LoggerFactory.getLogger(ArtistController.class);
+
 	@Autowired
 	private SearchService searchServiceImpl;
 
-	@RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
-	public String searchpage(ModelMap model) {
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String searchPage(@RequestParam("key") String queryKey, HttpServletRequest request) {
+		logger.info("<<<UserRecords>>>/"+"SearchPage/"+queryKey+"/"+request.getRemoteAddr());
+
 		return "/WEB-INF/pages/search.jsp";
 	}
 

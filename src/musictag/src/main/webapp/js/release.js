@@ -143,10 +143,7 @@ function createRecordingHtml(recording, id, ratingMax) {
 	var time = '';
 	var length = getValue(recording, 'length');
 	if (length) {
-		var minutes = parseInt(length / 1000 / 60);
-		var seconds = parseInt(length / 1000 % 60);
-		seconds = seconds < 10 ? '0' + seconds : seconds;
-		time = minutes + ':' + seconds;
+		time = OtherHelper.recordingLength(length);
 	}
 	html += '<td class="time">' + time + '</td>';
 

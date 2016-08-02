@@ -1,0 +1,55 @@
+= '<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>'
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=ISO-8859-1", "http-equiv" => "Content-Type"}/
+    = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css" />'
+    = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/release.css" />'
+    = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/artist-overview.css" />'
+    = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/search.css" />'
+    = '<script src="<%=request.getContextPath()%>/js/jquery.js"></script>'
+    = '<script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>'
+    = '<script src="<%=request.getContextPath()%>/js/util.js"></script>'
+    = '<script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>'
+    = '<script src="<%=request.getContextPath()%>/js/paginator.js"></script>'
+    = '<script src="<%=request.getContextPath()%>/js/search.js"></script>'
+  %body
+    = '<%@ include file="_navbar.html"%>'
+    .container{:style => "margin-top:80px;"}
+      .row
+        .col-md-6.col-md-offset-3
+          %form{action: '/musictag/search'}
+            #search-bar.input-group
+              %input#search-input.form-control{placeholder: "Search for...", name: 'key', type: "text"}
+              %span.input-group-btn
+                %button.btn.btn-default{:type => "submit"}
+                  %i.glyphicon.glyphicon-search
+
+      #search-summary
+        %p &nbsp;
+
+      / Nav tabs
+      %ul.nav.nav-tabs#search-tabs{:role => "tablist"}
+        %li{:role => "presentation"}
+          %a#recordings-tab{"aria-controls" => "home", "data-toggle" => "tab", :href => "#recordings", :role => "tab"} Recordings
+        %li{:role => "presentation"}
+          %a#artists-tab{"aria-controls" => "profile", "data-toggle" => "tab", :href => "#artists", :role => "tab"} Artists
+        %li{:role => "presentation"}
+          %a#releases-tab{"aria-controls" => "messages", "data-toggle" => "tab", :href => "#releases", :role => "tab"} Albums
+      / Tab panes
+      .tab-content
+        #recordings.tab-pane.fade{:role => "tabpanel"}
+          %table#recording-tbl.table.table-striped{data: {pagination: '#recordings-pagination', 'per-page': 12, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}
+            %thead
+              %th Name
+              %th Artist(s)
+              %th Related album(s)
+              %th Length
+            %tbody
+          #recordings-pagination.text-center
+        #artists.tab-pane.fade{:role => "tabpanel"}
+          #artist-frames.row{data: {pagination: '#artist-pagination', 'per-page': 24, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}
+          #artist-pagination.text-center
+        #releases.tab-pane.fade{:role => "tabpanel"}
+          #release-frames.row{data: {pagination: '#release-pagination', 'per-page': 24, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}
+          #release-pagination.text-center
