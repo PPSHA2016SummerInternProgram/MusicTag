@@ -20,10 +20,11 @@ public class GlobalControllerExceptionHandler {
 	 */
 	@ExceptionHandler(value=Exception.class)
 	public void defaultExceptionHandler(Exception e) throws Exception{
+
+		logger.error(null, e);
+		
 		if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null){
 			throw e;
 		}
-		
-		logger.error(null, e);
 	}
 }
