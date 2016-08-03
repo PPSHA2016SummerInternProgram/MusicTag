@@ -22,9 +22,10 @@ public class ArtistDaoWSImpl implements ArtistDao {
 
 	@Autowired
 	private ImageDao imageDaoImpl;
-	
+
 	@Override
-	public Map<String, Object> profile(String artistGid) throws NetConnectionException, NetContentNotFoundException, NetBadRequestException {
+	public Map<String, Object> profile(String artistGid)
+			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException {
 		return MusicTagPrivateAPI.getArtistWikiProfle(artistGid);
 	}
 
@@ -37,17 +38,33 @@ public class ArtistDaoWSImpl implements ArtistDao {
 		return res;
 	}
 
+	private Map<String, Object> imageNotFound() {
+		Map<String, Object> notFound = new HashMap<>();
+		notFound.put("error", "not found");
+		return notFound;
+	}
+
 	@Override
-	public Map<String, Object> image(String artistGid) throws NetConnectionException, NetContentNotFoundException, NetBadRequestException {
+	public Map<String, Object> image(String artistGid)
+			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException {
 
 		Map<String, Object> info = imageDaoImpl.imageInfoFromCoverart(artistGid);
 		if (info != null) {
 			return info;
 		}
 
-		info = MusicTagPrivateAPI.getArtistCommonsImage(artistGid);
-		imageDaoImpl.saveImageInfoToCoverart(artistGid, info);
-		return info;
+		if (imageDaoImpl.isNotFound(artistGid)) {
+			return imageNotFound();
+		}
+
+		try {
+			info = MusicTagPrivateAPI.getArtistCommonsImage(artistGid);
+			imageDaoImpl.saveImageInfoToCoverart(artistGid, info);
+			return info;
+		} catch (Exception e) {
+			imageDaoImpl.saveNotFoundToCoverart(artistGid);
+			return imageNotFound();
+		}
 	}
 
 	@Override
@@ -59,8 +76,9 @@ public class ArtistDaoWSImpl implements ArtistDao {
 	}
 
 	@Override
-	public Map<String, Object> releaseGroup(String artistGid) throws NetConnectionException,
-			NetContentNotFoundException, JsonMappingException, MalformedURLException, ProtocolException, NetBadRequestException {
+	public Map<String, Object> releaseGroup(String artistGid)
+			throws NetConnectionException, NetContentNotFoundException, JsonMappingException, MalformedURLException,
+			ProtocolException, NetBadRequestException {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("artist", artistGid);
 		params.put("limit", "100");

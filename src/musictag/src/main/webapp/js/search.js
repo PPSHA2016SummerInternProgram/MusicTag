@@ -32,8 +32,11 @@ $(document).ready(function() {
                     downloadingImage.onload = function () {
                         frame.find('img').attr('src', this.src);
                     };
-                    downloadingImage.src = json.data['commons-img'];
-                    frame.find('img').attr('src', this.src);
+                    
+                    if(json['data']['commons-img']){
+                    	downloadingImage.src = json.data['commons-img'];
+                    	frame.find('img').attr('src', this.src);
+                    }
                 });
                 frame.appendTo(frames);
             });
@@ -71,8 +74,10 @@ $(document).ready(function() {
                         frame.find('img').attr('src', this.src);
                     };
 
-                    downloadingImage.src = json.data.images[0].thumbnails.large;
-                    frame.find('img').attr('src', this.src);
+                    if(json['data']['images']){
+                    	downloadingImage.src = json.data.images[0].thumbnails.large;
+                    	frame.find('img').attr('src', this.src);
+                    }
                 });
                 frame.appendTo(frames);
             });

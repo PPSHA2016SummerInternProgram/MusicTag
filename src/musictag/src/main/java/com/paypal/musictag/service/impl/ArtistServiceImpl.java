@@ -28,9 +28,6 @@ public class ArtistServiceImpl implements ArtistService {
 	@Autowired
 	private ImageDao imageDaoImpl;
 
-	@Autowired
-	private CoverArtArchiveServiceImpl coverArtArchiveServiceImpl;
-
 	@Override
 	public Map<String, Object> profile(String gid) throws IOException {
 		return artistDaoWSImpl.profile(gid);
@@ -47,7 +44,7 @@ public class ArtistServiceImpl implements ArtistService {
 
 		Map<String, Object> result = new HashMap<>();
 		for (Map<String, Object> image : images) {
-			if ("extralarge".equals(image.get("size"))) {
+			if ("large".equals(image.get("size"))) {
 				result.put("commons-img", image.get("src"));
 				return result;
 			}
@@ -80,7 +77,6 @@ public class ArtistServiceImpl implements ArtistService {
 		return res;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> releaseGroupPaged(String artistGid, int curPage, int perPage, String orderBy,
 			String direction) {

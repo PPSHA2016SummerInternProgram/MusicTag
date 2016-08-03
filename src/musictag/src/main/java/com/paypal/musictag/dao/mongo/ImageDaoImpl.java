@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.ImageDao;
 import com.paypal.musictag.dao.mongo.mapper.CoverartInfo;
+import com.paypal.musictag.dao.mongo.mapper.CoverartNotFound;
 import com.paypal.musictag.dao.mongo.mapper.LastfmAlbum;
 import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
 
@@ -95,6 +96,23 @@ public class ImageDaoImpl implements ImageDao {
 			return result;
 		}
 		return null;
+	}
+
+	@Override
+	public void saveNotFoundToCoverart(String mbid) {
+
+		if (!isNotFound(mbid)) {
+			CoverartNotFound coverart = new CoverartNotFound();
+			coverart.setGid(mbid);
+			mongoTemplate.save(coverart);
+		}
+	}
+
+	@Override
+	public boolean isNotFound(String mbid) {
+		Query searchQuery = new Query(Criteria.where("gid").is(mbid));
+		CoverartNotFound coverart = mongoTemplate.findOne(searchQuery, CoverartNotFound.class);
+		return coverart != null;
 	}
 
 }

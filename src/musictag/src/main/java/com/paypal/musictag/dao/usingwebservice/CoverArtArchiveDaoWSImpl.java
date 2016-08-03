@@ -2,6 +2,7 @@ package com.paypal.musictag.dao.usingwebservice;
 
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,24 @@ public class CoverArtArchiveDaoWSImpl implements CoverArtArchiveDao {
 			return info;
 		}
 
-		info = CoverArtArchiveAPI.sendRequest("release/", releaseGid);
-		imageDaoImpl.saveImageInfoToCoverart(releaseGid, info);
-		return info;
+		if (imageDaoImpl.isNotFound(releaseGid)) {
+			return imageNotFound();
+		}
+
+		try {
+			info = CoverArtArchiveAPI.sendRequest("release/", releaseGid);
+			imageDaoImpl.saveImageInfoToCoverart(releaseGid, info);
+			return info;
+		} catch (Exception e) {
+			imageDaoImpl.saveNotFoundToCoverart(releaseGid);
+			return imageNotFound();
+		}
+	}
+
+	private Map<String, Object> imageNotFound() {
+		Map<String, Object> notFound = new HashMap<>();
+		notFound.put("error", "not found");
+		return notFound;
 	}
 
 	@Override
@@ -45,8 +61,17 @@ public class CoverArtArchiveDaoWSImpl implements CoverArtArchiveDao {
 			return info;
 		}
 
-		info = CoverArtArchiveAPI.sendRequest("release-group/", releaseGroupGid);
-		imageDaoImpl.saveImageInfoToCoverart(releaseGroupGid, info);
-		return info;
+		if (imageDaoImpl.isNotFound(releaseGroupGid)) {
+			return imageNotFound();
+		}
+
+		try {
+			info = CoverArtArchiveAPI.sendRequest("release-group/", releaseGroupGid);
+			imageDaoImpl.saveImageInfoToCoverart(releaseGroupGid, info);
+			return info;
+		} catch (Exception e) {
+			imageDaoImpl.saveNotFoundToCoverart(releaseGroupGid);
+			return imageNotFound();
+		}
 	}
 }
