@@ -6,4 +6,6 @@ import java.util.Map;
 public interface ImageDao {
 
 	List<Map<String, Object>> artistImagesFromLastfm(String artistGid);
+
+	List<Map<String, Object>> albumImagesFromLastfm(String albumGid);
 }
