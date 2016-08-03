@@ -49,7 +49,7 @@
       <!-- Tab panes -->
       <div class='tab-content'>
         <div class='tab-pane fade' id='recordings' role='tabpanel'>
-          <table class='table table-striped' data-page-param='currPage' data-pagination='#recordings-pagination' data-per-page-param='perPage' data-per-page='12' data-window='10' id='recording-tbl'>
+          <table class='table table-striped' data-page-param='currPage' data-pagination='#recordings-pagination' data-per-page-param='perPage' data-per-page='24' data-window='10' id='recording-tbl'>
             <thead>
               <th>Name</th>
               <th>Artist(s)</th>

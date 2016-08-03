@@ -43,7 +43,7 @@ $(document).ready(function() {
         $("#artists-tab").off('show.bs.tab', artistHandler);
     };
     
-    var releaseHandler = function (e) {
+    var releaseHandler = function(e) {
         Paginator($("#release-frames"), '/musictag/search/release?key=' + queryKey, function (json) {
 
             var frames = $("#release-frames");
@@ -97,16 +97,25 @@ $(document).ready(function() {
             tbody.empty();
             res.docs.forEach(function(doc){
                 var releaseUrl = UrlHelper.recordingUrl(doc.mbid);
-                var relatedReleases = '';
-                for(var i = 0; i < doc.releases_name.length; i++) {
-                    relatedReleases += TagBuilder('li', null,
-                    TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[i])}, doc.releases_name[i]))
+                var relatedRelease = TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[0])}, doc.releases_name[0]);
+
+                var relatedReleasesMore = '';
+                for(var i = 1; i < doc.releases_name.length; i++) {
+                    relatedReleasesMore += TagBuilder('li', null,
+                    TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[i])}, doc.releases_name[i]));
                 }
-                relatedReleases = TagBuilder('ul', {class: 'related-releases'}, relatedReleases);
+
+                if(doc.releases_name.length > 1) {
+                    relatedReleasesMore = TagBuilder('span', null, ' | ') + TagBuilder('span', {class: 'dropdown'},
+                        TagBuilder('a', {data: {toggle: 'dropdown', href: '#'}}, 'More' + TagBuilder('span', {class: 'caret'})) +
+                        TagBuilder('ul', {class: 'dropdown-menu'}, relatedReleasesMore)
+                    );
+                }
+
                 var row = $(TagBuilder('tr', {class: 'recording-row'},
                     TagBuilder('td', {class: 'name'}, TagBuilder('i', {class: 'glyphicon glyphicon-music'}, '&nbsp;') + TagBuilder('a', {href: releaseUrl}, doc.name)) +
                     TagBuilder('td', {class: 'artists_name'}, doc.artists_name.join(',')) +
-                    TagBuilder('td', {class: 'related_releases'}, relatedReleases) +
+                    TagBuilder('td', {class: 'related_releases'}, relatedRelease + relatedReleasesMore) +
                     TagBuilder('td', {class: 'length'}, OtherHelper.recordingLength(doc.length)) ));
 
                 row.appendTo(tbody);
@@ -114,7 +123,7 @@ $(document).ready(function() {
 
             return res.numFound;
         });
-        $("#releases-tab").off('show.bs.tab', releaseHandler);
+        $("#recordings-tab").off('show.bs.tab', recordingHandler);
     };
 
     $('#artists-tab').on('show.bs.tab', artistHandler).trigger('click');
