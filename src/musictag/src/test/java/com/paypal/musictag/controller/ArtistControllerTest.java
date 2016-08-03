@@ -33,14 +33,14 @@ public class ArtistControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-	
-	@Test(expected=NetContentNotFoundException.class)
-	public void testProfileException() throws IOException{
+
+	@Test(expected = NetContentNotFoundException.class)
+	public void testProfileException() throws IOException {
 		artistController.profile(StaticValues.artistGidNoWikiExtract);
 	}
-	
-	@Test(expected=NetBadRequestException.class)
-	public void testProfileBadRequest() throws IOException{
+
+	@Test(expected = NetBadRequestException.class)
+	public void testProfileBadRequest() throws IOException {
 		artistController.profile(null);
 	}
 
@@ -50,9 +50,9 @@ public class ArtistControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-	
-	@Test(expected=NetBadRequestException.class)
-	public void testRelLinksException() throws IOException{
+
+	@Test(expected = NetBadRequestException.class)
+	public void testRelLinksException() throws IOException {
 		artistController.relLinks(null);
 	}
 
@@ -62,15 +62,20 @@ public class ArtistControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-	
-	@Test(expected = NetContentNotFoundException.class)
+
+	@Test
 	public void testImageException() throws IOException {
-		artistController.image(StaticValues.artistGidNoCommonImg);
+		Map<?, ?> map = artistController.image(StaticValues.artistGidNoCommonImg);
+		assertEquals(map.get("success"), true);
+		assertNotEquals(map.get("data"), null);
+
 	}
-	
-	@Test(expected = NetBadRequestException.class)
+
+	@Test
 	public void testImageBadRequestException() throws IOException {
-		artistController.image(null);
+		Map<?, ?> map = artistController.image(null);
+		assertEquals(map.get("success"), true);
+		assertNotEquals(map.get("data"), null);
 	}
 
 	@Test
@@ -79,9 +84,9 @@ public class ArtistControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-	
-	@Test(expected=NetBadRequestException.class)
-	public void testBasicInfoException() throws IOException{
+
+	@Test(expected = NetBadRequestException.class)
+	public void testBasicInfoException() throws IOException {
 		artistController.basicInfo(null);
 	}
 
@@ -91,8 +96,8 @@ public class ArtistControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-	
-	@Test(expected=NetBadRequestException.class)
+
+	@Test(expected = NetBadRequestException.class)
 	public void testReleaseGroupException() throws IOException {
 		artistController.releaseGroup(null);
 	}
@@ -112,9 +117,9 @@ public class ArtistControllerTest {
 		assertEquals(map.get("success"), true);
 		assertNotEquals(map.get("data"), null);
 	}
-	
+
 	@Test(expected = Exception.class)
-	public void testReleaseGroupPagedException() throws Exception{
+	public void testReleaseGroupPagedException() throws Exception {
 		artistController.releaseGroup(null);
 		artistController.releaseGroupPaged(StaticValues.artistGid0, 0, 10, null, null);
 		artistController.releaseGroupPaged(StaticValues.artistGid0, 0, 10, "something", null);
@@ -123,11 +128,11 @@ public class ArtistControllerTest {
 
 	@Test
 	public void testArtistOverview() {
-				
+
 		HttpServletRequest request = new MockHttpServletRequest();
-		
+
 		String page = artistController.artistOverview(null, StaticValues.artistGid0, request);
-		
+
 		assertEquals(page, "/WEB-INF/pages/artist-overview.jsp");
 	}
 }

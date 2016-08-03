@@ -49,7 +49,7 @@ $(document).ready(function() {
             var url = ContextPath + '/cover-art-archive/release-group/' + rg.id;
             var defaultAlbumCover = '/images/default_album_cover.jpg';
             $.getJSON(url, function(json){
-                if(json.success === true) {
+                if(json.success === true && json.data.images) {
                     var downloadingImage = new Image();
                     downloadingImage.onload = function () {
                         imgMap[rg.id][0].attr('src', this.src);

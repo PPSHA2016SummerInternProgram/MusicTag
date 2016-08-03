@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.paypal.musictag.exception.NetBadRequestException;
-import com.paypal.musictag.exception.NetContentNotFoundException;
 import com.paypal.musictag.values.StaticValues;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,14 +31,16 @@ public class CoverArtArchiveControllerTest {
 		assertNotEquals(map.get("data"), null);
 	}
 	
-	@Test(expected=NetContentNotFoundException.class)
+	@Test
 	public void testReleaseCoverException() throws IOException{
-		coverArtArchiveController.releaseCover(StaticValues.releaseGidNoCoverArt);
+		Map<?, ?> map = coverArtArchiveController.releaseCover(StaticValues.releaseGidNoCoverArt);
+		assertEquals(map.get("success"), true);
 	}
 
-	@Test(expected=NetBadRequestException.class)
+	@Test
 	public void testReleaseCoverBadRequestException() throws IOException{
-		coverArtArchiveController.releaseCover("not exist gid");
+		Map<?, ?> map = coverArtArchiveController.releaseCover("not exist gid");
+		assertEquals(map.get("success"), true);
 	}
 	
 	@Test
@@ -49,9 +50,10 @@ public class CoverArtArchiveControllerTest {
 		assertNotEquals(map.get("data"), null);
 	}
 	
-	@Test(expected=NetContentNotFoundException.class)
+	@Test
 	public void testReleaseGroupCoverException() throws IOException{
-		coverArtArchiveController.releaseGroupCover(StaticValues.releaseGroupGidNoCoverArt);
+		Map<?, ?> map = coverArtArchiveController.releaseGroupCover(StaticValues.releaseGroupGidNoCoverArt);
+		assertEquals(map.get("success"), true);
 	}
 	
 	@Test(expected=NetBadRequestException.class)

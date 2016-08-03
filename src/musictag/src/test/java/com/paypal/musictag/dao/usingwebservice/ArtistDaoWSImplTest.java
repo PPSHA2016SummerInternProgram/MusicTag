@@ -53,12 +53,12 @@ public class ArtistDaoWSImplTest {
 		artistDaoWSImpl.image(StaticValues.artistGid1);
 	}
 
-	@Test(expected = NetContentNotFoundException.class)
+	@Test
 	public void testRelLinksImageException() throws IOException {
 		artistDaoWSImpl.image(StaticValues.artistGidNoCommonImg);
 	}
 	
-	@Test(expected = NetBadRequestException.class)
+	@Test
 	public void testRelLinksImageBadRequestException() throws IOException {
 		artistDaoWSImpl.image(null);
 	}
