@@ -13,6 +13,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.ImageDao;
+import com.paypal.musictag.dao.mongo.mapper.CoverartInfo;
 import com.paypal.musictag.dao.mongo.mapper.LastfmAlbum;
 import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
 
@@ -25,9 +26,9 @@ public class ImageDaoImpl implements ImageDao {
 	@Override
 	public List<Map<String, Object>> artistImagesFromLastfm(String artistGid) {
 
-		Query searchUserQuery = new Query(Criteria.where("gid").is(artistGid));
+		Query searchQuery = new Query(Criteria.where("gid").is(artistGid));
 
-		LastfmArtist artist = mongoTemplate.findOne(searchUserQuery, LastfmArtist.class);
+		LastfmArtist artist = mongoTemplate.findOne(searchQuery, LastfmArtist.class);
 
 		List<Map<String, Object>> images;
 		if (artist != null && artist.getImage() != null) {
@@ -42,9 +43,9 @@ public class ImageDaoImpl implements ImageDao {
 	@Override
 	public List<Map<String, Object>> albumImagesFromLastfm(String albumGid) {
 
-		Query searchUserQuery = new Query(Criteria.where("gid").is(albumGid));
+		Query searchQuery = new Query(Criteria.where("gid").is(albumGid));
 
-		LastfmAlbum albums = mongoTemplate.findOne(searchUserQuery, LastfmAlbum.class);
+		LastfmAlbum albums = mongoTemplate.findOne(searchQuery, LastfmAlbum.class);
 
 		List<Map<String, Object>> images;
 		if (albums != null && albums.getImage() != null) {
@@ -70,6 +71,30 @@ public class ImageDaoImpl implements ImageDao {
 			}
 		}
 		return result;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void saveImageInfoToCoverart(String mbid, Map<String, Object> info) {
+
+		if (imageInfoFromCoverart(mbid) == null) {
+			CoverartInfo coverart = new CoverartInfo();
+			coverart.setGid(mbid);
+			coverart.setImages((List<Map<String, Object>>) info.get("images"));
+			mongoTemplate.save(coverart);
+		}
+	}
+
+	@Override
+	public Map<String, Object> imageInfoFromCoverart(String mbid) {
+		Query searchQuery = new Query(Criteria.where("gid").is(mbid));
+		CoverartInfo coverart = mongoTemplate.findOne(searchQuery, CoverartInfo.class);
+		if (coverart != null && coverart.getImages() != null && !coverart.getImages().isEmpty()) {
+			Map<String, Object> result = new HashMap<>();
+			result.put("images", coverart.getImages());
+			return result;
+		}
+		return null;
 	}
 
 }
