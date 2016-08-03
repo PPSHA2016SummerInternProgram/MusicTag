@@ -1,9 +1,22 @@
+@import 'bt_variables';
+
 #search-bar {
   margin-bottom: 1rem;
 }
 
 #search-tabs {
   margin-bottom: 1rem;
+}
+
+.recording-row, .artist-frame, .release-frame {
+  a:not(.releases-more) {
+    color: $gray-base;
+  }
+
+  em {
+    color: $link-color;
+    font-style: normal;
+  }
 }
 
 .artist-frame, .release-frame {
@@ -22,9 +35,10 @@
   .title {
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: inline-block;
+    display: block;
     width: 90%;
     overflow-x: hidden;
+    margin: auto;
   }
   .thumbnail:hover {
     cursor: pointer;

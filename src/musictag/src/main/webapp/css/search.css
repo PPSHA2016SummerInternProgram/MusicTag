@@ -4,6 +4,12 @@
 #search-tabs {
   margin-bottom: 1rem; }
 
+.recording-row a:not(.releases-more), .artist-frame a:not(.releases-more), .release-frame a:not(.releases-more) {
+  color: #000; }
+.recording-row em, .artist-frame em, .release-frame em {
+  color: #337ab7;
+  font-style: normal; }
+
 .artist-frame, .release-frame {
   text-align: center; }
   .artist-frame .cover-wrapper, .release-frame .cover-wrapper {
@@ -18,9 +24,10 @@
   .artist-frame .title, .release-frame .title {
     text-overflow: ellipsis;
     white-space: nowrap;
-    display: inline-block;
+    display: block;
     width: 90%;
-    overflow-x: hidden; }
+    overflow-x: hidden;
+    margin: auto; }
   .artist-frame .thumbnail:hover, .release-frame .thumbnail:hover {
     cursor: pointer; }
 

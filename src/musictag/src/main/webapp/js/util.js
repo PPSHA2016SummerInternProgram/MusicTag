@@ -105,6 +105,7 @@ window.UrlHelper = {
 
 window.OtherHelper = {
 	recordingLength: function( length ) {
+		if(length === undefined || length === null) return '';
 		var minutes = parseInt(length / 1000 / 60);
 		var seconds = parseInt(length / 1000 % 60);
 		seconds = seconds < 10 ? '0' + seconds : seconds;

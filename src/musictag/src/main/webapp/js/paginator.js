@@ -10,6 +10,8 @@
         var directionParam = enumerable.data('direction-param') || 'direction';
 
         var curPageClass = enumerable.data('cur-page-class') || 'active';
+        var autoTurn = enumerable.data('auto-turn');
+        if(autoTurn === undefined) autoTurn = true;
 
         // pagination template
         var template = function(curPage, pageCnt, window) {
@@ -92,7 +94,7 @@
 
         window.Paginator.turnTo = turnTo;
 
-        turnTo(enumerable, 0);
+        if(autoTurn === true) turnTo(enumerable, 0);
 
         var pagination = $(enumerable.data('pagination'));
         pagination.data('enumerable', '#' + enumerable.attr('id'));

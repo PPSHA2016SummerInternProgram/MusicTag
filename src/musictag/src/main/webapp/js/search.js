@@ -5,16 +5,20 @@ $(document).ready(function() {
     $("#search-input").val(queryKey);
     $("#navbar-search-input").val(queryKey);
 
+    var summaryUpdate = function (queryKey, numFound) {
+        $("#search-summary").html(TagBuilder('p', null,
+            'Search for "'+ queryKey + '", ' + TagBuilder('span', null, numFound) + ' Found'
+        ));
+    };
+
     var artistHandler = function(e) {
         Paginator($("#artist-frames"), '/musictag/search/artist?key=' + queryKey, function (json) {
 
             var frames = $("#artist-frames");
             var res = json.data.response;
-            var summary = $("#search-summary");
+            var highlight = json.data.highlighting;
 
-            summary.html(TagBuilder('p', null,
-                'Search for "'+ queryKey + '", ' + TagBuilder('span', null, res.numFound) + ' Found'
-            ));
+            summaryUpdate(queryKey, res.numFound);
 
             frames.empty();
             res.docs.forEach(function(doc){
@@ -24,7 +28,7 @@ $(document).ready(function() {
                         TagBuilder('div', {class: 'cover-wrapper'},
                             TagBuilder('img', {class: 'cover', src: UrlHelper.defaultArtistCoverUrl})
                         ) +
-                        TagBuilder('span', {class: 'title'}, doc.name)
+                        TagBuilder('span', {class: 'title'}, highlight[doc.mbid]['name'][0] || doc.name)
                     )));
 
                 $.getJSON(artistUrl + 'image', function(json){
@@ -32,7 +36,7 @@ $(document).ready(function() {
                     downloadingImage.onload = function () {
                         frame.find('img').attr('src', this.src);
                     };
-                    
+
                     if(json['data']['commons-img']){
                     	downloadingImage.src = json.data['commons-img'];
                     	frame.find('img').attr('src', this.src);
@@ -45,27 +49,27 @@ $(document).ready(function() {
         });
         $("#artists-tab").off('show.bs.tab', artistHandler);
     };
-    
+
     var releaseHandler = function(e) {
         Paginator($("#release-frames"), '/musictag/search/release?key=' + queryKey, function (json) {
 
             var frames = $("#release-frames");
             var res = json.data.response;
-            var summary = $("#search-summary");
+            var highlight = json.data.highlighting;
 
-            summary.html(TagBuilder('p', null,
-                'Search for "'+ queryKey + '", ' + TagBuilder('span', null, res.numFound) + ' Found'
-            ));
+            summaryUpdate(queryKey, res.numFound);
 
             frames.empty();
             res.docs.forEach(function(doc){
                 var releaseUrl = UrlHelper.releaseUrl(doc.mbid);
+                var year_month = (doc.release_year ? doc.release_year : '?') + ' - ' + (doc.release_month ? doc.release_month : '?');
                 var frame = $(TagBuilder('div', {class: 'release-frame col-xs-6 col-sm-4 col-md-3 col-lg-2'},
                     TagBuilder('a',  {href: releaseUrl, class: 'thumbnail'},
                         TagBuilder('div', {class: 'cover-wrapper'},
                             TagBuilder('img', {class: 'cover', src: UrlHelper.defaultArtistCoverUrl})
                         ) +
-                        TagBuilder('span', {class: 'title'}, doc.name)
+                        TagBuilder('span', {class: 'title'}, (highlight[doc.mbid]['name'] || doc.name) + ' ' + year_month) +
+                        TagBuilder('span', {class: 'artists_name'}, highlight[doc.mbid]['artists_name'].join(',') || doc.name)
                     )));
 
                 $.getJSON(releaseUrl + 'image', function(json){
@@ -93,33 +97,38 @@ $(document).ready(function() {
 
             var tbody = table.find('tbody');
             var res = json.data.response;
-            var summary = $("#search-summary");
+            var highlight = json.data.highlighting;
 
-            summary.html(TagBuilder('p', null,
-                'Search for "'+ queryKey + '", ' + TagBuilder('span', null, res.numFound) + ' Found'
-            ));
+            summaryUpdate(queryKey, res.numFound);
 
             tbody.empty();
             res.docs.forEach(function(doc){
                 var releaseUrl = UrlHelper.recordingUrl(doc.mbid);
-                var relatedRelease = TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[0])}, doc.releases_name[0]);
-
+                var hl = highlight[doc.mbid];
+                var relatedRelease = '';
                 var relatedReleasesMore = '';
-                for(var i = 1; i < doc.releases_name.length; i++) {
-                    relatedReleasesMore += TagBuilder('li', null,
-                    TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[i])}, doc.releases_name[i]));
-                }
 
-                if(doc.releases_name.length > 1) {
-                    relatedReleasesMore = TagBuilder('span', null, ' | ') + TagBuilder('span', {class: 'dropdown'},
-                        TagBuilder('a', {data: {toggle: 'dropdown', href: '#'}}, 'More' + TagBuilder('span', {class: 'caret'})) +
-                        TagBuilder('ul', {class: 'dropdown-menu'}, relatedReleasesMore)
-                    );
+                if( doc.hasOwnProperty("releases_mbid") ) {
+                    // NOTE: assume doc.releases_mbid, hl.releases_name have the same length
+                    relatedRelease = TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[0])}, hl.releases_name[0]);
+
+                    for (var i = 1; i < doc.releases_mbid.length; i++) {
+                        relatedReleasesMore += TagBuilder('li', null,
+                            TagBuilder('a', {href: UrlHelper.releaseUrl(doc.releases_mbid[i])}, hl.releases_name[i]));
+                    }
+
+                    if (doc.releases_mbid.length > 1) {
+                        relatedReleasesMore = TagBuilder('span', null, ' | ') + TagBuilder('span', {class: 'dropdown'},
+                                TagBuilder('a', { class: 'releases-more', data: { toggle: 'dropdown', href: '#' } }, 'More' + TagBuilder('span', {class: 'caret'})) +
+                                TagBuilder('ul', {class: 'dropdown-menu'}, relatedReleasesMore)
+                            );
+                    }
                 }
 
                 var row = $(TagBuilder('tr', {class: 'recording-row'},
-                    TagBuilder('td', {class: 'name'}, TagBuilder('i', {class: 'glyphicon glyphicon-music'}, '&nbsp;') + TagBuilder('a', {href: releaseUrl}, doc.name)) +
-                    TagBuilder('td', {class: 'artists_name'}, doc.artists_name.join(',')) +
+                    TagBuilder('td', {class: 'name'}, TagBuilder('i', {class: 'glyphicon glyphicon-music'}, '&nbsp;') +
+                        TagBuilder('a', {href: releaseUrl}, highlight[doc.mbid]['name'] || doc.name)) +
+                    TagBuilder('td', {class: 'artists_name'}, hl.artists_name.join(',')) +
                     TagBuilder('td', {class: 'related_releases'}, relatedRelease + relatedReleasesMore) +
                     TagBuilder('td', {class: 'length'}, OtherHelper.recordingLength(doc.length)) ));
 
