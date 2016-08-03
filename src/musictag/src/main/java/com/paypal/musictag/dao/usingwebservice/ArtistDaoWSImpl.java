@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.ImageDao;
-import com.paypal.musictag.dao.usingwebservice.api.CoverArtArchiveAPI;
 import com.paypal.musictag.dao.usingwebservice.api.MusicTagPrivateAPI;
 import com.paypal.musictag.dao.usingwebservice.api.MusicTagServiceAPI;
 import com.paypal.musictag.exception.NetBadRequestException;

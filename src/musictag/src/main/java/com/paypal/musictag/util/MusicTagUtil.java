@@ -153,4 +153,13 @@ public final class MusicTagUtil {
 		}
 		return map;
 	}
+
+	public static String fillPrefix(Object o, char ch, int len) {
+		String s = String.valueOf(o);
+		while (s.length() < len) {
+			s = ch + s;
+		}
+		return s;
+	}
+
 }

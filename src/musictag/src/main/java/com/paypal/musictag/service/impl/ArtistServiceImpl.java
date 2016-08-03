@@ -14,6 +14,7 @@ import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.ImageDao;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
 import com.paypal.musictag.service.ArtistService;
+import com.paypal.musictag.util.MusicTagUtil;
 import com.paypal.musictag.util.ReleaseesCountsMapResultHandler;
 
 @Service("artistServiceImpl")
@@ -26,6 +27,9 @@ public class ArtistServiceImpl implements ArtistService {
 
 	@Autowired
 	private ImageDao imageDaoImpl;
+
+	@Autowired
+	private CoverArtArchiveServiceImpl coverArtArchiveServiceImpl;
 
 	@Override
 	public Map<String, Object> profile(String gid) throws IOException {
@@ -76,6 +80,7 @@ public class ArtistServiceImpl implements ArtistService {
 		return res;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> releaseGroupPaged(String artistGid, int curPage, int perPage, String orderBy,
 			String direction) {
@@ -112,11 +117,12 @@ public class ArtistServiceImpl implements ArtistService {
 			Object month = group.get("first_release_date_month");
 			Object day = group.get("first_release_date_day");
 			if (year != null && month != null && day != null) {
-				date = "" + year + "-" + month + "-" + day;
+				date = "" + MusicTagUtil.fillPrefix(year, '0', 4) + "-" + MusicTagUtil.fillPrefix(month, '0', 2) + "-"
+						+ MusicTagUtil.fillPrefix(day, '0', 2);
 			} else if (year != null && month != null) {
-				date = "" + year + "-" + month;
+				date = "" + MusicTagUtil.fillPrefix(year, '0', 4) + "-" + MusicTagUtil.fillPrefix(month, '0', 2);
 			} else if (year != null) {
-				date = "" + year;
+				date = "" + MusicTagUtil.fillPrefix(year, '0', 4);
 			}
 			resGroup.put("first-release-date", date);
 			resGroups.add(resGroup);
