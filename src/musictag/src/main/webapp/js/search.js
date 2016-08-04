@@ -5,20 +5,22 @@ $(document).ready(function() {
     $("#search-input").val(queryKey);
     $("#navbar-search-input").val(queryKey);
 
-    var summaryUpdate = function (queryKey, numFound) {
+    var summaryUpdate = function (numFound) {
         $("#search-summary").html(TagBuilder('p', null,
-            'Search for "'+ queryKey + '", ' + TagBuilder('span', null, numFound) + ' Found'
+            'Search for "'+ queryKey + '", ' + TagBuilder('span', {class: 'total-found'}, numFound) + ' Found'
         ));
     };
 
     var artistHandler = function(e) {
+        var numFound = 0;
         Paginator($("#artist-frames"), '/musictag/search/artist?key=' + queryKey, function (json) {
 
             var frames = $("#artist-frames");
             var res = json.data.response;
             var highlight = json.data.highlighting;
 
-            summaryUpdate(queryKey, res.numFound);
+            numFound = res.numFound;
+            summaryUpdate(res.numFound);
 
             frames.empty();
             res.docs.forEach(function(doc){
@@ -47,17 +49,21 @@ $(document).ready(function() {
 
             return res.numFound;
         });
-        $("#artists-tab").off('show.bs.tab', artistHandler);
+        $("#artists-tab").off('show.bs.tab', artistHandler).on('show.bs.tab', function(){
+            summaryUpdate(numFound);
+        });
     };
 
     var releaseHandler = function(e) {
+        var numFound = 0;
         Paginator($("#release-frames"), '/musictag/search/release?key=' + queryKey, function (json) {
 
             var frames = $("#release-frames");
             var res = json.data.response;
             var highlight = json.data.highlighting;
 
-            summaryUpdate(queryKey, res.numFound);
+            numFound = res.numFound;
+            summaryUpdate(res.numFound);
 
             frames.empty();
             res.docs.forEach(function(doc){
@@ -88,10 +94,13 @@ $(document).ready(function() {
 
             return res.numFound;
         });
-        $("#releases-tab").off('show.bs.tab', releaseHandler);
+        $("#releases-tab").off('show.bs.tab', releaseHandler).on('show.bs.tab', function(){
+            summaryUpdate(numFound);
+        });
     };
 
     var recordingHandler = function(e) {
+        var numFound = 0;
         var table = $("#recording-tbl");
         Paginator(table, '/musictag/search/recording?key=' + queryKey, function (json) {
 
@@ -99,7 +108,8 @@ $(document).ready(function() {
             var res = json.data.response;
             var highlight = json.data.highlighting;
 
-            summaryUpdate(queryKey, res.numFound);
+            numFound = res.numFound;
+            summaryUpdate(res.numFound);
 
             tbody.empty();
             res.docs.forEach(function(doc){
@@ -118,8 +128,8 @@ $(document).ready(function() {
                     }
 
                     if (doc.releases_mbid.length > 1) {
-                        relatedReleasesMore = TagBuilder('span', null, ' | ') + TagBuilder('span', {class: 'dropdown'},
-                                TagBuilder('a', { class: 'releases-more', data: { toggle: 'dropdown', href: '#' } }, 'More' + TagBuilder('span', {class: 'caret'})) +
+                        relatedReleasesMore = TagBuilder('span', {class: 'recording-icon'}, ' | ') + TagBuilder('span', {class: 'dropdown'},
+                                TagBuilder('a', { class: 'releases-more', href: '#',data: { toggle: 'dropdown'}}, 'More' + TagBuilder('span', {class: 'caret'})) +
                                 TagBuilder('ul', {class: 'dropdown-menu'}, relatedReleasesMore)
                             );
                     }
@@ -137,7 +147,9 @@ $(document).ready(function() {
 
             return res.numFound;
         });
-        $("#recordings-tab").off('show.bs.tab', recordingHandler);
+        $("#recordings-tab").off('show.bs.tab', recordingHandler).on('show.bs.tab', function() {
+            summaryUpdate(numFound);
+        });
     };
 
     $('#artists-tab').on('show.bs.tab', artistHandler).trigger('click');

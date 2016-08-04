@@ -10,8 +10,6 @@
         var directionParam = enumerable.data('direction-param') || 'direction';
 
         var curPageClass = enumerable.data('cur-page-class') || 'active';
-        var autoTurn = enumerable.data('auto-turn');
-        if(autoTurn === undefined) autoTurn = true;
 
         // pagination template
         var template = function(curPage, pageCnt, window) {
@@ -56,7 +54,7 @@
                   '</a>' +
                 '</li>' +
                     left + pages + right +
-                '<li data-next-page="" ' + (curPage === last ? 'class="disabled"' : '') + '>' +
+                '<li data-next-page="" ' + (curPage === last || last === -1 ? 'class="disabled"' : '') + '>' +
                   '<a href="#" aria-label="Next">' +
                     '<span aria-hidden="true">&raquo;</span>' +
                   '</a>' +
@@ -92,17 +90,15 @@
             });
         };
 
-        window.Paginator.turnTo = turnTo;
-
-        if(autoTurn === true) turnTo(enumerable, 0);
+        turnTo(enumerable, 0);
 
         var pagination = $(enumerable.data('pagination'));
         pagination.data('enumerable', '#' + enumerable.attr('id'));
         // bind events
         pagination.on('click', '[data-page]', function(e) {
             if(!$(this).hasClass('active')) {
-                pagination = $(e.delegateTarget);
-                enumerable = $(pagination.data('enumerable'));
+                var pagination = $(e.delegateTarget);
+                var enumerable = $(pagination.data('enumerable'));
                 var index = $(this).data('page') - 1;
 
                 turnTo(enumerable, index);
@@ -112,9 +108,9 @@
 
         pagination.on('click', '[data-previous-page]', function(e) {
             if(!$(this).hasClass('disabled')) {
-                pagination = $(e.delegateTarget);
-                enumerable = $(pagination.data('enumerable'));
-                var curPage = pagination.find('.active').data('page');
+                var pagination = $(e.delegateTarget);
+                var enumerable = $(pagination.data('enumerable'));
+                var curPage = pagination.find('.' + curPageClass).data('page');
 
                 turnTo(enumerable, curPage - 2);
             }
@@ -123,9 +119,9 @@
 
         pagination.on('click', '[data-next-page]', function(e) {
             if(!$(this).hasClass('disabled')) {
-                pagination = $(e.delegateTarget);
-                enumerable = $(pagination.data('enumerable'));
-                var curPage = pagination.find('.active').data('page');
+                var pagination = $(e.delegateTarget);
+                var enumerable = $(pagination.data('enumerable'));
+                var curPage = pagination.find('.' + curPageClass).data('page');
 
                 turnTo(enumerable, curPage);
             }

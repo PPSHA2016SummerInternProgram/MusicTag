@@ -1,8 +1,14 @@
 #search-bar {
   margin-bottom: 1rem; }
 
+#search-summary .total-found {
+  color: #31708f; }
+
 #search-tabs {
   margin-bottom: 1rem; }
+
+.recording-row .release-more {
+  display: inline-block; }
 
 .recording-row a:not(.releases-more), .artist-frame a:not(.releases-more), .release-frame a:not(.releases-more) {
   color: #000; }
