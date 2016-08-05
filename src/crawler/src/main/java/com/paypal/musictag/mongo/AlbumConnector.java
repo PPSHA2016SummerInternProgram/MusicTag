@@ -9,9 +9,10 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.paypal.musictag.exception.NoAlbumException;
+import com.paypal.musictag.exception.NoNextException;
 import com.paypal.musictag.util.CrawlerUtil;
 
-public class AlbumConnector extends MongoConnector {
+public class AlbumConnector extends MongoConnector implements IGeneralConnector {
 
 	private final static String albumTableName = MongoCollectionName.LAST_FM_ALBUM.getName();
 	private final static String albumNotFoundTableName = MongoCollectionName.LAST_FM_ALBUM_NOT_FOUND.getName();
@@ -45,6 +46,7 @@ public class AlbumConnector extends MongoConnector {
 			BasicDBObject key = new BasicDBObject();
 			key.append("gid", 1);
 			key.append("listeners", 1);
+			key.append("playcount", 1);
 			key.append("_id", 0);
 
 			albums = getFoundCollection().find().projection(key).skip(offset).limit(cacheAmount);
@@ -83,6 +85,15 @@ public class AlbumConnector extends MongoConnector {
 			} catch (NoAlbumException e) {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	@Override
+	public Map<String, Object> next() throws NoNextException {
+		try {
+			return nextAlbum();
+		} catch (NoAlbumException e) {
+			throw new NoNextException();
 		}
 	}
 }
