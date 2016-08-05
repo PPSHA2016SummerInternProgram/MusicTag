@@ -16,7 +16,7 @@ public class TrackConnector extends MongoConnector implements IGeneralConnector 
 	private final static String trackNotFoundTableName = MongoCollectionName.LAST_FM_TRACK_NOT_FOUND.getName();
 
 	private int offset = 0;
-	private int cacheAmount = 1000;
+	private int cacheAmount = 10000;
 	private FindIterable<Document> tracks = null;
 	private MongoCursor<Document> cursor = null;
 

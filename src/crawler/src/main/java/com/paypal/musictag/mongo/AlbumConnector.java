@@ -20,7 +20,7 @@ public class AlbumConnector extends MongoConnector implements IGeneralConnector 
 	private final static String offsetFile = "logs/track.log";
 
 	private int offset = 0;
-	private int cacheAmount = 100;
+	private int cacheAmount = 10000;
 	private FindIterable<Document> albums = null;
 	private MongoCursor<Document> cursor = null;
 	private int seq = 0;
