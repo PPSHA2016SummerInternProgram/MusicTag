@@ -225,7 +225,7 @@
       <filter class="solr.SnowballPorterFilterFactory" language="Irish"/>
     </analyzer>
   </fieldType>
-  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100" multiValued="true">
+  <fieldType name="text_general" class="solr.TextField" positionIncrementGap="100">
     <analyzer type="index">
       <tokenizer class="solr.StandardTokenizerFactory"/>
       <filter class="solr.StopFilterFactory" words="stopwords.txt" ignoreCase="true"/>
@@ -423,16 +423,21 @@
   <field name="language" type="string" indexed="true" stored="true"/>
   <field name="last_updated" type="date" indexed="false" stored="true"/>
   <field name="length" type="int" indexed="false" stored="true"/>
-  <field name="listeners" type="int" indexed="false" stored="true"/>
+  <field name="listener_count" type="int" indexed="false" stored="true"/>
   <field name="mbid" type="string" indexed="true" stored="true"/>
   <field name="name" type="text_general" indexed="true" stored="true"/>
-  <field name="playcount" type="int" indexed="false" stored="true"/>
+  <field name="play_count" type="int" indexed="false" stored="true"/>
   <field name="quality" type="int" indexed="false" stored="true"/>
+  <field name="release_month" type="int" indexed="false" stored="true"/>
+  <field name="release_year" type="int" indexed="false" stored="true"/>
   <field name="releases_aliases" type="text_general" multiValued="true" indexed="true" stored="true"/>
   <field name="releases_mbid" type="string" multiValued="true" indexed="false" stored="true"/>
+  <field name="releases_month" type="ints" indexed="false" stored="true"/>
   <field name="releases_name" type="text_general" multiValued="true" indexed="true" stored="true"/>
+  <field name="releases_year" type="ints" indexed="false" stored="true"/>
   <field name="sort_name" type="text_en_splitting" indexed="true" stored="true"/>
   <field name="status" type="string" indexed="true" stored="true"/>
+  <field name="suggest_ngram" type="text_suggest_ngram" indexed="false" stored="true"/>
   <field name="type" type="string" indexed="true" stored="true"/>
   <dynamicField name="*_txt_en_split_tight" type="text_en_splitting_tight" indexed="true" stored="true"/>
   <dynamicField name="*_descendent_path" type="descendent_path" indexed="true" stored="true"/>
@@ -507,5 +512,6 @@
   <dynamicField name="*_d" type="double" indexed="true" stored="true"/>
   <dynamicField name="*_p" type="location" indexed="true" stored="true"/>
   <dynamicField name="*_c" type="currency" indexed="true" stored="true"/>
+  <copyField source="name" dest="suggest_ngram"/>
   <copyField source="*" dest="_text_"/>
 </schema>
