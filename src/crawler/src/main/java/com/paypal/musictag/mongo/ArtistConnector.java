@@ -9,9 +9,10 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCursor;
 import com.paypal.musictag.exception.NoArtistException;
+import com.paypal.musictag.exception.NoNextException;
 import com.paypal.musictag.util.CrawlerUtil;
 
-public final class ArtistConnector extends MongoConnector {
+public final class ArtistConnector extends MongoConnector implements IGeneralConnector {
 
 	private final static String artistTableName = MongoCollectionName.LAST_FM_ARTIST.getName();
 	private final static String artistNotFoundTableName = MongoCollectionName.LAST_FM_ARTIST_NOT_FOUND.getName();
@@ -19,7 +20,7 @@ public final class ArtistConnector extends MongoConnector {
 	private final static String offsetFile = "logs/album.log";
 
 	private int offset = 0;
-	private int cacheAmount = 100;
+	private int cacheAmount = 1000;
 	private FindIterable<Document> artists = null;
 	private MongoCursor<Document> cursor = null;
 	private int seq = 0;
@@ -36,6 +37,15 @@ public final class ArtistConnector extends MongoConnector {
 
 	public String getArtistNotFoundTablename() {
 		return artistNotFoundTableName;
+	}
+
+	public Map<String, Object> next() throws NoNextException {
+
+		try {
+			return nextArtist();
+		} catch (NoArtistException e) {
+			throw new NoNextException();
+		}
 	}
 
 	/**

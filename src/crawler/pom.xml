@@ -78,7 +78,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.paypal.musictag.crawler.lastfm.LastfmCrawler</mainClass>
+							<mainClass>com.paypal.musictag.statistics.HotDistribution</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
