@@ -74,7 +74,7 @@ public class SearchServiceImpl implements SearchService {
 	private Map<String, Object> search(String entityType, String key, int currPage, int perPage)
 			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException, ProtocolException,
 			MalformedURLException, JsonMappingException {
-		StringBuilder url = new StringBuilder(String.valueOf(MusicTagUtil.getProperties().get("searchURL")));
+		StringBuilder url = new StringBuilder(String.valueOf(MusicTagUtil.getProperties().get(entityType + "Base")));
 //		url.append("?wt=json&");
 //		url.append("q=entity_type:").append(entityType).append(" AND (").append("name:\"").append(key).append("\" ")
 //				.append(key).append(")").append("&");

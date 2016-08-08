@@ -14,11 +14,11 @@ import com.paypal.musictag.util.MusicTagUtil;
 
 @Service("suggestServiceImpl")
 public class SuggestServiceImpl implements SuggestService {
-	private static final String solrArtistSuggestURL = MusicTagUtil.getProperties().getProperty("solrArtistBase")
+	private static final String solrArtistSuggestURL = MusicTagUtil.getProperties().getProperty("artistBase")
 			+ "suggest";
-	private static final String solrReleaseSuggestURL = MusicTagUtil.getProperties().getProperty("solrReleaseBase")
+	private static final String solrReleaseSuggestURL = MusicTagUtil.getProperties().getProperty("releaseBase")
 			+ "suggest";
-	private static final String solrRecordingSuggestURL = MusicTagUtil.getProperties().getProperty("solrRecordingBase")
+	private static final String solrRecordingSuggestURL = MusicTagUtil.getProperties().getProperty("recordingBase")
 			+ "suggest";
 
 	private static Logger logger = LoggerFactory.getLogger(SuggestServiceImpl.class);
