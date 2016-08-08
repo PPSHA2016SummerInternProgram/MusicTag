@@ -5,7 +5,7 @@ $(document).ready(function() {
 			var responseJson = $.parseJSON(response);
 			var artistSuggest = responseJson.data.artist.suggest.suggester;
 			var query = Object.keys(artistSuggest)[0];
-			
+
 			var transformedArtists = transform(query, artistSuggest[query].suggestions, 'artist');
 			
 			var releaseSuggest = responseJson.data.release.suggest.suggester;
