@@ -768,8 +768,9 @@
         <str name="bf">3</str>
         <str name="fl">* score</str>
         <str name="fq">entity_type:artist</str>
-	<str name="hl">on</str>
-	<str name="hl.fl">name</str>
+        <str name="hl">on</str>
+        <str name="hl.fl">name</str>
+        <str name="hl.preserveMulti">true</str>
         <str name="echoParams">all</str>
         <str name="wt">json</str>
         <str name="indent">true</str>
@@ -788,7 +789,7 @@
       <str name="payloadField">mbid</str>
       <str name="suggestAnalyzerFieldType">text_general</str>
       <str name="buildOnCommit">true</str>
-      <str name="doHighlight">true</str>
+      <str name="highlight">false</str>
     </lst>
   </searchComponent>
 

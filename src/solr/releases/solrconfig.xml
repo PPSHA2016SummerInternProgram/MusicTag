@@ -769,6 +769,7 @@
         <str name="fq">entity_type:release</str>
         <str name="hl">on</str>
         <str name="hl.fl">name artists_name</str>
+        <str name="hl.preserveMulti">true</str>
         <str name="echoParams">all</str>
         <str name="wt">json</str>
         <str name="indent">true</str>
@@ -788,7 +789,7 @@
       <str name="contextField">entity_type</str>
       <str name="suggestAnalyzerFieldType">text_general</str>
       <str name="buildOnCommit">true</str>
-      <str name="doHighlight">true</str>
+      <str name="highlight">false</str>
     </lst>
   </searchComponent>
 
