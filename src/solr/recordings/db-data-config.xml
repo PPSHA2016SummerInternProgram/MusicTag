@@ -1,16 +1,13 @@
 <dataConfig>
     <dataSource  name="MyPsql" driver="org.postgresql.Driver" url="jdbc:postgresql://10.24.53.72:5432/musicbrainz_db" user="musicbrainz" password="musicbrainz"/>
-   <dataSource name="MyMongo" type="MongoDataSource" database="music-tag" host="10.24.53.72" />
+    <dataSource name="MyMongo" type="MongoDataSource" database="music-tag" host="10.24.53.72" />
     <document>
         <entity dataSource="MyPsql" name="recording" pk="mbid"
                 query="select recording.id as id, concat(recording.gid, '') as mbid, 'recording' as entity_type, recording.name as name, recording.artist_credit as artist_credit,
                               recording.length as length, recording.comment as comment, recording.last_updated as last_updated, recording.video as is_video
                       from recording
-                           left join artist_credit on recording.artist_credit = artist_credit.id
-                          join artist_credit_name on artist_credit_name.artist_credit = recording.artist_credit
-                           join artist on artist.id = artist_credit_name.artist
-where artist.id in (1186356,11611,1368646,927669,31612,171615,443647,432526,433327,849969,121699,740756,298188,1384293,251336,556376,1251037,426435,92625,137360,39696,992412,1014684,1149355,360382,752498,1371243,1361936,123742,304708,1374971,255652,239983,313811,3705,1372339,179011,227462,1050635,274057,502754,941349,303659,802811,553878,1209004,520867,740203,1288267,505019,717469,490486,1014868,874382,871183,365544,615277,444221,1203940,1189359,268618,478336,986429,1090374,817400,1386155,864811,740391,1041479,500943,981723,1091033,451983,1234331,379596,1104081,39295,891316,1326656,31494,830400,1318336,577079,842027,549085,822273,668545,222682,857431,1246038,391174,1063642,1126283,56688,324132,904053,1372584,756828,1205551,399736,1044593,1224599,1301537,538877,659271,895807,977271,1041127,184391,840744,442102,132888,314701,639445,1200686,477273,368604,1285991,632260,532112,161270,193512,1122143,808642,840182,780287,816984,570551,600029,667452,772346,520746,589493,863679,560972,11866,605378,789362,341508,336275,100671,342912,1339946,1367214,198568,1116516,1092109,405168,603989,287571,369747,766895,693652,70701,818928,1164007,1242923,700140,619322,978188,763205,174595,900285,981817,876359,895579,1163629,1240323,1335092,890403,1335090,768523,479897,1309393,548829,673489,1383476,1125971,1065275,644029,1169807,462516,537600,1372139,801501,250901,564518,35536,691692,1337339,1013019,977077,844181,702360,1354773,531603,178712,1132845,480427,615281,707375,126238,899925,491420,507912,1292550,612634,9659,1232838,185700,808917,876676,390458,579737,1290107,890433,1330332,316608,391058,110074,399541)">		
-	    <entity dataSource="MyPsql" name="recording_alias"
+                      limit ${dataimporter.request.limit}">
+            <entity dataSource="MyPsql" name="recording_alias"
                     query="select name from recording_alias where recording ='${recording.id}'" >
                 <field name="aliases" column="name" />
             </entity>
@@ -29,7 +26,7 @@ where artist.id in (1186356,11611,1368646,927669,31612,171615,443647,432526,4333
             </entity>
             <entity dataSource="MyPsql" name="recording_release"
                     query="select release.id as id, concat(release.gid, '') as mbid, release.name as name,
-				  area.name as area, release_event.date_year as release_year, release_event.date_month as release_month	
+                          area.name as area, release_event.date_year as release_year, release_event.date_month as release_month	
                           from track
                                join medium on medium.id = track.medium
                                join release on release.id = medium.release
@@ -46,23 +43,15 @@ where artist.id in (1186356,11611,1368646,927669,31612,171615,443647,432526,4333
                 <field name="releases_year" column="release_year"/>
                 <field name="releases_month" column="release_month"/>
             </entity>
+            <entity processor="MongoEntityProcessor"
+                    query="{'gid':'${recording.mbid}'}"
+                    collection="lastfm.track"
+                    datasource="MyMongo" 
+                    name="recording_count_info">
+                <field column="listeners" name="listener_count" mongoField="listeners" />
+                <field column="playcount" name="play_count" mongoField="playcount" />
+            </entity>
         </entity>
-    </document>
-<script><![CDATA[
-function hotTransformer(row){
-    row.put('listeners', '0');
-    row.put('playcount', '0');
-    if(row.get('stats') !== null && row.get('stats')){
-        var stats = row.get('stats');
-        if(stats.get('listeners') !== null){
-           row.put('listeners', stats.get('listeners'));
-        }
-        if(stats.get('playcount') !== null){
-           row.put('playcount', stats.get('playcount'));
-        }
-    }
-    return row;
-}
-]]></script>
 
+    </document>
 </dataConfig>

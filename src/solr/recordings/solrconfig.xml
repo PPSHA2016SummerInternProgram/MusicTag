@@ -817,9 +817,9 @@
       <str name="lookupImpl">BlendedInfixLookupFactory</str>
       <str name="dictionaryImpl">DocumentExpressionDictionaryFactory</str>
       <str name="field">name</str>
-      <str name="weightExpression">ln(listeners)+ln(playcount)</str>
-      <str name="sortField">listeners</str>
-      <str name="sortField">playcount</str>
+      <str name="weightExpression">ln(listener_count)+ln(play_count)</str>
+      <str name="sortField">listener_count</str>
+      <str name="sortField">play_count</str>
       <str name="payloadField">mbid</str>
       <str name="contextField">entity_type</str>
       <str name="suggestAnalyzerFieldType">text_general</str>

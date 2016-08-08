@@ -20,7 +20,7 @@ public final class ArtistConnector extends MongoConnector implements IGeneralCon
 	private final static String offsetFile = "logs/album.log";
 
 	private int offset = 0;
-	private int cacheAmount = 1000;
+	private int cacheAmount = 10000;
 	private FindIterable<Document> artists = null;
 	private MongoCursor<Document> cursor = null;
 	private int seq = 0;

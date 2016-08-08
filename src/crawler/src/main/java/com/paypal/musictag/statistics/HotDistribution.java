@@ -73,7 +73,7 @@ final public class HotDistribution {
 				}
 				Map<String, Object> item = connector.next();
 				int hotValue = getHot(entity, item, hot);
-				int key = hotValue / window;
+				int key = (int) (Math.log(hotValue + 1) * window);
 				int currHot = 0;
 				if (hotMap.containsKey(key)) {
 					currHot = hotMap.get(key);
@@ -121,6 +121,7 @@ final public class HotDistribution {
 	}
 
 	static public void main(String[] args) throws UnknownHostException {
+
 		HotDistribution h = new HotDistribution();
 		if (args.length < 2) {
 			System.out.println("At least two params are needed.");
@@ -138,7 +139,7 @@ final public class HotDistribution {
 		// String hotType = "playcount";
 
 		int window = 100;
-		int amount = 1000;
+		int amount = 100000;
 		if (args.length >= 3) {
 			window = Integer.parseInt(args[2]);
 		}
