@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.service.ArtistService;
+import com.paypal.musictag.service.StatisticsService;
 import com.paypal.musictag.util.MusicTagUtil;
+
+import net.sf.cglib.transform.impl.FieldProviderTransformer;
 
 @Controller
 @RequestMapping("/artist")
@@ -26,6 +29,8 @@ public class ArtistController {
 	
 	@Autowired
 	private ArtistService artistServiceImpl;
+	@Autowired
+	private StatisticsService statisticsServiceImpl;
 
 	@RequestMapping(value = "/{gid}/profile", method = RequestMethod.GET)
 	@ResponseBody
@@ -73,4 +78,22 @@ public class ArtistController {
 		
 		return "/WEB-INF/pages/artist-overview.jsp";
 	}
+	
+	/*
+	================================================================
+			statistics api for artist
+	================================================================		
+	*/
+	/**
+	 * 
+	 * @param gid
+	 * @return
+	 * @throws IOException
+	 */
+	@RequestMapping(value = "/{gid}/artist-credit-counts", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistCreditCount(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
+	}
+
 }

@@ -59,5 +59,4 @@ public class StatisticsController {
 	public Map<String, Object> recordingPlaycount() throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.recordingPlaycount());
 	}
-
 }

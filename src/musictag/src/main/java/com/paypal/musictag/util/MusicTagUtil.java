@@ -161,5 +161,13 @@ public final class MusicTagUtil {
 		}
 		return s;
 	}
+	
+	public static Object getFromMap(Map<String, Object> map, String key) {
+		if (map.containsKey(key.toLowerCase())) {
+			return map.get(key.toLowerCase());
+		} else {
+			return map.get(key.toUpperCase());
+		}
+	}
 
 }

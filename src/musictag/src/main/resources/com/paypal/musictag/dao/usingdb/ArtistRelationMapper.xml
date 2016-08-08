@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paypal.musictag.dao.usingdb.ArtistRelationMapper">
+	<select id="findArtistCredit" resultType="map">
+	with artist_ref_count as (
+		select artist.gid, sum(ac.ref_count) as ref_count 
+		from artist_credit_name as acn1 
+			join artist_credit as ac on acn1.artist_credit = ac.id 
+			join artist on acn1.artist = artist.id 
+		where artist.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR} and acn1.artist_credit in (
+			select artist_credit 
+			from artist_credit_name as acn2 join artist on acn2.artist = artist.id 
+			where artist.gid=#{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}) 
+		group by artist.gid)
+	
+	select artist_ref_count.gid, artist.name, artist_ref_count.ref_count 
+	from artist join artist_ref_count on artist.gid = artist_ref_count.gid;
+	</select>
+</mapper>
