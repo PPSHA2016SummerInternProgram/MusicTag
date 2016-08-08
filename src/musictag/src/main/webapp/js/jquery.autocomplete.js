@@ -694,7 +694,7 @@
             var groupMap = {}
             $.each(that.suggestions, function (i, suggestion) {
             	var val = formatResult(suggestion, value, i);
-            	var item = '<div class="' + className + '" data-index="' + i + '" title="' + val.replace(/<[^<>]*>/g, '') + '">' + val + '</div>';
+            	var item = '<div class="' + className + '" data-index="' + i + '" title="' + val.replace(/<[^<>]*>/g, '') + '-' + suggestion['data']['mbid'] + '">' + val + '</div>';
             	var groupKey = suggestion.data[groupBy];
             	if(groupMap[groupKey]){
             		groupMap[groupKey] = groupMap[groupKey] + item;
