@@ -12,12 +12,14 @@
 <link rel="stylesheet" type="text/css"
     href="<%=request.getContextPath()%>/css/artist-overview.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist.js"></script>
 <script src="<%=request.getContextPath()%>/js/albums.js"></script>
 <script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
+<script src="<%=request.getContextPath()%>/js/statistics.js"></script>
 </head>
 <body>
 
@@ -114,6 +116,17 @@
 		</div> 
 		</div>
 		
+		<div id="artist-statistics">
+		
+		</div>
+		
+		<div id="artist-listeners">
+		
+		</div>
+		
+		<div id="artist-playcount">
+		
+		</div>
 		
 		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.jsp"%>

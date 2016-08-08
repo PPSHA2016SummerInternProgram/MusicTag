@@ -15,8 +15,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private HotStatisticsDao hotStatisticsDaoImpl;
 
 	@Override
-	public Map<String, Object> artistListeners() {
-		return hotStatisticsDaoImpl.artistListeners();
+	public Map<String, Object> artistListeners(String gid) {
+		return hotStatisticsDaoImpl.artistListeners(gid);
 
 	}
 

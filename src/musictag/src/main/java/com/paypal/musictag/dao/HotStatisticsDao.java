@@ -4,7 +4,7 @@ import java.util.Map;
 
 public interface HotStatisticsDao {
 
-	Map<String, Object> artistListeners();
+	Map<String, Object> artistListeners(String gid);
 
 	Map<String, Object> artistPlaycount();
 

@@ -4,8 +4,13 @@ $(function() {
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-
+	showHotCharts();
 });
+
+function showHotCharts() {
+	getStatisticsDataFromServer('artist', 'listeners', 'artist-listeners', getUuid());
+//	getStatisticsDataFromServer('artist', 'playcount', 'artist-playcount')
+}
 
 function hideBasicInfo() {
 	$('[data-artist-overview]').hide();
