@@ -1,4 +1,4 @@
-function getStatisticsDataFromServer(entityType, hotType, id, gid) {
+function getStatisticsDataFromServer(entityType, hotType, id, gid, callback) {
 	var subUrl = entityType + '-' + hotType;
 	var url = ContextPath + '/statistics/' + subUrl + '/' + gid + '.ajax';
 	var args = {
@@ -6,6 +6,7 @@ function getStatisticsDataFromServer(entityType, hotType, id, gid) {
 		title : id,
 		yText : entityType,
 		name : subUrl,
+		callback : callback,
 	}
 	sendAjax(url, null, drawCharts, args);
 }
@@ -47,7 +48,7 @@ function drawCharts(response, args) {
 		xAxis : {
 			type : 'int',
 			plotLines : [ {
-				color : 'red',
+				color : '#dd4b39',
 				value : mark,
 				width : 1,
 			} ],
@@ -94,4 +95,9 @@ function drawCharts(response, args) {
 		series : seriesCache
 	}
 	$('#' + id).highcharts(config);
+	
+	var callback = args['callback'];
+	if(callback){
+		callback(rank, total);
+	}
 }
