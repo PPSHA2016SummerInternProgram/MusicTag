@@ -8,10 +8,12 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/release.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
 <script src="<%=request.getContextPath()%>/js/release_cover_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/release.js"></script>
+<script src="<%=request.getContextPath()%>/js/statistics.js"></script>
 </head>
 <body>
 
@@ -38,6 +40,24 @@
 				</div>
 			</div>
 		</div>
+		<div style="height: 0; margin-left: 300px;">
+			<div id="release-hot-div" style="padding-top: 30px; display: none">
+				<span style="padding-top: 30px;" id="release-hot-rank-hint">beats
+					100% releases:</span> <span class="artist-overview-value"> <span
+					class="readmore_toggler"> <span
+						class="readmore_single_toggler" id="release-hot-chart-read-more">See
+							More <i style="font-size: 10"
+							class="glyphicon glyphicon-triangle-bottom"></i>
+					</span> <span class="readmore_single_toggler" style="display: none;"
+						id="release-hot-chart-read-less">Hide <i
+							style="font-size: 10;" class="glyphicon glyphicon-triangle-top"></i>
+					</span>
+				</span>
+				</span>
+			</div>
+		</div>
+		<div id="release-listeners"
+			style="margin-top: 0px; height: 0; overflow: hidden; margin-left: 0px"></div>
 		<div style="max-width: 840px;">
 			<h2 style="margin-left: 165px">Tracklist</h2>
 			<table class="table track-table" style="display: none;"

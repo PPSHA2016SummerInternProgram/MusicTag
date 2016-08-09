@@ -13,7 +13,9 @@ import org.springframework.stereotype.Service;
 import com.paypal.musictag.dao.HotStatisticsDao;
 import com.paypal.musictag.dao.mongo.mapper.HotInfo;
 import com.paypal.musictag.dao.mongo.mapper.HotRank;
+import com.paypal.musictag.dao.mongo.mapper.LastfmAlbum;
 import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
+import com.paypal.musictag.dao.mongo.mapper.LastfmTrack;
 
 @Service("hotStatisticsDaoImpl")
 public class HotStatisticsDaoImpl implements HotStatisticsDao {
@@ -28,22 +30,46 @@ public class HotStatisticsDaoImpl implements HotStatisticsDao {
 		if (hotInfo != null) {
 			map.put("data", hotInfo.getData());
 		}
+		fillRank(map, type, gid);
+		return map;
+	}
 
-		searchQuery = new Query(Criteria.where("gid").is(gid));
-		LastfmArtist artist = mongoTemplate.findOne(searchQuery, LastfmArtist.class);
-		if (artist != null) {
+	private void fillRank(Map<String, Object> map, String type, String gid) {
 
-			Map<String, Object> stats = artist.getStats();
-			if (stats != null) {
-				int amount = Integer.parseInt(String.valueOf(stats.get(type.split("-")[1])));
-				map.put("amount", amount);
-				map.put("rank", getHotRank(type, amount));
-				Long totalAmount = mongoTemplate.count(null, Long.class, "lastfm." + type.split("-")[0]);
-				map.put("total", totalAmount.intValue());
+		String type0 = type.split("-")[0];
+		String type1 = type.split("-")[1];
+
+		if ("artist".equals(type0)) {
+			Query searchQuery = new Query(Criteria.where("gid").is(gid));
+			LastfmArtist artist = mongoTemplate.findOne(searchQuery, LastfmArtist.class);
+			if (artist != null) {
+				Map<String, Object> stats = artist.getStats();
+				if (stats != null) {
+					int amount = Integer.parseInt(String.valueOf(stats.get(type1)));
+					map.put("amount", amount);
+					map.put("rank", getHotRank(type, amount));
+					Long totalAmount = mongoTemplate.count(null, Long.class, "lastfm." + type.split("-")[0]);
+					map.put("total", totalAmount.intValue());
+				}
 			}
+		} else {
+			Query searchQuery = new Query(Criteria.where("gid").is(gid));
+			int amount = 0;
+			if ("album".equals(type0)) {
+				LastfmAlbum album = mongoTemplate.findOne(searchQuery, LastfmAlbum.class);
+				amount = Integer.parseInt(
+						String.valueOf("listeners".equals(type1) ? album.getListeners() : album.getPlaycount()));
+			} else {
+				LastfmTrack track = mongoTemplate.findOne(searchQuery, LastfmTrack.class);
+				amount = Integer.parseInt(
+						String.valueOf("listeners".equals(type1) ? track.getListeners() : track.getPlaycount()));
+			}
+			map.put("amount", amount);
+			map.put("rank", getHotRank(type, amount));
+			Long totalAmount = mongoTemplate.count(null, Long.class, "lastfm." + type0);
+			map.put("total", totalAmount.intValue());
 		}
 
-		return map;
 	}
 
 	private int getHotRank(String type, int hot) {
