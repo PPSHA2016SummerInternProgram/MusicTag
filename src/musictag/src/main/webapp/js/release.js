@@ -35,7 +35,6 @@ function addReleaseHotChartListener() {
 	var chart = $('#release-listeners');
 	var more = $('#release-hot-chart-read-more');
 	var less = $('#release-hot-chart-read-less');
-	var hiddenClass = 'release-overview-profile-less';
 	more.on('click', function() {
 		more.hide();
 		less.show();
