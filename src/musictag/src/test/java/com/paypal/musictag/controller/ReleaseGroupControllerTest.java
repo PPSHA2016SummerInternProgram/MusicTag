@@ -31,6 +31,14 @@ public class ReleaseGroupControllerTest {
 		assertNotEquals(map.get("data"), null);
 	}
 	
+	
+	@Test
+	public void testimage() throws IOException {
+		Map<?, ?> map = releaseGroupController.image(StaticValues.releaseGroupGid0);
+		assertEquals(map.get("success"), true);
+		assertNotEquals(map.get("data"), null);
+	}
+	
 	@Test(expected=NetBadRequestException.class)
 	public void testReleaseException() throws IOException{
 		releaseGroupController.releases(null);
