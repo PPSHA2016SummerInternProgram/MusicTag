@@ -60,8 +60,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 		List<Map<String, Object>> linksWithCount = artistRelationMapper.findArtistCreditLinkWithCount(UUID.fromString(artistGid));
 		//node info
 		List<Integer> ids = extractUniqueIds(linksWithCount);
-		List<Map<String, Object>> nodes = artistRelationMapper.findArtistCreditNode(ids);
-		addCounttoNodes(nodes, linksWithCount);
+		List<Map<String, Object>> nodes = new LinkedList<>();
+		if (ids.size() > 0) {
+			nodes = artistRelationMapper.findArtistCreditNode(ids);	
+			addCounttoNodes(nodes, linksWithCount);
+		}
+		
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("links", linksWithCount);
 		resultMap.put("nodes", nodes);
