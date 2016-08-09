@@ -19,8 +19,6 @@ import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.service.StatisticsService;
 import com.paypal.musictag.util.MusicTagUtil;
 
-import net.sf.cglib.transform.impl.FieldProviderTransformer;
-
 @Controller
 @RequestMapping("/artist")
 public class ArtistController {

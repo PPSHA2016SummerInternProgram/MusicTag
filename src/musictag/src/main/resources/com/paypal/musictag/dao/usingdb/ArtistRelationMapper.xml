@@ -3,19 +3,38 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paypal.musictag.dao.usingdb.ArtistRelationMapper">
-	<select id="findArtistCredit" resultType="map">
-	with artist_ref_count as (
-		select artist.gid, sum(ac.ref_count) as ref_count 
+	<select id="findArtistCreditLinkWithCount" resultType="map">
+
+	with first_level as (
+		select ar1.id as source, ar2.id as target, sum(ac1.ref_count) as count
 		from artist_credit_name as acn1 
-			join artist_credit as ac on acn1.artist_credit = ac.id 
-			join artist on acn1.artist = artist.id 
-		where artist.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR} and acn1.artist_credit in (
-			select artist_credit 
-			from artist_credit_name as acn2 join artist on acn2.artist = artist.id 
-			where artist.gid=#{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}) 
-		group by artist.gid)
+			join artist as ar1 on acn1.artist = ar1.id
+			join artist_credit as ac1 on acn1.artist_credit = ac1.id
+			join artist_credit_name as acn2 on acn2.artist_credit = acn1.artist_credit 
+			join artist as ar2 on ar2.id = acn2.artist
+		where ar1.gid =#{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR} and ar2.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		group by source, target)
 	
-	select artist_ref_count.gid, artist.name, artist_ref_count.ref_count 
-	from artist join artist_ref_count on artist.gid = artist_ref_count.gid;
+	select * from first_level 
+	union
+	select fl.target as source, acn2.artist as target,sum(ac1.ref_count) as count
+	from artist_credit_name as acn1
+		join first_level as fl on fl.target = acn1.artist
+		join artist as ar1 on ar1.id = acn1.artist
+		join artist_credit as ac1 on acn1.artist_credit = ac1.id
+		join artist_credit_name as acn2 on acn2.artist_credit = acn1.artist_credit
+		join artist as ar2 on ar2.id = acn2.artist
+	where fl.target != acn2.artist and ar2.gid !=#{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	group by fl.target, acn2.artist;
+	
+	</select>
+	
+	<select id="findArtistCreditNode" resultType="map">
+		select id, gid, name 
+		from artist
+		where id in
+		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
+			#{artistId}
+		</foreach>
 	</select>
 </mapper>
