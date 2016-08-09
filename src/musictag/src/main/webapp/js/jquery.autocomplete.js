@@ -662,8 +662,8 @@
                 beforeRender = options.beforeRender,
                 html = '',
                 category,
-                formatGroup = function (suggestion, index) {
-                        var currentCategory = suggestion.data[groupBy];
+                formatGroupLeft = function (suggestion, index) {
+                    	var currentCategory = suggestion.data[groupBy];
 
                         if (category === currentCategory){
                             return '';
@@ -671,7 +671,17 @@
 
                         category = currentCategory;
 
-                        return '<div class="autocomplete-group"><strong>' + category + '</strong></div>';
+                        return '<div class="autocomplete-group">' + category;
+                    },
+                formatGroupRight = function (suggestion, index) {
+                    	return '</div>';
+                    },
+                formatGroup = function (suggestion, index) {
+                        var left = formatGroupLeft(suggestion, index);
+                        if(left){
+                        	return left + formatGroupRight(suggestion, index);
+                        }
+                        return left;
                     };
 
             if (options.triggerSelectOnValidInput && that.isExactMatch(value)) {
@@ -680,13 +690,29 @@
             }
 
             // Build suggestions inner HTML:
+            var groupState = 0;
+            var groupMap = {}
             $.each(that.suggestions, function (i, suggestion) {
-                if (groupBy){
-                    html += formatGroup(suggestion, value, i);
-                }
-
-                html += '<div class="' + className + '" data-index="' + i + '">' + formatResult(suggestion, value, i) + '</div>';
+            	var val = formatResult(suggestion, value, i);
+            	var item = '<div class="' + className + '" data-index="' + i + '" title="' + val.replace(/<[^<>]*>/g, '') + '-' + suggestion['data']['mbid'] + '">' + val + '</div>';
+            	var groupKey = suggestion.data[groupBy];
+            	if(groupMap[groupKey]){
+            		groupMap[groupKey] = groupMap[groupKey] + item;
+            	}else{
+            		groupMap[groupKey] = item;
+            	}
             });
+            for(var groupKey in groupMap){
+            	var spanHtml = '';
+            	if(groupKey === 'artist'){
+            		spanHtml = '<span class="glyphicon glyphicon-user"></span>';
+            	}else if(groupKey === 'recording'){
+            		spanHtml = '<span class="glyphicon glyphicon-music"></span>';
+            	}else if(groupKey === 'release'){
+            		spanHtml = '<span class="glyphicon glyphicon-cd"></span>';
+            	}
+            	html += '<div class="autocomplete-group"><div class="autocomplete-type">' + spanHtml + groupKey + '</div><div class="autocomplete-items">' + groupMap[groupKey] + '</div></div><div style="height:0;clear: both"></div>'
+            }
 
             this.adjustContainerWidth();
 

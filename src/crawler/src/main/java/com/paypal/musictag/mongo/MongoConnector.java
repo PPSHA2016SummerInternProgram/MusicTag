@@ -14,9 +14,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 enum MongoCollectionName {
-	LAST_FM_ARTIST("lastfm.artist"), LAST_FM_ARTIST_NOT_FOUND("lastfm.artist.notfound"), LAST_FM_ALBUM(
-			"lastfm.album"), LAST_FM_ALBUM_NOT_FOUND("lastfm.album.notfound"), LAST_FM_TRACK(
-					"lastfm.track"), LAST_FM_TRACK_NOT_FOUND("lastfm.track.notfound");
+	LAST_FM_ARTIST("lastfm.artist"), LAST_FM_ARTIST_NOT_FOUND("lastfm.artist.notfound"),
+	LAST_FM_ALBUM("lastfm.album"), LAST_FM_ALBUM_NOT_FOUND("lastfm.album.notfound"),
+	LAST_FM_TRACK("lastfm.track"), LAST_FM_TRACK_NOT_FOUND("lastfm.track.notfound"),
+	LYRIC("lyric"), LYRIC_NOT_FOUND("lyric.not_found");
+
 	private String collectionName;
 
 	MongoCollectionName(String name) {

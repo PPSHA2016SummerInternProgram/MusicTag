@@ -4,8 +4,46 @@ $(function() {
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-
+	showHotCharts();
 });
+
+var basicInfo;
+
+function showHotCharts() {
+	getStatisticsDataFromServer('artist', 'listeners', 'artist-listeners',
+			getUuid(), showRank);
+}
+
+function showRank(rank, total) {
+	if (rank && total) {
+		var key = $('[data-artist-listeners-chart-key]');
+		var artistName = '';
+		if(basicInfo){
+			artistName = getValue(basicInfo, 'name');
+		}
+		var rate = parseInt(rank / total * 10000) / 100;
+		key.html(artistName + ' beats <span style="color:#dd4b39">' + rate + '%</span> artists: ');
+		$('[data-artist-listeners-char]').show();
+		addArtistHotChartListener();
+	}
+}
+
+function addArtistHotChartListener() {
+	var chart = $('[data-artist-listeners-chart-value]');
+	var more = $('#artist-hot-chart-read-more');
+	var less = $('#artist-hot-chart-read-less');
+	var hiddenClass = 'artist-overview-profile-less';
+	more.on('click', function() {
+		more.hide();
+		less.show();
+		chart.css('height', '');
+	});
+	less.on('click', function() {
+		more.show();
+		less.hide();
+		chart.css('height', '0');
+	});
+}
 
 function hideBasicInfo() {
 	$('[data-artist-overview]').hide();
@@ -25,6 +63,7 @@ function clearBasicInfo() {
 	$('[data-artist-overview-life-span]').text('');
 	$('[data-artist-overview-image]').attr('src', '');
 	$('[data-artist-overview-links-wrapper]').html('')
+	$('[data-artist-listeners-chart]').html('');
 }
 
 function getBasicInfoFromServer() {
@@ -86,6 +125,8 @@ function receivedBasicInfo(data) {
 	if (!data.success) {
 		return;
 	}
+	
+	basicInfo = data.data;
 
 	var info = data.data;
 	var name = getValue(info, 'name');

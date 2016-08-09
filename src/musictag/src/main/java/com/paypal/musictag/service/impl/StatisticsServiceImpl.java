@@ -24,34 +24,34 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private ArtistRelationMapper artistRelationMapper;
 
 	@Override
-	public Map<String, Object> artistListeners() {
-		return hotStatisticsDaoImpl.artistListeners();
+	public Map<String, Object> artistListeners(String gid) {
+		return hotStatisticsDaoImpl.artistListeners(gid);
 
 	}
 
 	@Override
-	public Map<String, Object> artistPlaycount() {
-		return hotStatisticsDaoImpl.artistPlaycount();
+	public Map<String, Object> artistPlaycount(String gid) {
+		return hotStatisticsDaoImpl.artistPlaycount(gid);
 	}
 
 	@Override
-	public Map<String, Object> releaseListeners() {
-		return hotStatisticsDaoImpl.releaseListeners();
+	public Map<String, Object> releaseListeners(String gid) {
+		return hotStatisticsDaoImpl.releaseListeners(gid);
 	}
 
 	@Override
-	public Map<String, Object> releasePlaycount() {
-		return hotStatisticsDaoImpl.releasePlaycount();
+	public Map<String, Object> releasePlaycount(String gid) {
+		return hotStatisticsDaoImpl.releasePlaycount(gid);
 	}
 
 	@Override
-	public Map<String, Object> recordingListeners() {
-		return hotStatisticsDaoImpl.recordingListeners();
+	public Map<String, Object> recordingListeners(String gid) {
+		return hotStatisticsDaoImpl.recordingListeners(gid);
 	}
 
 	@Override
-	public Map<String, Object> recordingPlaycount() {
-		return hotStatisticsDaoImpl.recordingPlaycount();
+	public Map<String, Object> recordingPlaycount(String gid) {
+		return hotStatisticsDaoImpl.recordingPlaycount(gid);
 	}
 
 	@Override
