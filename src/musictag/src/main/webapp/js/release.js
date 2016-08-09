@@ -6,7 +6,49 @@ $(function() {
 	getReleaseCoverFromServer(uuid);
 	getReleaseArtistinfoFromServer();
 	getReleasevoteFromServer();
+	showHotCharts();
 });
+
+var basicInfo;
+
+function showHotCharts() {
+	getStatisticsDataFromServer('release', 'listeners', 'release-listeners',
+			getUuid(), showRank);
+}
+
+function showRank(rank, total) {
+	if (rank && total) {
+		var key = $('#release-hot-rank-hint');
+		var artistName = '';
+		if(basicInfo){
+			artistName = getValue(basicInfo, 'name');
+		}
+		var rate = parseInt(rank / total * 10000) / 100;
+		key.html(artistName + ' beats <span style="color:#dd4b39">' + rate + '%</span> releases: ');
+		$('[data-artist-listeners-char]').show();
+		$('#release-hot-div').show();
+		addReleaseHotChartListener();
+	}
+}
+
+function addReleaseHotChartListener() {
+	var chart = $('#release-listeners');
+	var more = $('#release-hot-chart-read-more');
+	var less = $('#release-hot-chart-read-less');
+	var hiddenClass = 'release-overview-profile-less';
+	more.on('click', function() {
+		more.hide();
+		less.show();
+		chart.css('margin-top', '50px');
+		chart.css('height', '');
+	});
+	less.on('click', function() {
+		more.show();
+		less.hide();
+		chart.css('margin-top', '0');
+		chart.css('height', '0');
+	});
+}
 
 function clearBasicInfo() {
 	$('[data-artist-name]').text('');

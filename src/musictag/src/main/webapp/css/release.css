@@ -131,3 +131,19 @@
 .track-table .play-amount {
 	width: 150px;
 }
+
+.readmore_toggler {
+	background: white;
+	color: #868379;
+	height: 20px;
+}
+
+.readmore_toggler:hover {
+	background: white;
+	color: black;
+	height: 20px;
+}
+
+.readmore_single_toggler:hover {
+	cursor: pointer;
+}
