@@ -62,28 +62,28 @@ public class HotStatisticsDaoImpl implements HotStatisticsDao {
 	}
 
 	@Override
-	public Map<String, Object> artistPlaycount() {
-		return getData("artist-playcount", "");
+	public Map<String, Object> artistPlaycount(String gid) {
+		return getData("artist-playcount", gid);
 	}
 
 	@Override
-	public Map<String, Object> releaseListeners() {
-		return getData("album-listeners", "");
+	public Map<String, Object> releaseListeners(String gid) {
+		return getData("album-listeners", gid);
 	}
 
 	@Override
-	public Map<String, Object> releasePlaycount() {
-		return getData("album-playcount", "");
+	public Map<String, Object> releasePlaycount(String gid) {
+		return getData("album-playcount", gid);
 	}
 
 	@Override
-	public Map<String, Object> recordingListeners() {
-		return getData("track-listeners", "");
+	public Map<String, Object> recordingListeners(String gid) {
+		return getData("track-listeners", gid);
 	}
 
 	@Override
-	public Map<String, Object> recordingPlaycount() {
-		return getData("track-playcount", "");
+	public Map<String, Object> recordingPlaycount(String gid) {
+		return getData("track-playcount", gid);
 	}
 
 }
