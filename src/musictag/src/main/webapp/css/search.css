@@ -37,6 +37,14 @@
   .artist-frame .thumbnail:hover, .release-frame .thumbnail:hover {
     cursor: pointer; }
 
+.release-frame .artists-name {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  width: 90%;
+  overflow-x: hidden;
+  margin: auto; }
+
 .clickable:hover {
   cursor: pointer; }
 

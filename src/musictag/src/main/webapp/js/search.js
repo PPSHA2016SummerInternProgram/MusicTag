@@ -75,7 +75,7 @@ $(document).ready(function() {
                             TagBuilder('img', {class: 'cover', src: UrlHelper.defaultArtistCoverUrl})
                         ) +
                         TagBuilder('span', {class: 'title'}, (highlight[doc.mbid]['name'] || doc.name) + ' ' + year_month) +
-                        TagBuilder('span', {class: 'artists_name'}, highlight[doc.mbid]['artists_name'].join(',') || doc.name)
+                        TagBuilder('span', {class: 'artists-name'}, highlight[doc.mbid]['artists_name'].join(',') || doc.name)
                     )));
 
                 $.getJSON(releaseUrl + 'image', function(json){
@@ -138,8 +138,8 @@ $(document).ready(function() {
                 var row = $(TagBuilder('tr', {class: 'recording-row'},
                     TagBuilder('td', {class: 'name'}, TagBuilder('i', {class: 'glyphicon glyphicon-music'}, '&nbsp;') +
                         TagBuilder('a', {href: releaseUrl}, highlight[doc.mbid]['name'] || doc.name)) +
-                    TagBuilder('td', {class: 'artists_name'}, hl.artists_name.join(',')) +
-                    TagBuilder('td', {class: 'related_releases'}, relatedRelease + relatedReleasesMore) +
+                    TagBuilder('td', {class: 'artists-name'}, hl.artists_name.join(',')) +
+                    TagBuilder('td', {class: 'related-releases'}, relatedRelease + relatedReleasesMore) +
                     TagBuilder('td', {class: 'length'}, OtherHelper.recordingLength(doc.length)) ));
 
                 row.appendTo(tbody);
