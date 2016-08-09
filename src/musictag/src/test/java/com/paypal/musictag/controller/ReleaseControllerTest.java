@@ -15,8 +15,13 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.util.MusicTagUtil;
 import com.paypal.musictag.values.StaticValues;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -84,6 +89,19 @@ public class ReleaseControllerTest {
 		String page = releaseController.tracklistpage(null,StaticValues.releaseGid0,request);
 		assertEquals(page, "/WEB-INF/pages/release.jsp");
 	}
+	
+	@Test
+	public void testimage() throws IOException{
+		
+		Map<String,Object> map = releaseController.image(StaticValues.releaseGid0);
+		
+		assertEquals(map.get("success"), true);
+		
+		assertNotEquals(map.get("data"), null);
+	}
+	
+	
+	
 	
 
 }
