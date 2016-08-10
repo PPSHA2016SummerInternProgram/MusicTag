@@ -10,4 +10,8 @@ public interface ArtistRelationMapper {
 	List<Map<String, Object>> findArtistCreditLinkWithCount(@Param(value = "artistGid") UUID artistGid);
 
 	List<Map<String, Object>> findArtistCreditNode(@Param(value="artistIds") List<Integer> ids);
+
+	int getReleaseCount(@Param(value = "artistGid") UUID artistGid);
+
+	int getRecordingCount(@Param(value = "artistGid") UUID artistGid);
 }
