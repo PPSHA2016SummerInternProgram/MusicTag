@@ -240,7 +240,7 @@ final public class PsqlConnector {
 				writer.write(amount + " ");
 				int arr[] = artistConnector.findListenersAndPlaycount(artistGid);
 				writer.write(arr[0] + " ");
-				writer.write(arr[1]);
+				writer.write(arr[1] + "");
 				writer.write("\n");
 			} catch (NoArtistException noArtist) {
 				break;
