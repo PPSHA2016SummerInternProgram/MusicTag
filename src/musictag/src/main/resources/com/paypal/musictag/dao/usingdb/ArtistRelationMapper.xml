@@ -53,4 +53,19 @@
 		where ar.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 	</select>
+	<select id="getReleaseCount" resultType="int">
+        SELECT count(*) AS release_count
+        FROM release
+          JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+          JOIN artist on acn.artist = artist.id
+        WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	</select>
+
+    <select id="getRecordingCount" resultType="int">
+        SELECT count(*) AS recording_count
+        FROM recording
+          JOIN artist_credit_name acn ON recording.artist_credit = acn.artist_credit
+          JOIN artist on acn.artist = artist.id
+        WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	</select>
 </mapper>

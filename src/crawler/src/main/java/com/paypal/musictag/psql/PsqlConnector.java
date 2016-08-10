@@ -75,6 +75,15 @@ final public class PsqlConnector {
 		return resultSetToList(statement.executeQuery(query));
 	}
 
+	synchronized public List<Map<String, Object>> countArtistRecordsNum() throws SQLException {
+
+		String query = "select artist_credit, artist.gid as gid, count(artist_credit) as artist_count from recording\n"
+				+ "join artist on artist.id = recording.artist_credit\n"
+				+ "where artist_credit <= 1400000 and artist_credit > 0 group by artist_credit , artist.gid;";
+		return resultSetToList(statement.executeQuery(query));
+
+	}
+
 	/**
 	 * Thread safe. Return the next artist (include gid, id, work-amount).
 	 * 
@@ -152,8 +161,8 @@ final public class PsqlConnector {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoArtistException {
 		PsqlConnector psqlConnector = new PsqlConnector();
-		List<?> list = psqlConnector.findAllReleases("3ff72a59-f39d-411d-9f93-2d4a86413013");
-		System.out.println(list);
+		List<?> list = psqlConnector.countArtistRecordsNum();
+		// System.out.println(list);
 		// for (int i = 0; i < 1000; i++) {
 		// Map<?, ?> artist = psqlConnector.nextArtist();
 		// System.out.println(i + ": " + artist.get("gid") + ", " +
@@ -161,4 +170,5 @@ final public class PsqlConnector {
 		// + ", " + artist.get("seq"));
 		// }
 	}
+
 }

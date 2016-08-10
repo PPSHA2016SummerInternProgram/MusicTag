@@ -32,7 +32,6 @@ function addArtistHotChartListener() {
 	var chart = $('[data-artist-listeners-chart-value]');
 	var more = $('#artist-hot-chart-read-more');
 	var less = $('#artist-hot-chart-read-less');
-	var hiddenClass = 'artist-overview-profile-less';
 	more.on('click', function() {
 		more.hide();
 		less.show();
