@@ -7,7 +7,6 @@ $(document).ready(
 			$.get("/musictag/artist/" + curArtistGid + "/artist-credit-counts",
 					function(data) {
 						artistRelationChart.hideLoading();
-
 						data.data.nodes
 								.forEach(function(node) {
 									if (node.gid === curArtistGid) {
@@ -54,16 +53,32 @@ $(document).ready(
 							visualMap: {
 							    // 不显示 visualMap 组件，只用于明暗度的映射
 							    show: false,
-							    // 映射的最小值为 80
 							    min: 0,
-							    // 映射的最大值为 600
 							    max: 40,
 							    inRange: {
 							        // 明暗度的范围是 0 到 1
 							        colorLightness: [0, 1]
 							    }
 							},
-							tooltip : {},
+							tooltip : {
+								formatter: function (params, ticket, callback) {
+									if(params.dataType === "node"){
+									     $.get('/musictag/artist/' + params.data.gid + '/tooltip-info', function (content) {
+									         callback(ticket, artistTooltipHtml(content));
+									     });
+										
+									}else if(params.dataType === "edge"){
+										if(params.seriesName === "Credit Relation"){
+											$.get('/musictag/artist/' + params.data.source + '/', function (content) {
+										    	 console.log(params);
+										         callback(ticket, cooperationTooltipHtml(content));
+										     });
+										}
+									}
+//									console.log(JSON.stringify(params));
+								    return 'Loading';
+								 }
+							},
 							animationDuration : 1500,
 							animationEasingUpdate : 'quinticInOut',
 							series : [ {
@@ -107,4 +122,19 @@ $(document).ready(
 									+ params.data.gid + '/';
 						}
 					});
+			
+			function artistTooltipHtml(content){
+				var img = content.data['commons-img'] ? content.data['commons-img'] : window.UrlHelper.defaultArtistCoverUrl;
+				var wiki = content.data['wikipedia-extract'] ? content.data['wikipedia-extract'] : '';
+				//TODO process wiki
+				var html = '<div style="float: left; width: 100px; height: 100px;">' + 
+						'<img width="100px" src=' + img + 'style="display: inline;">'+
+					'</div>' +
+					'<div style="margin-left: 110px; min-width: 200px; max-width: 500px; max-height: 50px"> <h2 stylle"margin-right: 50px">'+content.data.name+'</h2> </div>';
+				return html
+			}
+			
+			function cooperationTooltipHtml(content){
+				
+			}
 		});

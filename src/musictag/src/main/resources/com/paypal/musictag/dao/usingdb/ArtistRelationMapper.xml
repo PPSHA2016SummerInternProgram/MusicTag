@@ -17,8 +17,10 @@
 		order by count desc
 		limit 30)
 	
-	select * from first_level 
-	union
+	select * from first_level;
+	
+	<!-- get second level relationship -->
+<!-- 	union
 	(select fl.target as source, acn2.artist as target,sum(ac1.ref_count) as count
 	from artist_credit_name as acn1
 		join first_level as fl on fl.target = acn1.artist
@@ -30,7 +32,7 @@
 	group by fl.target, acn2.artist
 	order by count desc
 	limit 30);
-	
+ -->	
 	</select>
 	
 	<select id="findArtistCreditNode" resultType="map">
@@ -41,7 +43,16 @@
 			#{artistId}
 		</foreach>
 	</select>
-
+	
+	<select id="getArtistCountInFirstLevel" resultType="map">
+		select count(distinct acn1.artist)
+		from artist_credit_name as acn 
+		join artist as ar on acn.artist = ar.id
+		join artist_credit_name as acn1 on acn.artist_credit = acn1.artist_credit
+		join artist as ar1 on ar1.id = acn1. artist
+		where ar.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	</select>
 	<select id="getReleaseCount" resultType="int">
         SELECT count(*) AS release_count
         FROM release

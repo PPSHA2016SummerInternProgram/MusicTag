@@ -54,6 +54,12 @@ public class ArtistController {
 
 		return MusicTagUtil.wrapResult(artistServiceImpl.basicInfo(gid));
 	}
+	
+	@RequestMapping(value="/{gid}/tooltip-info", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException{
+		return MusicTagUtil.wrapResult(artistServiceImpl.tooltipInfo(gid));
+	}
 
 	@RequestMapping(value = "/{gid}/release-groups-old", method = RequestMethod.GET)
 	@ResponseBody
@@ -93,5 +99,4 @@ public class ArtistController {
 	public Map<String, Object> artistCreditCount(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
 	}
-
 }

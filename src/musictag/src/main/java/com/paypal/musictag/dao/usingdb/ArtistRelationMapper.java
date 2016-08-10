@@ -11,6 +11,7 @@ public interface ArtistRelationMapper {
 
 	List<Map<String, Object>> findArtistCreditNode(@Param(value="artistIds") List<Integer> ids);
 
+	List<Map<String, Object>> getArtistCountInFirstLevel(@Param("artistGid") UUID artistGid);
 	int getReleaseCount(@Param(value = "artistGid") UUID artistGid);
 
 	int getRecordingCount(@Param(value = "artistGid") UUID artistGid);
