@@ -78,7 +78,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.paypal.musictag.statistics.HotDistribution</mainClass>
+							<mainClass>com.paypal.musictag.psql.PsqlConnector</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
