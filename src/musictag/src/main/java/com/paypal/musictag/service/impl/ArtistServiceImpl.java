@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +22,7 @@ import com.paypal.musictag.util.MusicTagUtil;
 @Service("artistServiceImpl")
 public class ArtistServiceImpl implements ArtistService {
 
+	Logger logger = LoggerFactory.getLogger(ArtistServiceImpl.class);
 	@Autowired
 	private ArtistDao artistDaoWSImpl;
 	@Autowired
@@ -55,6 +58,28 @@ public class ArtistServiceImpl implements ArtistService {
 	@Override
 	public Map<String, Object> basicInfo(String gid) throws IOException {
 		return artistDaoWSImpl.basicInfo(gid);
+	}
+
+	@Override
+	public Map<String, Object> tooltipInfo(String gid) throws IOException {
+		Map<String, Object> result = new HashMap<>();
+		try {
+			result.putAll(image(gid));
+		} catch (Exception e) {
+			logger.error(null, e);
+		}
+		try {
+			result.putAll(basicInfo(gid));
+		} catch (Exception e) {
+			logger.error(null, e);
+		}
+		try {
+			result.putAll(profile(gid));
+		} catch (Exception e) {
+			logger.error(null, e);
+		}
+
+		return result;
 	}
 
 	public Map<String, Object> releaseGroup(String artistGid) throws IOException {
@@ -151,5 +176,4 @@ public class ArtistServiceImpl implements ArtistService {
 			throw new IllegalArgumentException("Don't support sort direction: " + direction);
 		}
 	}
-
 }

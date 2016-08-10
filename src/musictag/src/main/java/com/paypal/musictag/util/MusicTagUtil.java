@@ -10,8 +10,12 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.core.io.ClassPathResource;
@@ -170,4 +174,19 @@ public final class MusicTagUtil {
 		}
 	}
 
+	/**
+	 * extract unique ids from artist link relations.
+	 * @param links
+	 * @return
+	 */
+	public static List<Integer> extractUniqueIds(List<Map<String, Object>> links){
+		Set<Integer> idSet = new HashSet<>();
+		for(Map<String, Object> map:links){
+			idSet.add((Integer) map.get("source"));
+			idSet.add((Integer) map.get("target"));
+		}
+		List<Integer> res = new LinkedList<>();
+		res.addAll(idSet);
+		return res;
+	}
 }
