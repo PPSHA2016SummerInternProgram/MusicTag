@@ -76,8 +76,16 @@ public class Constants {
      */
     public static final String XML = "xml";
 
-   /**
+    /**
      * Retrieve the lyrics of a track.
      */
-   public static final String TRACK_LYRICS_GET = "track.lyrics.get";
+    public static final String TRACK_LYRICS_GET = "track.lyrics.get";
+
+    /**
+     * Get a track info from our database: title, artist, instrumental flag and
+     * cover art.
+     */
+    public static final String TRACK_GET = "track.get";
+
+    public static final String WORK_MBID = "work_mbid";
 }

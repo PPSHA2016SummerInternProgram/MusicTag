@@ -1,12 +1,18 @@
 package com.paypal.musictag.crawler.musixmatch;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.sql.SQLException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
+import com.mongodb.client.result.UpdateResult;
 import com.paypal.musictag.exception.NoNextException;
+import com.paypal.musictag.exception.OutOfLimitException;
 import com.paypal.musictag.mongo.LyricConnector;
 import com.paypal.musictag.psql.WorkConnector;
 
@@ -16,17 +22,26 @@ import org.slf4j.Logger;
 
 public final class MusixMatchCrawler {
 
-    private final String apiKey;
     private static final Logger logger = LoggerFactory.getLogger(MusixMatchCrawler.class);
+	private static final String[] ApiKeys = {
+//		"8bbd389ac24588e24dbcca43218a17b1",
+		"7bfbe44f53758b6cf649a8a4eb372520",
+		"7c6db7d24e115c1fd0c8cda086dcbc3e"
+	};
 
 	private WorkConnector workConnector;
 	private LyricConnector lyricConnector;
 
-    public MusixMatchCrawler(String apiKey){
-        this.apiKey = apiKey;
+    public MusixMatchCrawler(){
+		try {
+			this.workConnector = new WorkConnector();
+			this.lyricConnector = new LyricConnector();
+		} catch (SQLException | UnknownHostException | ClassNotFoundException e) {
+			e.printStackTrace();
+		}
     }
 
-    public Map<String, Object> getLyricByMBID(String trackMBID) throws IOException {
+    public Map<String, Object> getLyricByMBID(String trackMBID, String apiKey) throws IOException {
 		Map<String, Object> params = new HashMap<>();
 
 		params.put(Constants.API_KEY, apiKey);
@@ -37,43 +52,116 @@ public final class MusixMatchCrawler {
         return CrawlerUtil.jsontoMap(response);
 	}
 
-	public void crawlOneLyric() throws IOException, SQLException, NoNextException {
-		Map<String, Object> work = workConnector.nextWork();
-		int workId = (int) work.get("id");
-        String from = "";
-        List<String> urls = workConnector.findAllLyricUrls(workId);
-        Map<String, Object> doc = new HashMap<>();
-        doc.put("work_mbid", work.get("gid").toString());
-		if( urls.isEmpty() ) {
-		    doc.put("from", "musixmatch");
-			List<Map<String, Object>> recordings = workConnector.findAllRecordings((int) work.get("id"));
-            Map<String, Object> json = null;
-			Map<String, Object> msg = null;
-			int i = 0;
-			for(; i < recordings.size(); ++i) {
-				String mbid = recordings.get(i).get("gid").toString();
-				json = getLyricByMBID(mbid);
-				msg = (Map<String, Object>) json.get("message");
-                if(( (Map<String, Object>) msg.get("header")).get("status_code") == StatusCode.REQ_SUCCESS )
-                	break;
-			}
+	public Map<String, Object> getTrackByMBID(String trackMBID, String apiKey) throws IOException {
+		Map<String, Object> params = new HashMap<>();
 
-			if( i == recordings.size() ) {
-				lyricConnector.insertOneIntoNotFoundTable(doc);
+		params.put(Constants.API_KEY, apiKey);
+		params.put(Constants.TRACK_MBID, trackMBID);
+		params.put(Constants.FORMAT, "json");
+
+		String response = MusixMatchRequest.sendRequest(Constants.TRACK_GET, params);
+        return CrawlerUtil.jsontoMap(response);
+	}
+
+	public void dumpMBLyricUrls() throws SQLException {
+	    List<Map<String, Object>> works = workConnector.allWorkHavingLyricUrl();
+		for(Map<String, Object> work : works) {
+			List<String> urls = workConnector.findAllLyricUrls((int)work.get("id"));
+			assert !urls.isEmpty();
+			Map<String, Object> doc = new HashMap<>();
+			doc.put("from", "musicbrainz");
+			doc.put(Constants.WORK_MBID, String.valueOf(work.get("gid")) );
+			doc.put("lyric_urls", urls);
+		    UpdateResult ur =  lyricConnector.replaceOneInFoundTable(doc, true);
+			if(ur.getModifiedCount() == 1) {
+				logger.info(doc.get("work_mbid") + ": " + "modified." );
+			} else if( ur.getUpsertedId() != null ) {
+				logger.info(doc.get("work_mbid") + ": " + "inserted." );
 			} else {
-				doc.put("musixmatch_msg", msg);
-				lyricConnector.insertOneIntoFoundTable(doc);
+				assert false;
 			}
-		} else {
-		    doc.put("from", "musicbrainz");
-            doc.put("lyric_urls", urls);
-			lyricConnector.insertOneIntoFoundTable(doc);
 		}
 	}
 
+	public void crawlOneLyricUrl(String apiKey) throws IOException, SQLException, NoNextException, OutOfLimitException {
+		Map<String, Object> work = workConnector.nextNoUrlWork();
+		int workId = (int) work.get("id");
+		List<String> urls = workConnector.findAllLyricUrls(workId);
+        assert urls.isEmpty();
 
-	static public void main(String args[]) {
-	    logger.info("test");
-		logger.error("adfasf");
+		Map<String, Object> doc = new HashMap<>();
+		doc.put("work_mbid", work.get("gid").toString());
+
+		logger.info("start crawling work: " + workId + " (" + doc.get("work_mbid") + ")" );
+
+		doc.put("from", "musixmatch");
+		List<Map<String, Object>> recordings = workConnector.findAllRecordings((int) work.get("id"));
+		Map<String, Object> json = null;
+		Map<String, Object> msg = null;
+		int i = 0;
+		for(; i < recordings.size(); ++i) {
+			String mbid = recordings.get(i).get("gid").toString();
+			logger.info("try recording" + i + " (" + mbid + ")" );
+			json = getTrackByMBID(mbid, apiKey);
+			msg = (Map<String, Object>) json.get("message");
+			int status_code = (int) ( (Map<String, Object>) msg.get("header")).get("status_code");
+			if( status_code == StatusCode.REQ_SUCCESS.getStatusCode() ) {
+				doc.put("recording_mbid", mbid);
+				break;
+			} else if( status_code != StatusCode.RESOURCE_NOT_FOUND.getStatusCode()) {
+				throw new OutOfLimitException();
+			}
+		}
+
+		if( i == recordings.size() ) {
+			lyricConnector.insertOneIntoNotFoundTable(doc);
+			logger.info("[Lyric not found] work: " + workId + " (" + doc.get("work_mbid") + ")" );
+		} else {
+			doc.put("musixmatch_msg", msg);
+			lyricConnector.insertOneIntoFoundTable(doc);
+			logger.info("[Lyric found] work: " + workId + " (" + doc.get("work_mbid") + ")" );
+		}
+
+	}
+
+	class CrawlLyricUrlTask implements Runnable {
+		private final String apiKey;
+
+		CrawlLyricUrlTask(String apiKey) {
+			this.apiKey = apiKey;
+		}
+
+		@Override
+		public void run() {
+			while( true ) {
+				try {
+					crawlOneLyricUrl(apiKey);
+				} catch (IOException | SQLException e) {
+				    logger.error("crawl lyric url error");
+                    logger.error(null, e);
+				} catch (NoNextException e) {
+					logger.error("No work left");
+					logger.error(null, e);
+                    break;
+				} catch (OutOfLimitException e) {
+					logger.error("MusixMatch limit reached");
+					logger.error(null, e);
+					break;
+				}
+			}
+		}
+	}
+
+	public void startCrawlingLyricUrl(int threadCnt) {
+	    ExecutorService es = Executors.newFixedThreadPool(threadCnt);
+		for(int i = 0; i < threadCnt; i++) {
+			es.execute(new CrawlLyricUrlTask(ApiKeys[i % ApiKeys.length]));
+		}
+	}
+
+	static public void main(String args[]) throws SQLException, IOException, NoNextException, OutOfLimitException {
+	    MusixMatchCrawler mmc = new MusixMatchCrawler();
+		int threadCnt = 2;
+        mmc.startCrawlingLyricUrl(threadCnt);
 	}
 }

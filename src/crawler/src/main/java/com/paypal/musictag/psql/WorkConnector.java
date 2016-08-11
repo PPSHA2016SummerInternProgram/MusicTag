@@ -15,7 +15,17 @@ final public class WorkConnector {
 
 	private final static String offsetFile = "/tmp/work.log";
 
-	private final static String workQueryStr = "select * from work order by id offset ? limit ?";
+	private final static String workQueryStr =
+			"SELECT * \n" +
+            "FROM work \n" +
+            "where exists ( select * from l_url_work luw where luw.entity1 = work.id) \n" +
+            "order by id";
+
+	private final static String noUrlWorkQueryStr =
+			"select * \n" +
+            "FROM work where not exists ( select * from l_url_work luw where luw.entity1 = work.id) \n" +
+            "order by id offset ? limit ?";
+
 	private final static String urlQueryStr =
 			"select url.url\n" +
             "from url\n" +
@@ -30,7 +40,7 @@ final public class WorkConnector {
             "WHERE entity1 = ?";
 
 	private Connection connection;
-	private PreparedStatement workQuery;
+	private PreparedStatement noUrlWorkQuery;
 	private PreparedStatement urlQuery;
 	private PreparedStatement recordingQuery;
 	private ResultSet resultSet = null;
@@ -51,7 +61,7 @@ final public class WorkConnector {
 
 		Class.forName("org.postgresql.Driver");
 		connection = DriverManager.getConnection("jdbc:postgresql://" + hostname + ":" + port + "/" + dbname, username, password);
-		workQuery = connection.prepareStatement(workQueryStr);
+		noUrlWorkQuery = connection.prepareStatement(noUrlWorkQueryStr);
 		urlQuery = connection.prepareStatement(urlQueryStr);
 		recordingQuery = connection.prepareStatement(recordingQueryStr);
 	}
@@ -65,6 +75,12 @@ final public class WorkConnector {
 		CrawlerUtil.writeInt(offsetFile, offset);
 	}
 
+
+	public List<Map<String, Object>> allWorkHavingLyricUrl() throws SQLException {
+	    Statement q = connection.createStatement();
+		return resultSetToList(q.executeQuery(workQueryStr));
+	}
+
 	/**
 	 * Thread safe. Return the next work (include gid, id, work-amount).
 	 *
@@ -72,15 +88,15 @@ final public class WorkConnector {
 	 * @throws SQLException
 	 * @throws NoNextException
 	 */
-	synchronized public Map<String, Object> nextWork() throws SQLException, NoNextException {
+	synchronized public Map<String, Object> nextNoUrlWork() throws SQLException, NoNextException {
 
 		// If no work cached, fetch the artist information from database.
 		if (resultSet == null || !resultSet.next()) {
 
-		    workQuery.setInt(1, offset);
-			workQuery.setInt(2, cacheAmount);
+		    noUrlWorkQuery.setInt(1, offset);
+			noUrlWorkQuery.setInt(2, cacheAmount);
 
-			resultSet = workQuery.executeQuery();
+			resultSet = noUrlWorkQuery.executeQuery();
 
 			saveOffset();
 
@@ -147,7 +163,7 @@ final public class WorkConnector {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoNextException {
 		WorkConnector workConnector = new WorkConnector();
-        Map<String, Object> data = workConnector.nextWork();
+        Map<String, Object> data = workConnector.nextNoUrlWork();
 		List<String> urls = workConnector.findAllLyricUrls((int)data.get("id"));
 	}
 }
