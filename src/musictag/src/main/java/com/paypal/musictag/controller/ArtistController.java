@@ -93,5 +93,11 @@ public class ArtistController {
 	public Map<String, Object> artistCreditCount(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
 	}
+	
+	@RequestMapping(value = "/{gid}/artist-areas", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistAreas(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.ArtistArea(gid));
+	}
 
 }

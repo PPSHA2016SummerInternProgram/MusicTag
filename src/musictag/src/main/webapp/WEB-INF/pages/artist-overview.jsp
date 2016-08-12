@@ -21,7 +21,9 @@
 <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
 <script src="<%=request.getContextPath()%>/js/statistics.js"></script>
 <script src="<%=request.getContextPath()%>/js/echarts.js"></script>
+<script src="<%=request.getContextPath()%>/js/world.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist-relation.js"></script>
+<script src="<%=request.getContextPath()%>/js/artist-area.js"></script>
 </head>
 <body>
 
@@ -144,6 +146,7 @@
 		</div>
 
 		<div id="artist-relations" style="width:100%;height:400px;"></div>
+		<div id="artist-area" style="width:100%;height:400px;"></div>
 
 		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.jsp"%>

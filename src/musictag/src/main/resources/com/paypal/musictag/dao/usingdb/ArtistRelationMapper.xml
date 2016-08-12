@@ -57,4 +57,12 @@
           JOIN artist on acn.artist = artist.id
         WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 	</select>
+	
+	<select id="getArtistArea" resultType="map">
+        select name from area where id in (select distinct rc.country from release
+JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+JOIN artist on acn.artist = artist.id
+JOIN release_country rc ON release.id = rc.release
+where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR})
+	</select>
 </mapper>

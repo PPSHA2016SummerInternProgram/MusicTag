@@ -72,6 +72,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return resultMap;
 	}
 	
+
 	
 	
 	private void addCounttoNodes(List<Map<String, Object>> nodes,
@@ -95,4 +96,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 		res.addAll(idSet);
 		return res;
 	}
+	
+	public List<Map<String, Object>> ArtistArea(String artistGid){
+		List<Map<String, Object>> tryList = artistRelationMapper.getArtistArea(UUID.fromString(artistGid));
+		return tryList;
+	}
+	
+	
 }
