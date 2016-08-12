@@ -64,6 +64,6 @@ public class StatisticsController {
 	@RequestMapping(value = "/artist-area/{gid}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistArea(@PathVariable("gid") String gid) throws IOException {
-		return MusicTagUtil.wrapResult(statisticsServiceImpl.ArtistArea(gid));
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistArea(gid));
 	}
 }

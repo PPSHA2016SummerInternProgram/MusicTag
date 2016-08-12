@@ -19,5 +19,5 @@ public interface StatisticsService {
 	
 	Map<String, Object> artistCreditCount(String artistGid);
 	
-	List<Map<String, Object>> ArtistArea(String artistGid);
+	List<Map<String, Object>> artistArea(String artistGid);
 }
