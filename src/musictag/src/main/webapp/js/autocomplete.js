@@ -27,7 +27,7 @@ $(document).ready(function() {
 		let set = new Set();
 		var num = 0;
 		return $.map(solrSuggestions, function(dataItem){
-			return {value: dataItem.term, data: {entity_type: group, mbid: dataItem.payload}};
+			return {value: dataItem.term, data: {entity_type: group, mbid: dataItem.payload, meta:dataItem['country-date']}};
 		}).filter(function(elem){
 			if(num > 2) return false;
 			if(set.has(elem.data.mbid)){
