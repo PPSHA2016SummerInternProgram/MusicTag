@@ -95,7 +95,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 		}
 	}
 	
-	public List<Map<String, Object>> ArtistArea(String artistGid){
+	public List<Map<String, Object>> artistArea(String artistGid){
 		List<Map<String, Object>> tryList = artistRelationMapper.getArtistArea(UUID.fromString(artistGid));
 		return tryList;
 	}
