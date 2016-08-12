@@ -4,14 +4,33 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.paypal.musictag.dao.usingdb.CountryAndDateMapper">
 	<select id="releaseCountryAndDate" resultType="map">
-		select release.gid, area.name as country, rc.date_year, rc.date_month, rc.date_day
+		select release.gid, area.name as country, rc.date_year, rc.date_month,
+		rc.date_day
 		from release
-		join release_country rc ON release.id = rc.release
+		join release_country rc ON release.id =
+		rc.release
 		join area ON area.id = rc.country
 		where release.gid in
-		<foreach item="gid" index="index" collection="gids"
-             open="(" separator="," close=")">
-        	#{gid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
-    	</foreach>
+		<foreach item="gid" index="index" collection="gids" open="("
+			separator="," close=")">
+			#{gid, typeHandler=com.paypal.musictag.util.UuidTypeHandler,
+			javaType=java.util.UUID, jdbcType=VARCHAR}
+		</foreach>
+	</select>
+
+	<select id="recordingCountryAndDate" resultType="map">
+		select recording.gid, area.name as country, rc.date_year, rc.date_month, rc.date_day
+		from recording
+		join track on recording.id=track.recording
+		join medium on track.medium=medium.id
+		join release on release.id=medium.release
+		join release_country rc ON release.id = rc.release
+		join area ON area.id = rc.country
+		where recording.gid in
+		<foreach item="gid" index="index" collection="gids" open="("
+			separator="," close=")">
+			#{gid, typeHandler=com.paypal.musictag.util.UuidTypeHandler,
+			javaType=java.util.UUID, jdbcType=VARCHAR}
+		</foreach>
 	</select>
 </mapper>
