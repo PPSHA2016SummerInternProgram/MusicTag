@@ -39,8 +39,8 @@ class MongoConnector {
 	private final MongoDatabase mongoDatabase;
 	private final String foundCollectionName;
 	private final String noExistCollectionName;
-	private final MongoCollection<Document> foundCollection;
-	private final MongoCollection<Document> notFoundCollection;
+	protected final MongoCollection<Document> foundCollection;
+	protected final MongoCollection<Document> notFoundCollection;
 
 	public MongoConnector(String foundCollectionName, String notFoundCollectionName) throws UnknownHostException {
 
@@ -122,7 +122,7 @@ class MongoConnector {
 	 * @param cursor
 	 * @return
 	 */
-	private List<Map<String, Object>> fillDBObjectList(FindIterable<Document> cursor) {
+	protected List<Map<String, Object>> fillDBObjectList(FindIterable<Document> cursor) {
 		List<Map<String, Object>> list = new ArrayList<>();
 		for (Document document : cursor) {
 			list.add(document);

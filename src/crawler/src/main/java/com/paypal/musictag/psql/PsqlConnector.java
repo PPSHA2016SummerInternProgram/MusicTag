@@ -1,6 +1,8 @@
 package com.paypal.musictag.psql;
 
-import java.net.UnknownHostException;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -19,7 +21,7 @@ import com.paypal.musictag.util.CrawlerUtil;
 
 final public class PsqlConnector {
 
-	private final static String hostname = "10.24.53.72";
+	private String hostname = "10.24.53.72";
 	private final static int port = 5432;
 	private final static String dbname = "musicbrainz_db";
 	private final static String username = "musicbrainz";
@@ -41,6 +43,15 @@ final public class PsqlConnector {
 	 * @throws ClassNotFoundException
 	 */
 	public PsqlConnector() throws SQLException, ClassNotFoundException {
+		initConnector();
+	}
+
+	public PsqlConnector(String hostIp) throws SQLException, ClassNotFoundException {
+		hostname = hostIp;
+		initConnector();
+	}
+
+	private void initConnector() throws SQLException, ClassNotFoundException {
 
 		readOffset();
 
@@ -48,6 +59,7 @@ final public class PsqlConnector {
 		connection = DriverManager.getConnection("jdbc:postgresql://" + hostname + ":" + port + "/" + dbname, username,
 				password);
 		statement = connection.createStatement();
+
 	}
 
 	private void readOffset() {
@@ -139,6 +151,12 @@ final public class PsqlConnector {
 		return 0;
 	}
 
+	public int editAmount(String gid) throws SQLException {
+		String query = "select count(*)\n" + "from artist\n" + "join edit_artist ea on ea.artist=artist.id\n"
+				+ "where artist.gid = '" + gid + "';\n";
+		return getAmount(query);
+	}
+
 	/**
 	 * Thread safe. Return the next artist (include gid, id, work-amount).
 	 * 
@@ -214,30 +232,40 @@ final public class PsqlConnector {
 		return map;
 	}
 
-	public static void main(String[] args)
-			throws ClassNotFoundException, SQLException, NoArtistException, UnknownHostException {
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoArtistException, IOException {
 		// String artistGid = "20244d07-534f-4eff-b4d4-930878889970";
-		PsqlConnector psqlConnector = new PsqlConnector();
+		PsqlConnector psqlConnector = new PsqlConnector("10.24.51.209");
 		// List<?> list = psqlConnector.countArtistRecordsNum();
 		ArtistConnector artistConnector = new ArtistConnector();
+		BufferedWriter writer = new BufferedWriter(new FileWriter("logs/statistics.csv"));
 		while (true) {
-			Map<String, Object> artist = artistConnector.nextArtist();
-			String artistGid = String.valueOf(artist.get("gid"));
-			System.out.print(artistGid + " ");
-			int amount = psqlConnector.countryAmount(artistGid);
-			System.out.print(amount + " ");
-			amount = psqlConnector.releaseAmount(artistGid);
-			System.out.print(amount + " ");
-			amount = psqlConnector.recordingAmount(artistGid);
-			System.out.print(amount + " ");
-			amount = psqlConnector.friendsAmount(artistGid);
-			System.out.print(amount + " ");
-			amount = psqlConnector.activeRange(artistGid);
-			System.out.print(amount + " ");
-			int arr[] = artistConnector.findListenersAndPlaycount(artistGid);
-			System.out.print(arr[0] + " ");
-			System.out.println(arr[1]);
+			try {
+				Map<String, Object> artist = artistConnector.nextArtist();
+				String artistGid = String.valueOf(artist.get("gid"));
+				writer.write(artistGid + " ");
+				// int amount = psqlConnector.countryAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.releaseAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.recordingAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.friendsAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.activeRange(artistGid);
+				// writer.write(amount + " ");
+				// int arr[] =
+				// artistConnector.findListenersAndPlaycount(artistGid);
+				// writer.write(arr[0] + " ");
+				// writer.write(arr[1] + "");
+				int amount = psqlConnector.editAmount(artistGid);
+				writer.write(amount + "");
+				writer.write("\n");
+				System.out.println(artistGid + " " + amount);
+			} catch (NoArtistException noArtist) {
+				break;
+			}
 		}
+		writer.close();
 
 		// List<?> list =
 		// psqlConnector.findAllReleases("3ff72a59-f39d-411d-9f93-2d4a86413013");
