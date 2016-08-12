@@ -70,7 +70,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 		resultMap.put("nodes", nodes);
 		return resultMap;
 	}
-	
+
+	@Override
+    public List<Map<String, Object>> artistReleaseYearlyDist(String artistGid) {
+	    return artistRelationMapper.getReleaseYearlyDist(UUID.fromString(artistGid));
+    }
+
 	private void postProcessLinkAndNode(List<Map<String, Object>> nodes,
 			List<Map<String, Object>> linksWithCount){
 		moveCountFromLinktoNodes(nodes, linksWithCount);

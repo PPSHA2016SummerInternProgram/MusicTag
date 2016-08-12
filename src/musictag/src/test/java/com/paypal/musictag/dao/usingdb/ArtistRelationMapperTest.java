@@ -1,6 +1,7 @@
 package com.paypal.musictag.dao.usingdb;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -65,5 +66,12 @@ public class ArtistRelationMapperTest {
 	public void testGetRecordingCount() {
 		UUID id = UUID.fromString(StaticValues.artistGid0);
 		assertTrue(artistRelationMapper.getRecordingCount(id) > 0);
+	}
+
+	@Test
+	public void testGetReleaseYearlyDist(){
+		UUID id = UUID.fromString("b2d122f9-eadb-4930-a196-8f221eeb0c66");
+		List<Map<String, Object>> data = artistRelationMapper.getReleaseYearlyDist(id);
+        assertTrue((int)data.get(0).get("date_year") == -1);
 	}
 }
