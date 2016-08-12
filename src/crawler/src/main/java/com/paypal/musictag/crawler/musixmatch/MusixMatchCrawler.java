@@ -24,12 +24,11 @@ public final class MusixMatchCrawler {
 
     private static final Logger logger = LoggerFactory.getLogger(MusixMatchCrawler.class);
 	private static final String[] ApiKeys = {
-//		"8bbd389ac24588e24dbcca43218a17b1",
+		"8bbd389ac24588e24dbcca43218a17b1",
 		"7bfbe44f53758b6cf649a8a4eb372520",
 		"7c6db7d24e115c1fd0c8cda086dcbc3e"
 	};
-
-	private WorkConnector workConnector;
+private WorkConnector workConnector;
 	private LyricConnector lyricConnector;
 
     public MusixMatchCrawler(){
@@ -109,7 +108,7 @@ public final class MusixMatchCrawler {
 				doc.put("recording_mbid", mbid);
 				break;
 			} else if( status_code != StatusCode.RESOURCE_NOT_FOUND.getStatusCode()) {
-				throw new OutOfLimitException();
+				throw new OutOfLimitException("work: " + workId + " (" + doc.get("work_mbid") + ")");
 			}
 		}
 
@@ -134,6 +133,7 @@ public final class MusixMatchCrawler {
 		@Override
 		public void run() {
 			while( true ) {
+				logger.info("Lyric url crawler started, apiKey is " + apiKey );
 				try {
 					crawlOneLyricUrl(apiKey);
 				} catch (IOException | SQLException e) {
@@ -161,7 +161,7 @@ public final class MusixMatchCrawler {
 
 	static public void main(String args[]) throws SQLException, IOException, NoNextException, OutOfLimitException {
 	    MusixMatchCrawler mmc = new MusixMatchCrawler();
-		int threadCnt = 2;
+		int threadCnt = 12;
         mmc.startCrawlingLyricUrl(threadCnt);
 	}
 }
