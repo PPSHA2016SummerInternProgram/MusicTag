@@ -73,8 +73,8 @@ $(document).ready(
 										
 									}else if(params.dataType === "edge"){
 										if(params.seriesName === "Credit Relation"){
-											console.log(JSON.stringify(params));
-											console.log(JSON.stringify(ticket));
+//											console.log(JSON.stringify(params));
+//											console.log(JSON.stringify(ticket));
 											$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/cooperations', function (content) {
 										         callback(ticket, cooperationTooltipHtml(content));
 										     });
@@ -129,7 +129,7 @@ $(document).ready(
 			
 			function artistTooltipHtml(content){
 				var img = content.data['commons-img'] ? content.data['commons-img'] : window.UrlHelper.defaultArtistCoverUrl;
-				var wiki = content.data['wikipedia-extract'] ? content.data['wikipedia-extract'] : '';
+//				var wiki = content.data['wikipedia-extract'] ? content.data['wikipedia-extract'] : '';
 				//TODO process wiki
 				var html = '<div style="float: left; width: 100px; height: 100px;">' + 
 						'<img width="100px" src=' + img + 'style="display: inline;">'+
