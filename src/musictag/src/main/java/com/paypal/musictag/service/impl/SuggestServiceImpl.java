@@ -108,7 +108,7 @@ public class SuggestServiceImpl implements SuggestService {
 				continue;
 			}
 			String key = release.get("term") + "-" + meta.get("country") + "-" + meta.get("date_year");
-			if(unique.contains(key)){
+			if (unique.contains(key)) {
 				suggestions.remove(i--);
 				continue;
 			}
@@ -122,8 +122,10 @@ public class SuggestServiceImpl implements SuggestService {
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
 		List<Map<String, Object>> suggestions = getSuggestions(key, releases);
 		List<UUID> gids = fillGids(suggestions);
-		List<Map<String, Object>> countryAndDate = countryAndDateMapper.releaseCountryAndDate(gids);
-		addCountryAndDate(suggestions, countryAndDate);
+		if (!gids.isEmpty()) {
+			List<Map<String, Object>> countryAndDate = countryAndDateMapper.releaseCountryAndDate(gids);
+			addCountryAndDate(suggestions, countryAndDate);
+		}
 		return releases;
 	}
 
@@ -133,8 +135,10 @@ public class SuggestServiceImpl implements SuggestService {
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
 		List<Map<String, Object>> suggestions = getSuggestions(key, recordings);
 		List<UUID> gids = fillGids(suggestions);
-		List<Map<String, Object>> countryAndDate = countryAndDateMapper.recordingCountryAndDate(gids);
-		addCountryAndDate(suggestions, countryAndDate);
+		if (!gids.isEmpty()) {
+			List<Map<String, Object>> countryAndDate = countryAndDateMapper.recordingCountryAndDate(gids);
+			addCountryAndDate(suggestions, countryAndDate);
+		}
 		return recordings;
 	}
 
