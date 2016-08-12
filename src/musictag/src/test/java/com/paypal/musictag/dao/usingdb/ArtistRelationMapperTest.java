@@ -1,5 +1,6 @@
 package com.paypal.musictag.dao.usingdb;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.paypal.musictag.util.MusicTagUtil;
 import static org.junit.Assert.assertTrue;
 
 import com.paypal.musictag.values.StaticValues;
@@ -21,11 +23,38 @@ public class ArtistRelationMapperTest {
 	ArtistRelationMapper artistRelationMapper;
 
 	@Test
-	public void testFindArtistCredit() {
+	public void findArtistCreditLinkWithCount() {
 		UUID id = UUID.fromString(StaticValues.artistGid0);
 		System.out.println(artistRelationMapper.findArtistCreditLinkWithCount(id));
 	}
 
+	@Test
+	public void testFindArtistCreditNode() {
+		UUID id = UUID.fromString(StaticValues.artistGid0);
+		List<Integer> ids = MusicTagUtil.extractUniqueIds(artistRelationMapper.findArtistCreditLinkWithCount(id));
+		System.out.println(artistRelationMapper.findArtistCreditNode(ids));
+	}
+	
+	@Test
+	public void testGetArtistCountInFirstLevel(){
+		UUID id = UUID.fromString(StaticValues.artistGid0);
+		System.out.println(artistRelationMapper.getArtistCountInFirstLevel(id));
+	}
+	
+	@Test
+	public void testGetCooperationsOnRecordingOfArtists(){
+		Integer sid = 35536; //周杰伦
+		Integer tid = 467348;//Terdsak Janpan
+		System.out.println("recording coop\n" + artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
+	}
+	
+	@Test
+	public void testGetCooperationsOnReleaseOfArtists(){
+		Integer sid = 35536; //周杰伦
+		Integer tid = 467348;//Terdsak Janpan
+		System.out.println("release coop \n" + artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+	}
+	
 	@Test
 	public void testGetReleaseCount() {
 		UUID id = UUID.fromString(StaticValues.artistGid0);

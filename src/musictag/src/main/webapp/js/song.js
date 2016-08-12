@@ -127,20 +127,13 @@ function updateRecordingBasicInfo(artistName, recordingName, length, rating,
 	$('[data-artist-name]').text(artistName);
 	$('[data-recording-name]').text(recordingName);
 	$('[data-rate]').html(createVoteHtml(rating));
-	$('[data-song-length]').text(millsecToMinutes(length));
+	$('[data-song-length]').text(OtherHelper.recordingLength(length));
 	$('[data-song-style').text(tagStr);
 	$('[data-song-producer').html(createProducersHtml(producerArtists));
 	$('[data-song-composer]').html(createArtistLinkElem(composerArtist));
 	$('[data-song-lyricist').html(createArtistLinkElem(lyricistArtist));
 	$('[data-song-publisher').html(createArtistLinkElem(publisherArtist));
 	$('[data-song-versions').html(createTranslationHtml(translationWorks));
-}
-
-function millsecToMinutes(length) {
-	var min = Math.floor(length / 60000);
-	var sec = Math.floor((length % 60000) / 1000);
-	sec = sec < 10 ? '0' + sec : sec;
-	return min + ":" + sec;
 }
 
 function createVoteHtml(rating) {

@@ -1,5 +1,8 @@
 package com.paypal.musictag.psql;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -13,11 +16,12 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.paypal.musictag.exception.NoArtistException;
+import com.paypal.musictag.mongo.ArtistConnector;
 import com.paypal.musictag.util.CrawlerUtil;
 
 final public class PsqlConnector {
 
-	private final static String hostname = "10.24.53.72";
+	private String hostname = "10.24.53.72";
 	private final static int port = 5432;
 	private final static String dbname = "musicbrainz_db";
 	private final static String username = "musicbrainz";
@@ -39,6 +43,15 @@ final public class PsqlConnector {
 	 * @throws ClassNotFoundException
 	 */
 	public PsqlConnector() throws SQLException, ClassNotFoundException {
+		initConnector();
+	}
+
+	public PsqlConnector(String hostIp) throws SQLException, ClassNotFoundException {
+		hostname = hostIp;
+		initConnector();
+	}
+
+	private void initConnector() throws SQLException, ClassNotFoundException {
 
 		readOffset();
 
@@ -46,6 +59,7 @@ final public class PsqlConnector {
 		connection = DriverManager.getConnection("jdbc:postgresql://" + hostname + ":" + port + "/" + dbname, username,
 				password);
 		statement = connection.createStatement();
+
 	}
 
 	private void readOffset() {
@@ -81,7 +95,66 @@ final public class PsqlConnector {
 				+ "join artist on artist.id = recording.artist_credit\n"
 				+ "where artist_credit <= 1400000 and artist_credit > 0 group by artist_credit , artist.gid;";
 		return resultSetToList(statement.executeQuery(query));
+	}
 
+	public int countryAmount(String gid) throws SQLException {
+		String query = "select count(distinct rc.country) from release\n"
+				+ "JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit\n"
+				+ "JOIN artist on acn.artist = artist.id\n" + "JOIN release_country rc ON release.id = rc.release\n"
+				+ "where artist.gid = '" + gid + "';\n";
+		return getAmount(query);
+	}
+
+	private int getAmount(String query) throws SQLException {
+		ResultSet resultSet = statement.executeQuery(query);
+		if (resultSet.next()) {
+			return resultSet.getInt(1);
+		}
+		return 0;
+	}
+
+	public int releaseAmount(String gid) throws SQLException {
+		String query = "SELECT count(*) AS release_count\n" + "FROM release\n"
+				+ "JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit\n"
+				+ "JOIN artist on acn.artist = artist.id\n" + "WHERE artist.gid = '" + gid + "';\n";
+		return getAmount(query);
+	}
+
+	public int recordingAmount(String gid) throws SQLException {
+		String query = "SELECT count(*) AS recording_count\n" + "FROM recording\n"
+				+ "JOIN artist_credit_name acn ON recording.artist_credit = acn.artist_credit\n"
+				+ "JOIN artist on acn.artist = artist.id\n" + "WHERE artist.gid = '" + gid + "';\n";
+		return getAmount(query);
+	}
+
+	public int friendsAmount(String gid) throws SQLException {
+		String query = "select count(distinct acn1.artist)\n" + "from artist_credit_name as acn \n"
+				+ "join artist as ar on acn.artist = ar.id\n"
+				+ "join artist_credit_name as acn1 on acn.artist_credit = acn1.artist_credit\n"
+				+ "join artist as ar1 on ar1.id = acn1. artist\n" + "where ar.gid = '" + gid + "'\n"
+				+ "and ar1.gid != '" + gid + "';\n";
+		return getAmount(query);
+	}
+
+	public int activeRange(String gid) throws SQLException {
+		String query = "select min(re.date_year) as start, max(re.date_year) as end from release\n"
+				+ "JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit\n"
+				+ "JOIN artist on acn.artist = artist.id\n" + "JOIN release_event re on re.release = release.id\n"
+				+ "where artist.gid = '" + gid + "'\n" + "and re.date_year is not NULL;\n";
+
+		ResultSet resultSet = statement.executeQuery(query);
+		if (resultSet.next()) {
+			int start = resultSet.getInt(1);
+			int end = resultSet.getInt(2);
+			return end - start + 1;
+		}
+		return 0;
+	}
+
+	public int editAmount(String gid) throws SQLException {
+		String query = "select count(*)\n" + "from artist\n" + "join edit_artist ea on ea.artist=artist.id\n"
+				+ "where artist.gid = '" + gid + "';\n";
+		return getAmount(query);
 	}
 
 	/**
@@ -159,9 +232,43 @@ final public class PsqlConnector {
 		return map;
 	}
 
-	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoArtistException {
-		PsqlConnector psqlConnector = new PsqlConnector();
-		List<?> list = psqlConnector.countArtistRecordsNum();
+	public static void main(String[] args) throws ClassNotFoundException, SQLException, NoArtistException, IOException {
+		// String artistGid = "20244d07-534f-4eff-b4d4-930878889970";
+		PsqlConnector psqlConnector = new PsqlConnector("10.24.51.209");
+		// List<?> list = psqlConnector.countArtistRecordsNum();
+		ArtistConnector artistConnector = new ArtistConnector();
+		BufferedWriter writer = new BufferedWriter(new FileWriter("logs/statistics.csv"));
+		while (true) {
+			try {
+				Map<String, Object> artist = artistConnector.nextArtist();
+				String artistGid = String.valueOf(artist.get("gid"));
+				writer.write(artistGid + " ");
+				// int amount = psqlConnector.countryAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.releaseAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.recordingAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.friendsAmount(artistGid);
+				// writer.write(amount + " ");
+				// amount = psqlConnector.activeRange(artistGid);
+				// writer.write(amount + " ");
+				// int arr[] =
+				// artistConnector.findListenersAndPlaycount(artistGid);
+				// writer.write(arr[0] + " ");
+				// writer.write(arr[1] + "");
+				int amount = psqlConnector.editAmount(artistGid);
+				writer.write(amount + "");
+				writer.write("\n");
+				System.out.println(artistGid + " " + amount);
+			} catch (NoArtistException noArtist) {
+				break;
+			}
+		}
+		writer.close();
+
+		// List<?> list =
+		// psqlConnector.findAllReleases("3ff72a59-f39d-411d-9f93-2d4a86413013");
 		// System.out.println(list);
 		// for (int i = 0; i < 1000; i++) {
 		// Map<?, ?> artist = psqlConnector.nextArtist();

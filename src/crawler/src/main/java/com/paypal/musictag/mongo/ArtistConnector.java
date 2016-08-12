@@ -48,6 +48,25 @@ public final class ArtistConnector extends MongoConnector implements IGeneralCon
 		}
 	}
 
+	public int[] findListenersAndPlaycount(String gid) {
+		BasicDBObject key = new BasicDBObject();
+		key.append("gid", 1);
+		key.append("stats", 1);
+		key.append("_id", 0);
+		BasicDBObject filter = new BasicDBObject();
+		filter.append("gid", gid);
+		FindIterable<Document> result = getFoundCollection().find(filter).projection(key);
+		MongoCursor<Document> cursor = result.iterator();
+		int[] arr = new int[2];
+		if (cursor.hasNext()) {
+			@SuppressWarnings("unchecked")
+			Map<String, Object> stats = (Map<String, Object>) cursor.next().get("stats");
+			arr[0] = Integer.parseInt(String.valueOf(stats.get("listeners")));
+			arr[1] = Integer.parseInt(String.valueOf(stats.get("playcount")));
+		}
+		return arr;
+	}
+
 	/**
 	 * Thread safe. Traverse the artist table, find the next artist.
 	 * 

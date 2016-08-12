@@ -49,3 +49,8 @@
 .autocomplete-group:hover {
 	cursor: pointer;
 }
+
+.meta {
+	font-size: 14px;
+	color: #777;
+}

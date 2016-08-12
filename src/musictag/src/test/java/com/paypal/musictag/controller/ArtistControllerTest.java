@@ -135,4 +135,11 @@ public class ArtistControllerTest {
 
 		assertEquals(page, "/WEB-INF/pages/artist-overview.jsp");
 	}
+	
+	@Test
+	public void testArtsitCooperations(){
+		Integer sid = 35536; //周杰伦
+		Integer tid = 467348;//Terdsak Janpan
+		artistController.artistCooperations(sid, tid);
+	}
 }

@@ -28,4 +28,8 @@ public interface ArtistService {
      */
     Map<String, Object> releaseGroupPaged(String artistGid, int curPage,
             int perPage, String orderBy, String direction) throws Exception;
+
+	Map<String, Object> tooltipInfo(String gid) throws IOException;
+	
+	Map<String, Object> artistCooperations(Integer sid, Integer tid);
 }
