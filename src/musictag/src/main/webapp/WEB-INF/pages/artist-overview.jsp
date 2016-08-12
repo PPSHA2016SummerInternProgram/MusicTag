@@ -147,6 +147,7 @@
 
 		<div id="artist-relations" style="width:100%;height:400px;"></div>
 		<div id="artist-area" style="width:100%;height:400px;"></div>
+		<div id="artist-release-dist"></div>
 
 		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.jsp"%>

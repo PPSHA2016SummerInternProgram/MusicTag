@@ -60,10 +60,16 @@ public class StatisticsController {
 	public Map<String, Object> recordingPlaycount(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.recordingPlaycount(gid));
 	}
-	
+
 	@RequestMapping(value = "/artist-area/{gid}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistArea(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.ArtistArea(gid));
+	}
+
+	@RequestMapping(value = "/artist/{gid}/release-dist", method = RequestMethod.GET)
+	@ResponseBody
+    public Map<String, Object> artistReleaseYearlyDist(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistReleaseYearlyDist(gid));
 	}
 }

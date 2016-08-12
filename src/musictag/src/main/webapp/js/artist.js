@@ -5,6 +5,7 @@ $(function() {
 	addReadMoreProfileListener();
 	addShowLinksListener();
 	showHotCharts();
+	Statistics.drawArtistReleaseDist($('#artist-release-dist'), getUuid());
 });
 
 var basicInfo;
