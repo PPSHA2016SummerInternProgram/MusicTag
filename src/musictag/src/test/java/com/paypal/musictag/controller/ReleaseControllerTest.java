@@ -15,13 +15,8 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.exception.NetBadRequestException;
-import com.paypal.musictag.util.MusicTagUtil;
 import com.paypal.musictag.values.StaticValues;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,8 +27,6 @@ public class ReleaseControllerTest {
 	
 	@Autowired
 	private ReleaseController releaseController;
-
-
 
 	@Test
 	public void testTracklist() throws IOException {

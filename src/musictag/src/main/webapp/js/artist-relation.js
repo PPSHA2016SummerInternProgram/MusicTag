@@ -61,6 +61,10 @@ $(document).ready(
 							    }
 							},
 							tooltip : {
+								enterable : true,
+								showDelay: 300,
+								hideDelay: 500,
+								backgroundColor: 'rgba(162,180,186,0.7)',
 								formatter: function (params, ticket, callback) {
 									if(params.dataType === "node"){
 									     $.get('/musictag/artist/' + params.data.gid + '/tooltip-info', function (content) {
@@ -69,13 +73,13 @@ $(document).ready(
 										
 									}else if(params.dataType === "edge"){
 										if(params.seriesName === "Credit Relation"){
-											$.get('/musictag/artist/' + params.data.source + '/', function (content) {
-										    	 console.log(params);
+											console.log(JSON.stringify(params));
+											console.log(JSON.stringify(ticket));
+											$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/cooperations', function (content) {
 										         callback(ticket, cooperationTooltipHtml(content));
 										     });
 										}
 									}
-//									console.log(JSON.stringify(params));
 								    return 'Loading';
 								 }
 							},
@@ -135,6 +139,67 @@ $(document).ready(
 			}
 			
 			function cooperationTooltipHtml(content){
+				var html = '<div style="width: 500px; word-wrap: break-word; white-space:normal;">' + 
+					buildRecordingTable(content.data.recordings) +
+					buildReleaseTable(content.data.releases) +
+					'</div>';
+				return html;
+			}
+			
+			function buildRecordingTable(recordings){
+				var html = '<table class="table"><thead><tr><th> # </th><th> Recording Title </th><th> Length </th></tr></thead><tbody>';
+				if(recordings && recordings.length !== 0){
+					for(var i = 0; i < recordings.length; i++){
+						html += buildRecordingRow(i+1, recordings[i]);
+					}
+				}
+				html += '</tbody></table>';
+				return html;
+			}
+			
+			function buildReleaseTable(releases){
+				var html = '<table class="table"><thead><tr><th> # </th><th> Release Title </th><th>Country</th><th>Date</th></tr></thead><tbody>';
+				if(releases && releases.length !== 0){
+					for(var i = 0; i < releases.length; i++){
+						html += buildReleaseRow(i, releases[i]);
+					}
+				}
+				html += '</tbody></table>';
+				return html;
+			}
+			
+			function buildRecordingRow(index, recording){
+				if(!recording.length) {
+					recording.length = 0;
+				}
+				var html = '<tr><td>' + index + '</td><td><a href="/musictag/recording/' + recording.gid + '/">' + recording.name + '</a></td>' +
+					'<td>' + OtherHelper.recordingLength(recording.length) + '</td>';
+				return html;
+			}
+			
+			function buildReleaseRow(index, release){
+				release.country = release.country ? release.country : '';
+				var date = '';
 				
+				if(release.date_year){
+					date += release.date_year;
+				}else{
+					date += '????';
+				}
+				if(release.date_month){
+					date += '-' + release.date_month
+				}else{
+					date += '-??';
+				}
+				if(release.date_day){
+					date += '-' + release.date_day;
+				}else{
+					date += '-??';
+				}
+				
+				var html = '<tr><td>' + index + '</td><td><a href="/musictag/release/' + release.gid + '/">' + release.name + '</a></td>' +
+					'<td>' + release.country + '</td>' +
+					'<td>' + date + '</td>';
+				return html;
 			}
 		});

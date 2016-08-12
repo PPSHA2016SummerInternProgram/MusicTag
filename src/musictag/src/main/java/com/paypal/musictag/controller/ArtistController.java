@@ -55,12 +55,6 @@ public class ArtistController {
 		return MusicTagUtil.wrapResult(artistServiceImpl.basicInfo(gid));
 	}
 	
-	@RequestMapping(value="/{gid}/tooltip-info", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException{
-		return MusicTagUtil.wrapResult(artistServiceImpl.tooltipInfo(gid));
-	}
-
 	@RequestMapping(value = "/{gid}/release-groups-old", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> releaseGroup(@PathVariable("gid") String gid) throws IOException {
@@ -99,4 +93,17 @@ public class ArtistController {
 	public Map<String, Object> artistCreditCount(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
 	}
+	
+	@RequestMapping(value="/{gid}/tooltip-info", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException{
+		return MusicTagUtil.wrapResult(artistServiceImpl.tooltipInfo(gid));
+	}
+	
+	@RequestMapping(value="/{sid}/target-artist/{tid}/cooperations", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistCooperations(@PathVariable("sid") Integer sourceId, @PathVariable("tid") Integer targetId) {
+		return MusicTagUtil.wrapResult(artistServiceImpl.artistCooperations(sourceId, targetId));
+	}
+
 }

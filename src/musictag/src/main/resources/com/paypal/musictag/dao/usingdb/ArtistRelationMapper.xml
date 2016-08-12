@@ -15,7 +15,7 @@
 		where ar1.gid =#{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR} and ar2.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 		group by source, target
 		order by count desc
-		limit 30)
+		limit 10)
 	
 	select * from first_level;
 	
@@ -42,6 +42,31 @@
 		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
 			#{artistId}
 		</foreach>
+	</select>
+	
+	<select id="getCooperationsOnRecordingOfArtists" resultType="map">
+		with artist_credit_ids as (select distinct acn1.artist_credit
+		from artist_credit_name acn1
+		join artist_credit_name acn2 on acn1.artist_credit = acn2.artist_credit
+		where acn1.artist = #{sid} and acn2.artist = #{tid})
+		select  rcd.gid, rcd.name, rcd.length
+		from recording as rcd
+		where rcd.artist_credit in (select artist_credit from artist_credit_ids)
+			and rcd.gid not in (select gid from recording_gid_redirect)
+	</select>
+	
+	<select id="getCooperationsOnReleaseOfArtists" resultType="map">
+		with artist_credit_ids as (select distinct acn1.artist_credit
+		from artist_credit_name acn1
+		join artist_credit_name acn2 on acn1.artist_credit = acn2.artist_credit
+		where acn1.artist = #{sid} and acn2.artist = #{tid})
+		select rls.gid, rls.name, area.name as country, rc.date_year, rc.date_month, rc.date_day
+		from release as rls
+			join release_country as rc on rls.id = rc.release
+			join country_area as ca on rc.country = ca.area
+			join area on ca.area = area.id
+		where rls.artist_credit in (select artist_credit from artist_credit_ids)
+			and rls.gid not in (select gid from release_gid_redirect)
 	</select>
 	
 	<select id="getArtistCountInFirstLevel" resultType="map">

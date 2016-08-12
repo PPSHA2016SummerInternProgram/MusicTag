@@ -40,6 +40,21 @@ public class ArtistRelationMapperTest {
 		UUID id = UUID.fromString(StaticValues.artistGid0);
 		System.out.println(artistRelationMapper.getArtistCountInFirstLevel(id));
 	}
+	
+	@Test
+	public void testGetCooperationsOnRecordingOfArtists(){
+		Integer sid = 35536; //周杰伦
+		Integer tid = 467348;//Terdsak Janpan
+		System.out.println("recording coop\n" + artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
+	}
+	
+	@Test
+	public void testGetCooperationsOnReleaseOfArtists(){
+		Integer sid = 35536; //周杰伦
+		Integer tid = 467348;//Terdsak Janpan
+		System.out.println("release coop \n" + artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+	}
+	
 	@Test
 	public void testGetReleaseCount() {
 		UUID id = UUID.fromString(StaticValues.artistGid0);

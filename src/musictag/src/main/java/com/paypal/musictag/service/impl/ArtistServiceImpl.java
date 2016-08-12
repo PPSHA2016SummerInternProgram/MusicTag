@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.ImageDao;
+import com.paypal.musictag.dao.usingdb.ArtistRelationMapper;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
 import com.paypal.musictag.dao.usingdb.resulthandler.ReleaseesCountsMapResultHandler;
 import com.paypal.musictag.service.ArtistService;
@@ -27,7 +28,8 @@ public class ArtistServiceImpl implements ArtistService {
 	private ArtistDao artistDaoWSImpl;
 	@Autowired
 	private ReleaseGroupMapper releaseGroupMapper;
-
+	@Autowired
+	private ArtistRelationMapper artistRelationMapper;
 	@Autowired
 	private ImageDao imageDaoImpl;
 
@@ -175,5 +177,13 @@ public class ArtistServiceImpl implements ArtistService {
 		if (!"asc".equals(direction) && !"desc".equals(direction)) {
 			throw new IllegalArgumentException("Don't support sort direction: " + direction);
 		}
+	}
+
+	@Override
+	public Map<String, Object> artistCooperations(Integer sid, Integer tid) {
+		Map<String, Object> result = new HashMap<>();
+		result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
+		result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+		return result;
 	}
 }
