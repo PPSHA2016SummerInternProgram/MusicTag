@@ -23,9 +23,17 @@ public class StatisticServiceImplTest {
 	}
 	
 	@Test
-	public void testtrygetarea(){
+	public void testTryGetArea(){
 
 		System.out.println(statisticsServiceImpl.artistArea(StaticValues.artistGid0));
 		
+	}
+	
+	
+	@Test
+	public void testGetEdit(){
+		System.out.println("--------------------------------------------------------");
+		System.out.println("******************"+statisticsServiceImpl.artistEdit(StaticValues.artistGid0)+"*******************");
+		System.out.println("--------------------------------------------------------");
 	}
 }

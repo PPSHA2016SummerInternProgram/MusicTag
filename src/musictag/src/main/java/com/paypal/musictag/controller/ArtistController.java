@@ -99,6 +99,13 @@ public class ArtistController {
 	public Map<String, Object> artistAreas(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistArea(gid));
 	}
+	
+	@RequestMapping(value = "/{gid}/artist-edit", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistEdit(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistEdit(gid));
+	}
+	
 	@RequestMapping(value="/{gid}/tooltip-info", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException{

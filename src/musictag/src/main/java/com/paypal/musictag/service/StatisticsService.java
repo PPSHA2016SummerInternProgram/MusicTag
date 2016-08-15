@@ -20,6 +20,8 @@ public interface StatisticsService {
 	Map<String, Object> artistCreditCount(String artistGid);
 
 	List<Map<String, Object>> artistArea(String artistGid);
+	
+	List<Map<String, Object>> artistEdit(String artistGid);
 
 	List<Map<String, Object>> artistReleaseYearlyDist(String artistGid);
 }
