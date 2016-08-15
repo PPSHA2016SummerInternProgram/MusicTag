@@ -17,7 +17,7 @@ function receivedDistribution(response) {
 		var id = type + ' (' + description + ')';
 		var config = chartConfig(id, 0, 'Artist Amount');
 
-		series = [];
+		var series = [];
 		series.push({
 			type : 'area',
 			name : id,
@@ -26,7 +26,6 @@ function receivedDistribution(response) {
 		
 		config['series'] = series;
 		if(data.length < 10000){
-			console.log(data.length)
 			$('#container').append('<div id="char-' + i + '"></div>');
 			$('#char-' + i).highcharts(config);
 		}

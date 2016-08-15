@@ -1,0 +1,23 @@
+<dataConfig>
+    <dataSource  name="MyPsql" driver="org.postgresql.Driver" url="jdbc:postgresql://10.24.53.72:5432/musicbrainz_db" user="musicbrainz" password="musicbrainz"/>
+    <dataSource name="MyMongo" type="MongoDataSource" database="music-tag" host="10.24.53.72" />
+    <document>
+          <entity processor="MongoEntityProcessor"
+                  query="{'lyric_limited': {'$exists': true}}"
+                  collection="lyric"
+                  datasource="MyMongo" 
+                  name="lyric">
+              <field column="lyric_limited" name="lyric_limited" mongoField="lyric_limited" />
+              <field column="work_mbid" name="work_mbid" mongoField="work_mbid" />
+              <entity dataSource="MyPsql" name="recording"
+                      query="select recording.name as name, concat(recording.gid, '') as mbid
+                            from recording
+                                join l_recording_work lrw on lrw.entity0 = recording.id
+                                join work on lrw.entity1 = work.id
+                            where work.gid = '${lyric.work_mbid}'">
+                  <field column="name" name="recordings_name"/>
+                  <field column="mbid" name="recordings_mbid"/>
+              </entity>
+          </entity>
+    </document>
+</dataConfig>
