@@ -94,7 +94,6 @@ function drawCharts(response, args) {
 
 		series : seriesCache,
 		
-		width: '100%'
 	}
 	$('#' + id).highcharts(config);
 	

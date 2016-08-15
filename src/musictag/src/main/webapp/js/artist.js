@@ -4,7 +4,6 @@ $(function() {
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-	showHotCharts();
 	Statistics.drawArtistReleaseDist($('#artist-release-dist'), getUuid());
 	showSimilarArtists();
 });
@@ -15,14 +14,13 @@ function showSimilarArtists(){
 }
 
 function receivedSimilarArtists(response){
-	var data = response['data'];
 	var artists = getValue(response,'data', 'similarartists', 'artist');
 	if(!artists || !artists.length){
 		return;
 	}
 	var max = 7;
 	$('#similar-artist-list').children().remove();
-	for(var i=0; i<artists.length; i++){
+	for(var i=0; i<artists.length && max > 0; i++){
 		var artist = artists[i];
 		var mbid = getValue(artist, 'mbid');
 		var name = getValue(artist, 'name');
@@ -36,12 +34,9 @@ function receivedSimilarArtists(response){
 				imageSrc = getValue(images[j], '#text'); 
 			}
 		}
-		if(!imageSrc){
-			continue;
-		}
-		$('#similar-artist-list').append(createSimilarArtistHtml(mbid, name, imageSrc));
-		if(--max <= 0){
-			break;
+		if(imageSrc){
+			$('#similar-artist-list').append(createSimilarArtistHtml(mbid, name, imageSrc));
+			--max;
 		}
 	}
 	$('#similar-artists').show();
@@ -205,6 +200,8 @@ function receivedBasicInfo(data) {
 
 	getImageFromServer();
 	getRelLinksFromServer();
+
+	showHotCharts();
 }
 
 /**
