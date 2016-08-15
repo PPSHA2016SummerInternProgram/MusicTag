@@ -152,7 +152,58 @@ $(document).ready(function() {
         });
     };
 
+    var lyricHandler = function(e) {
+        var numFound = 0;
+        var table = $("#lyric-tbl");
+        Paginator(table, '/musictag/search/lyric?key=' + queryKey, function (json) {
+
+            var tbody = table.find('tbody');
+            var res = json.data.response;
+            var highlight = json.data.highlighting;
+
+            numFound = res.numFound;
+            summaryUpdate(res.numFound);
+
+            tbody.empty();
+            res.docs.forEach(function(doc){
+                var hl = highlight[doc.work_mbid];
+                var relatedRecording = '';
+                var relatedRecordingsMore = '';
+
+                if( doc.hasOwnProperty("recordings_mbid") ) {
+                    // NOTE: assume doc.releases_mbid, hl.releases_name have the same length
+                    relatedRecording = TagBuilder('a', {href: UrlHelper.recordingUrl(doc.recordings_mbid[0])},
+                        TagBuilder('i', {class: 'glyphicon glyphicon-music'}, '&nbsp;') + doc.recordings_name[0]);
+
+                    for (var i = 1; i < doc.recordings_mbid.length; i++) {
+                        relatedRecordingsMore += TagBuilder('li', null,
+                            TagBuilder('a', {href: UrlHelper.recordingUrl(doc.recordings_mbid[i])}, doc.recordings_name[i]));
+                    }
+
+                    if (doc.recordings_mbid.length > 1) {
+                        relatedRecordingsMore = TagBuilder('span', {class: 'recording-icon'}, ' | ') + TagBuilder('span', {class: 'dropdown'},
+                                TagBuilder('a', { class: 'recordings-more', href: '#', data: { toggle: 'dropdown'}}, 'More' + TagBuilder('span', {class: 'caret'})) +
+                                TagBuilder('ul', {class: 'dropdown-menu'}, relatedRecordingsMore)
+                            );
+                    }
+                }
+
+                var row = $(TagBuilder('tr', {class: 'recording-row'},
+                    TagBuilder('td', {class: 'related-recording'}, relatedRecording + relatedRecordingsMore) +
+                    TagBuilder('td', {class: ''}, hl.lyric_limited[0] + TagBuilder('span', null, '...') )
+                ));
+                row.appendTo(tbody);
+            });
+
+            return res.numFound;
+        });
+        $("#lyrics-tab").off('show.bs.tab', lyricHandler).on('show.bs.tab', function() {
+            summaryUpdate(numFound);
+        });
+    };
+
     $('#artists-tab').on('show.bs.tab', artistHandler).trigger('click');
     $('#releases-tab').on('show.bs.tab', releaseHandler);
     $('#recordings-tab').on('show.bs.tab', recordingHandler);
+    $('#lyrics-tab').on('show.bs.tab', lyricHandler);
 });

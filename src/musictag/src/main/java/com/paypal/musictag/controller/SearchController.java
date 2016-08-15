@@ -60,4 +60,11 @@ public class SearchController {
 			@RequestParam("perPage") int perPage) throws IOException {
 		return MusicTagUtil.wrapResult(searchServiceImpl.searchRecording(key, currPage, perPage));
 	}
+
+	@RequestMapping(value = "/lyric", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> searchLyric(@RequestParam("key") String key, @RequestParam("currPage") int currPage,
+			@RequestParam("perPage") int perPage) throws IOException {
+		return MusicTagUtil.wrapResult(searchServiceImpl.searchLyric(key, currPage, perPage));
+	}
 }
