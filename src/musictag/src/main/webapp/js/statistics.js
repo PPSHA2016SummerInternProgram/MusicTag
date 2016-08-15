@@ -92,7 +92,9 @@ function drawCharts(response, args) {
 
 		colors : [ '#333333' ],
 
-		series : seriesCache
+		series : seriesCache,
+		
+		width: '100%'
 	}
 	$('#' + id).highcharts(config);
 	
