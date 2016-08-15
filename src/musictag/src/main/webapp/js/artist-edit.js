@@ -15,10 +15,10 @@ $(document).ready(function(){
 				var y_axis = [];
 		
 				edit.data.forEach(function(node){
-					x_axis.push(node.date_part);
+					x_axis.push(node.year);
 					y_axis.push(node.count);
 				})
-				
+				//alert(x_axis);
 				//alert(edit.data);
 				//for(var i in edit.data){
 					//alert("key"+i+"value"+edit.data[i]);
@@ -55,9 +55,7 @@ $(document).ready(function(){
 					            axisTick: {
 					                alignWithLabel: true
 					            },
-					        	axisLine:{
-					        		show:false
-					        	}
+					        	
 					        }
 					    ],
 					    yAxis : [
@@ -66,6 +64,7 @@ $(document).ready(function(){
 					        	name:'Edit Count',
 					        	nameLocation:'middle',
 					            type : 'value',
+					            data:y_axis,
 					            nameGap:38,
 					            axisLine:{
 					        		show:false

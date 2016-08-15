@@ -20,7 +20,7 @@ $(document).ready(function(){
 					
 					option = {
 					    title : {
-					        text: 'Release Areas (2016)',
+					        text: 'Release Areas',
 					        //subtext: 'from United Nations, Total population, both sexes combined, as of 1 July (thousands)',
 					        //sublink : 'http://esa.un.org/wpp/Excel-Data/population.htm',
 					        left: 'center',
