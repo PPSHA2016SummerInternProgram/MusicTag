@@ -17,6 +17,70 @@ function operate(amount) {
 	return parseInt(Math.log(amount));
 }
 
+function chartConfig(title, mark, yText){
+	var config = {
+			chart : {
+				zoomType : 'x'
+			},
+			title : {
+				text : title
+			},
+			subtitle : {
+				text : 'Click and drag in the plot area to zoom in'
+			},
+			xAxis : {
+				type : 'int',
+				plotLines : [ {
+					color : '#dd4b39',
+					value : mark,
+					width : 1,
+				} ],
+				title : {
+					text : 'Score'
+				}
+			},
+			yAxis : {
+				title : {
+					text : yText
+				},
+				min : 0
+			},
+			legend : {
+				enabled : false
+			},
+			plotOptions : {
+				area : {
+					fillColor : {
+						linearGradient : {
+							x1 : 0,
+							y1 : 0,
+							x2 : 0,
+							y2 : 1
+						},
+						stops : [
+								[ 0, Highcharts.getOptions().colors[0] ],
+								[
+										1,
+										Highcharts.Color('#FFFFFF').setOpacity(0)
+												.get('rgba') ], ]
+					},
+					marker : {
+						radius : 2
+					},
+					lineWidth : 1,
+					states : {
+						hover : {
+							lineWidth : 1
+						}
+					},
+					threshold : null
+				}
+			},
+
+		}
+	return config;
+}
+
 function drawCharts(response, args) {
 	var id = args['id'];
 	var title = args['title'];
@@ -35,67 +99,10 @@ function drawCharts(response, args) {
 		name : name,
 		data : data,
 	});
-	var config = {
-		chart : {
-			zoomType : 'x'
-		},
-		title : {
-			text : title
-		},
-		subtitle : {
-			text : 'Click and drag in the plot area to zoom in'
-		},
-		xAxis : {
-			type : 'int',
-			plotLines : [ {
-				color : '#dd4b39',
-				value : mark,
-				width : 1,
-			} ],
-			title : {
-				text : 'Score'
-			}
-		},
-		yAxis : {
-			title : {
-				text : yText
-			}
-		},
-		legend : {
-			enabled : false
-		},
-		plotOptions : {
-			area : {
-				fillColor : {
-					linearGradient : {
-						x1 : 0,
-						y1 : 0,
-						x2 : 0,
-						y2 : 1
-					},
-					stops : [
-							[ 0, Highcharts.getOptions().colors[0] ],
-							[
-									1,
-									Highcharts.Color('#FFFFFF').setOpacity(0)
-											.get('rgba') ], ]
-				},
-				marker : {
-					radius : 2
-				},
-				lineWidth : 1,
-				states : {
-					hover : {
-						lineWidth : 1
-					}
-				},
-				threshold : null
-			}
-		},
-
-		series : seriesCache,
-		
-	}
+	
+	var config = chartConfig(title, mark, yText);
+	config['series'] = seriesCache;
+	
 	$('#' + id).highcharts(config);
 	
 	var callback = args['callback'];

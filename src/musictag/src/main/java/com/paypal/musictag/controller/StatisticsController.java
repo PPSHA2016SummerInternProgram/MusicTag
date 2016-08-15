@@ -25,6 +25,19 @@ public class StatisticsController {
 		return "/WEB-INF/pages/statistics.jsp";
 	}
 
+	private Map<?, ?> distributionCache = null;
+
+	@RequestMapping(value = "/distribution", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> distribution(Boolean refresh) throws IOException {
+		if (distributionCache == null || refresh != null && refresh) {
+			distributionCache = statisticsServiceImpl.distribution();
+			return MusicTagUtil.wrapResult(statisticsServiceImpl.distribution());
+		} else {
+			return MusicTagUtil.wrapResult(distributionCache);
+		}
+	}
+
 	@RequestMapping(value = "/artist-listeners/{gid}", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistListeners(@PathVariable("gid") String gid) throws IOException {
@@ -69,7 +82,7 @@ public class StatisticsController {
 
 	@RequestMapping(value = "/artist/{gid}/release-dist", method = RequestMethod.GET)
 	@ResponseBody
-    public Map<String, Object> artistReleaseYearlyDist(@PathVariable("gid") String gid) throws IOException {
+	public Map<String, Object> artistReleaseYearlyDist(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistReleaseYearlyDist(gid));
 	}
 }

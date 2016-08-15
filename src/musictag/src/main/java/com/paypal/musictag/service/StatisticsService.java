@@ -5,6 +5,8 @@ import java.util.Map;
 
 public interface StatisticsService {
 
+	Map<String, Object> distribution();
+
 	Map<String, Object> artistListeners(String gid);
 
 	Map<String, Object> artistPlaycount(String gid);
@@ -16,7 +18,7 @@ public interface StatisticsService {
 	Map<String, Object> recordingListeners(String gid);
 
 	Map<String, Object> recordingPlaycount(String gid);
-	
+
 	Map<String, Object> artistCreditCount(String artistGid);
 
 	List<Map<String, Object>> artistArea(String artistGid);

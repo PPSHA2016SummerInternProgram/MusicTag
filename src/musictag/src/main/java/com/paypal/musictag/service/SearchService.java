@@ -44,4 +44,14 @@ public interface SearchService {
 	 * @return
 	 */
 	Map<String, Object> searchRecording(String key, int currPage, int perPage) throws IOException;
+
+	/**
+	 * Search one page for recording.
+	 *
+	 * @param key
+	 * @param currPage
+	 * @param perPage
+	 * @return
+	 */
+	Map<String, Object> searchLyric(String key, int currPage, int perPage) throws IOException;
 }

@@ -7,10 +7,13 @@
 #search-tabs {
   margin-bottom: 1rem; }
 
-.recording-row .release-more {
+.releases-more, .recordings-more {
   display: inline-block; }
 
-.recording-row a:not(.releases-more), .artist-frame a:not(.releases-more), .release-frame a:not(.releases-more) {
+a.releases-more, a.recordings-more {
+  color: #337ab7 !important; }
+
+.recording-row a, .artist-frame a, .release-frame a {
   color: #000; }
 .recording-row em, .artist-frame em, .release-frame em {
   color: #337ab7;

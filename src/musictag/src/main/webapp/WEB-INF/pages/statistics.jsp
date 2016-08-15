@@ -6,14 +6,9 @@
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
 <script src="<%=request.getContextPath()%>/js/statistics.js"></script>
+<script src="<%=request.getContextPath()%>/js/distribution.js"></script>
 </head>
 <body>
-	<h1>Statistics</h1>
-	<div id="artist-listeners"></div>
-	<div id="artist-playcount"></div>
-	<div id="release-listeners"></div>
-	<div id="release-playcount"></div>
-	<div id="recording-listeners"></div>
-	<div id="recording-playcount"></div>
+	<div id="container"></div>
 </body>
 </html>

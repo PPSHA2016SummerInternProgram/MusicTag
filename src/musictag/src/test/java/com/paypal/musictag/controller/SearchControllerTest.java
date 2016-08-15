@@ -22,9 +22,7 @@ public class SearchControllerTest {
 
 	@Autowired
 	SearchController searchController;
-	
-	
-	
+
 	@Test
 	public void testSearchPage(){
 		HttpServletRequest request = new MockHttpServletRequest();
@@ -33,8 +31,6 @@ public class SearchControllerTest {
 		
 		assertEquals(page,"/WEB-INF/pages/search.jsp");
 	}
-	
-	
 
 	@Test
 	public void testSearchAll() throws IOException {
@@ -59,5 +55,12 @@ public class SearchControllerTest {
 		Map<?, ?> map = searchController.searchRecording("Taylor Swift", 0, 1);
 		assertEquals(map.get("success"), true);
 	}
+
+	@Test
+	public void testSearchLyric() throws IOException {
+		Map<?, ?> map = searchController.searchLyric("apple", 0, 1);
+		assertEquals(map.get("success"), true);
+	}
+
 
 }

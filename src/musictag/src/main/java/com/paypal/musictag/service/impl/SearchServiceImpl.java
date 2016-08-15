@@ -71,6 +71,13 @@ public class SearchServiceImpl implements SearchService {
 		return search("recording", key, currPage, perPage);
 	}
 
+	@Override
+	public Map<String, Object> searchLyric(String key, int currPage, int perPage)
+			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException, JsonMappingException,
+			ProtocolException, MalformedURLException {
+		return search("lyric", key, currPage, perPage);
+	}
+
 	private Map<String, Object> search(String entityType, String key, int currPage, int perPage)
 			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException, ProtocolException,
 			MalformedURLException, JsonMappingException {
