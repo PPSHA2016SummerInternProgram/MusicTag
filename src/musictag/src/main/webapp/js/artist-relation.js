@@ -13,37 +13,24 @@ $(document).ready(
 							data.data.nodes
 									.forEach(function(node) {
 										if (node.gid === curArtistGid) {
-											node.itemStyle = {
-												normal : {
-													color : '#990033'
-												}
-											};
 											node.symbolSize = 20;
-											node.label = {
-													normal : {
-														show : node.symbolSize > 10,
-														textStyle: {
-															color: '#990033'
-														}
-													}
-											};
-											Math.seed = node.id;
-											node.x = Math.seededRandom(500, -500);
-											node.y = Math.seededRandom(250, -250);
+											node.x = 0;
+											node.y = 0;
 										} else {
 											node.itemStyle = null;
 											node.symbolSize = Math
 													.log(node.symbolSize * 3) * 3;
-											node.label = {
-													normal : {
-														show : node.symbolSize > 10,
-													}
-											};
+											Math.seed = node.id;
+											node.x = Math.seededRandom(300, 0);
+											node.y = Math.seededRandom(150, -150);
 										}
+										node.label = {
+												normal : {
+													show : node.symbolSize > 10,
+												}
+										};
 										node.value = node.symbolSize;
-										Math.seed = node.id;
-										node.x = Math.seededRandom(500, -500);
-										node.y = Math.seededRandom(250, -250);
+										
 									});
 
 							data.data.links.forEach(function(node) {
@@ -55,7 +42,8 @@ $(document).ready(
 								title : {
 									text : 'Artist Relation',
 									top : 'top',
-									left : 'right'
+									left : 'center',
+									right:'center'
 								},
 								visualMap: {
 								    // 不显示 visualMap 组件，只用于明暗度的映射
@@ -105,8 +93,10 @@ $(document).ready(
 									data : data.data.nodes,
 									links : data.data.links,
 									roam : true,
-									xAxisIndex: 0,
-									yAxisIndex: 0,
+									top: '0%',
+									bottom: '0%',
+									left: '50%',
+									right: '0%',
 									focusNodeAdjacency: true,
 									label : {
 										normal : {
@@ -137,34 +127,23 @@ $(document).ready(
 								lyricistData.data.nodes
 									.forEach(function(node) {
 										if (node.gid === curArtistGid) {
-											node.itemStyle = {
-												normal : {
-													color : '#990099'
-												}
-											};
 											node.symbolSize = 20;
-											node.label = {
-													normal : {
-														show : node.symbolSize > 10,
-														textStyle: {
-															color: '#990099'
-														}
-													}
-											};
+											node.x = 0;
+											node.y = 0;
 										} else {
 											node.itemStyle = null;
 											node.symbolSize = Math
-													.log(node.symbolSize * 3) * 5;
-											node.label = {
-													normal : {
-														show : node.symbolSize > 10,
-													}
-											};
+													.log(node.symbolSize * 3) * 10;
+											Math.seed = node.id;
+											node.x = Math.seededRandom(0, -500);
+											node.y = Math.seededRandom(250, 0);
 										}
+										node.label = {
+												normal : {
+													show : node.symbolSize > 10,
+												}
+										};
 										node.value = node.symbolSize;
-										Math.seed = node.id;
-										node.x = Math.seededRandom(500, -500);
-										node.y = Math.seededRandom(250, -250);
 									});
 
 								lyricistData.data.links.forEach(function(node) {
@@ -181,6 +160,10 @@ $(document).ready(
 									links : lyricistData.data.links,
 									roam : true,
 									focusNodeAdjacency: true,
+									right: '50%',
+									left: '0%',
+									top: '50%',
+									bottom: '0%',
 									label : {
 										normal : {
 											position : 'right',
@@ -200,60 +183,50 @@ $(document).ready(
 								option.series.push(lyricistsSeries);
 								artistRelationChart.setOption(option);
 
-								
-//								lyricistData.data.links.forEach(function(link){
-//									link.lineStyle = {
-//											normal : {
-//												color : 'source',
-//												curveness : 1,
-//											}	
-//									}
-//								});
-//								var newdata = data.data.nodes.concat(lyricistData.data.nodes);
-//								var newlinks = data.data.links.concat(lyricistData.data.links);
-//								console.log(JSON.stringify(lyricistData.data.links));
-//								console.log(JSON.stringify(data.data.nodes));
-//								console.log(JSON.stringify(newdata));
-//								console.log(JSON.stringify(newlinks));
-//								artistRelationChart.setOption({
-//									series: [{
-//										name: 'Credit Relation',
-//										links: newlinks
-//									}]
-//								});
-								
+/*								
+								lyricistData.data.links.forEach(function(link){
+									link.lineStyle = {
+											normal : {
+												color : 'source',
+												curveness : 1,
+											}	
+									}
+								});
+								var newdata = data.data.nodes.concat(lyricistData.data.nodes);
+								var newlinks = data.data.links.concat(lyricistData.data.links);
+								console.log(JSON.stringify(lyricistData.data.links));
+								console.log(JSON.stringify(data.data.nodes));
+								console.log(JSON.stringify(newdata));
+								console.log(JSON.stringify(newlinks));
+								artistRelationChart.setOption({
+									series: [{
+										name: 'Credit Relation',
+										links: newlinks
+									}]
+								});
+*/								
 								$.get("/musictag/artist/" + curArtistGid + "/artist-composers", function(composerData){
 									composerData.data.nodes
 										.forEach(function(node) {
 											if (node.gid === curArtistGid) {
-												node.itemStyle = {
-													normal : {
-														color : '#990099'
-													}
-												};
 												node.symbolSize = 20;
-												node.label = {
-														normal : {
-															show : node.symbolSize > 10,
-															textStyle: {
-																color: '#990099'
-															}
-														}
-												};
+												node.x = 0;
+												node.y = 0;
 											} else {
 												node.itemStyle = null;
 												node.symbolSize = Math
-														.log(node.symbolSize * 3) * 5;
-												node.label = {
-														normal : {
-															show : node.symbolSize > 10,
-														}
-												};
+														.log(node.symbolSize * 3) * 10;
+												Math.seed = node.id;
+												node.x = Math.seededRandom(-100, -500);
+												node.y = Math.seededRandom(-50, -250);
+												
 											}
+											node.label = {
+													normal : {
+														show : node.symbolSize > 10,
+													}
+											};
 											node.value = node.symbolSize;
-											Math.seed = node.id;
-											node.x = Math.seededRandom(500, -500);
-											node.y = Math.seededRandom(250, -250);
 										});
 	
 									composerData.data.links.forEach(function(node) {
@@ -269,6 +242,10 @@ $(document).ready(
 											data : composerData.data.nodes,
 											links : composerData.data.links,
 											roam : true,
+											left: "0%",
+											top: '0%',
+											right: '50%',
+											bottom: '50%',
 											focusNodeAdjacency: true,
 											label : {
 												normal : {
