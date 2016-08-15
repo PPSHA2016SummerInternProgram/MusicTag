@@ -3,6 +3,8 @@ package com.paypal.musictag.service;
 import java.io.IOException;
 import java.util.Map;
 
+import com.paypal.musictag.util.CooperationType;
+
 public interface ArtistService {
 
     Map<String, Object> profile(String gid) throws IOException;
@@ -31,5 +33,7 @@ public interface ArtistService {
 
 	Map<String, Object> tooltipInfo(String gid) throws IOException;
 	
-	Map<String, Object> artistCooperations(Integer sid, Integer tid);
+	Map<String, Object> artistCooperations(Integer sid, Integer tid, CooperationType type);
+	
+	Map<String, Object> similarArtist(String gid) throws Exception;
 }

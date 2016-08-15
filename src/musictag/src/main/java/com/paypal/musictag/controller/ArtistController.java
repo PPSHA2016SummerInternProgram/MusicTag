@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.service.StatisticsService;
+import com.paypal.musictag.util.CooperationType;
 import com.paypal.musictag.util.MusicTagUtil;
 
 @Controller
@@ -77,6 +78,12 @@ public class ArtistController {
 		return "/WEB-INF/pages/artist-overview.jsp";
 	}
 	
+	@RequestMapping(value = "/{gid}/similar", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> similarArtist(@PathVariable("gid") String gid) throws Exception {
+		return MusicTagUtil.wrapResult(artistServiceImpl.similarArtist(gid));
+	}
+	
 	/*
 	================================================================
 			statistics api for artist
@@ -106,16 +113,35 @@ public class ArtistController {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistEdit(gid));
 	}
 	
+	@RequestMapping(value = "/{gid}/artist-lyricists", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistLyricists(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistLyricist(gid));
+	}
+	
+	@RequestMapping(value = "/{gid}/artist-composers", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistComposers(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistComposer(gid));
+	}
+	
 	@RequestMapping(value="/{gid}/tooltip-info", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException{
 		return MusicTagUtil.wrapResult(artistServiceImpl.tooltipInfo(gid));
 	}
 	
-	@RequestMapping(value="/{sid}/target-artist/{tid}/cooperations", method = RequestMethod.GET)
+	/**
+	 * 
+	 * @param sourceId
+	 * @param targetId
+	 * @param type: credit, lyricist or composer.
+	 * @return
+	 */
+	@RequestMapping(value="/{sid}/target-artist/{tid}/type/{type}/cooperations", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> artistCooperations(@PathVariable("sid") Integer sourceId, @PathVariable("tid") Integer targetId) {
-		return MusicTagUtil.wrapResult(artistServiceImpl.artistCooperations(sourceId, targetId));
+	public Map<String, Object> artistCooperations(@PathVariable("sid") Integer sourceId, @PathVariable("tid") Integer targetId, @PathVariable("type") String type) {
+		return MusicTagUtil.wrapResult(artistServiceImpl.artistCooperations(sourceId, targetId, CooperationType.valueOf(type.toUpperCase())));
 	}
 
 }

@@ -1,6 +1,7 @@
 package com.paypal.musictag.controller;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 import java.io.IOException;
 import java.util.Map;
@@ -148,6 +149,8 @@ public class ArtistControllerTest {
 	public void testArtsitCooperations(){
 		Integer sid = 35536; //周杰伦
 		Integer tid = 467348;//Terdsak Janpan
-		artistController.artistCooperations(sid, tid);
+		artistController.artistCooperations(sid, tid, "credit");
+		artistController.artistCooperations(sid, tid, "lyricist");
+		artistController.artistCooperations(sid, tid, "composer");
 	}
 }

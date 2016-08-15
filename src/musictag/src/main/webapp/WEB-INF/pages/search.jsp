@@ -45,6 +45,9 @@
         <li role='presentation'>
           <a aria-controls='messages' data-toggle='tab' href='#releases' id='releases-tab' role='tab'>Albums</a>
         </li>
+        <li role='presentation'>
+          <a aria-controls='messages' data-toggle='tab' href='#lyrics' id='lyrics-tab' role='tab'>Lyrics</a>
+        </li>
       </ul>
       <!-- Tab panes -->
       <div class='tab-content'>
@@ -67,6 +70,16 @@
         <div class='tab-pane fade' id='releases' role='tabpanel'>
           <div class='row' data-page-param='currPage' data-pagination='#release-pagination' data-per-page-param='perPage' data-per-page='24' data-window='10' id='release-frames'></div>
           <div class='text-center' id='release-pagination'></div>
+        </div>
+        <div class='tab-pane fade' id='lyrics' role='tabpanel'>
+          <table class='table table-striped' data-page-param='currPage' data-pagination='#lyrics-pagination' data-per-page-param='perPage' data-per-page='24' data-window='10' id='lyric-tbl'>
+            <thead>
+              <th>Recording</th>
+              <th>Lyric</th>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <div class='text-center' id='lyrics-pagination'></div>
         </div>
       </div>
     </div>

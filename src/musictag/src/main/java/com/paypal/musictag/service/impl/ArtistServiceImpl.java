@@ -1,6 +1,8 @@
 package com.paypal.musictag.service.impl;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,12 +14,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.ImageDao;
 import com.paypal.musictag.dao.usingdb.ArtistRelationMapper;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
 import com.paypal.musictag.dao.usingdb.resulthandler.ReleaseesCountsMapResultHandler;
+import com.paypal.musictag.dao.usingwebservice.api.LastFmAPI;
+import com.paypal.musictag.exception.NetBadRequestException;
+import com.paypal.musictag.exception.NetConnectionException;
+import com.paypal.musictag.exception.NetContentNotFoundException;
 import com.paypal.musictag.service.ArtistService;
+import com.paypal.musictag.util.CooperationType;
 import com.paypal.musictag.util.MusicTagUtil;
 
 @Service("artistServiceImpl")
@@ -180,10 +188,32 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public Map<String, Object> artistCooperations(Integer sid, Integer tid) {
+	public Map<String, Object> artistCooperations(Integer sid, Integer tid, CooperationType type) {
+		if (type == null) {
+			throw new IllegalArgumentException("CooperationType should not be null");
+		}
 		Map<String, Object> result = new HashMap<>();
-		result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
-		result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+		if (type == CooperationType.CREDIT) {
+			result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
+			result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+		}else if (type == CooperationType.LYRICIST) {
+			result.put("releases", artistRelationMapper.getReleaseLyricCooperationsOfArtist(sid, tid));
+			result.put("recordings", artistRelationMapper.getRecordingLyricCooperationsOfArtists(sid, tid));
+		}else if (type == CooperationType.COMPOSER) {
+			result.put("releases", artistRelationMapper.getReleaseComposerCooperationsOfArtist(sid, tid));
+			result.put("recordings", artistRelationMapper.getRecordingComposerCooperationsOfArtists(sid, tid));
+		}else {
+			throw new AssertionError("should not reach here");
+		}
+		
 		return result;
+	}
+
+	@Override
+	public Map<String, Object> similarArtist(String gid) throws NetConnectionException, NetContentNotFoundException,
+			NetBadRequestException, JsonMappingException, ProtocolException, MalformedURLException {
+
+		return LastFmAPI.similarArtist(gid);
+
 	}
 }

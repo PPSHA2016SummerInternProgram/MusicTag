@@ -32,7 +32,8 @@
 	<div class="artist-background">
 		<div class="artist-background-top"></div>
 	</div>
-	<div class="container " style="margin-top: -120px;">
+	<div class="container "
+		style="margin-top: -120px; padding-bottom: 100px;">
 		<div style="height: 120px;">
 			<div class="release-cover img-circle-wrapper">
 				<img width="160" data-artist-overview-image
@@ -102,7 +103,8 @@
 					</div>
 					<div class="artist-overview-key">Life Span:</div>
 					<div class="artist-overview-value" data-artist-overview-life-span>1979-01-18~?</div>
-					<div class="artist-overview-key" style="width: 100%; display:none" data-artist-listeners-char>
+					<div class="artist-overview-key" style="width: 100%; display: none"
+						data-artist-listeners-char>
 						<div style="float: left" data-artist-listeners-chart-key>周杰伦
 							beats 97% artists:</div>
 						<div class="artist-overview-value"
@@ -146,13 +148,55 @@
 			</div>
 		</div>
 
-		<div id="artist-relations" style="width:100%;height:400px;"></div>
-		<div id="artist-area" style="width:100%;height:400px;"></div>
+		<div id="artist-relations" style="width: 100%; height: 400px;"></div>
+		<div id="artist-area" style="width: 100%; height: 400px;"></div>
 		<div id="artist-release-dist"></div>
 		<div id="artist-edit" style="width:100%;height:400px;"></div>
 		
 		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.jsp"%>
+		</div>
+
+		<div id="similar-artists" style="display: none">
+			<h3>Similar Artists</h3>
+			<ol id="similar-artist-list" class="grid-items">
+				<li class="grid-items-item">
+					<div class="grid-items-item-wrapper">
+						<div class="similar-artist-image">
+							<img
+								src="https://lastfm-img2.akamaized.net/i/u/avatar300s/2e3a9cef44244f31b3382f9ab214e9ea.jpg">
+						</div>
+						<div class="grid-items-item-details">
+							<div>不能说的秘密</div>
+						</div>
+						<a class="grid-items-item-link" href=""></a>
+					</div>
+				</li>
+				<li class="grid-items-item">
+					<div class="grid-items-item-wrapper">
+						<div class="similar-artist-image">
+							<img
+								src="https://lastfm-img2.akamaized.net/i/u/avatar300s/43d0c438db3c401aab783461a388e9d6.jpg">
+						</div>
+						<div class="grid-items-item-details">
+							<div>不能说的秘密</div>
+						</div>
+						<a class="grid-items-item-link" href=""></a>
+					</div>
+				</li>
+				<li class="grid-items-item">
+					<div class="grid-items-item-wrapper">
+						<div class="similar-artist-image">
+							<img
+								src="http://img2-ak.lst.fm/i/u/avatar300s/68467618652143bb9817c0fc366fe18a.jpg">
+						</div>
+						<div class="grid-items-item-details">
+							<div>不能说的秘密</div>
+						</div>
+						<a class="grid-items-item-link" href=""></a>
+					</div>
+				</li>
+			</ol>
 		</div>
 
 	</div>

@@ -4,9 +4,58 @@ $(function() {
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-	showHotCharts();
 	Statistics.drawArtistReleaseDist($('#artist-release-dist'), getUuid());
+	showSimilarArtists();
 });
+
+function showSimilarArtists(){
+	var url = 'similar';
+	sendAjax(url, null, receivedSimilarArtists);
+}
+
+function receivedSimilarArtists(response){
+	var artists = getValue(response,'data', 'similarartists', 'artist');
+	if(!artists || !artists.length){
+		return;
+	}
+	var max = 7;
+	$('#similar-artist-list').children().remove();
+	for(var i=0; i<artists.length && max > 0; i++){
+		var artist = artists[i];
+		var mbid = getValue(artist, 'mbid');
+		var name = getValue(artist, 'name');
+		var images = getValue(artist, 'image');
+		if(!mbid || !name || !images || !images.length){
+			continue;
+		}
+		var imageSrc;
+		for(var j=0; j<images.length; j++){
+			if(getValue(images[j], 'size') === 'extralarge'){
+				imageSrc = getValue(images[j], '#text'); 
+			}
+		}
+		if(imageSrc){
+			$('#similar-artist-list').append(createSimilarArtistHtml(mbid, name, imageSrc));
+			--max;
+		}
+	}
+	$('#similar-artists').show();
+}
+
+function createSimilarArtistHtml(mbid, name, imageSrc){
+	return '<li class="grid-items-item">'
+	+'	<div class="grid-items-item-wrapper">'
+	+'		<div class="similar-artist-image">'
+	+'			<img'
+	+'				src="' + imageSrc + '">'
+	+'		</div>'
+	+'		<div class="grid-items-item-details">'
+	+'			<div>' + name + '</div>'
+	+'		</div>'
+	+'		<a class="grid-items-item-link" href="' + ContextPath + '/artist/' + mbid + '/"></a>'
+	+'	</div>'
+	+'</li>';
+}
 
 var basicInfo;
 
@@ -151,6 +200,8 @@ function receivedBasicInfo(data) {
 
 	getImageFromServer();
 	getRelLinksFromServer();
+
+	showHotCharts();
 }
 
 /**

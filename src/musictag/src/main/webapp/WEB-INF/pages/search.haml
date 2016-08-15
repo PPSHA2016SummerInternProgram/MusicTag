@@ -36,6 +36,8 @@
           %a#artists-tab{"aria-controls" => "profile", "data-toggle" => "tab", :href => "#artists", :role => "tab"} Artists
         %li{:role => "presentation"}
           %a#releases-tab{"aria-controls" => "messages", "data-toggle" => "tab", :href => "#releases", :role => "tab"} Albums
+        %li{:role => "presentation"}
+          %a#lyrics-tab{"aria-controls" => "messages", "data-toggle" => "tab", :href => "#lyrics", :role => "tab"} Lyrics
       / Tab panes
       .tab-content
         #recordings.tab-pane.fade{:role => "tabpanel"}
@@ -53,3 +55,11 @@
         #releases.tab-pane.fade{:role => "tabpanel"}
           #release-frames.row{data: {pagination: '#release-pagination', 'per-page': 24, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}
           #release-pagination.text-center
+
+        #lyrics.tab-pane.fade{:role => "tabpanel"}
+          %table#lyric-tbl.table.table-striped{data: {pagination: '#lyrics-pagination', 'per-page': 24, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}
+            %thead
+              %th Recording
+              %th Lyric
+            %tbody
+          #lyrics-pagination.text-center
