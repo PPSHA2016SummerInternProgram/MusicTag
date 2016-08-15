@@ -14,7 +14,7 @@ function getStatisticsDataFromServer(entityType, hotType, id, gid, callback) {
 var seriesCache = [];
 
 function operate(amount) {
-	return parseInt(Math.log(amount) * 100);
+	return parseInt(Math.log(amount));
 }
 
 function drawCharts(response, args) {
