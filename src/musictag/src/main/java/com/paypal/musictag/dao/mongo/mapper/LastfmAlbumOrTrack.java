@@ -2,10 +2,7 @@ package com.paypal.musictag.dao.mongo.mapper;
 
 import java.util.List;
 
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection = "lastfm.track")
-public class LastfmTrack {
+public class LastfmAlbumOrTrack {
 
 	private String gid;
 

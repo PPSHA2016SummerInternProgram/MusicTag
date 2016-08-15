@@ -47,7 +47,7 @@ public class MongoMapperTest {
 
 	@Test
 	public void testLastfmAlbum() {
-		LastfmAlbum item = new LastfmAlbum();
+		LastfmAlbumOrTrack item = new LastfmAlbumOrTrack();
 		item.setGid(null);
 		item.getGid();
 		item.setImage(null);
@@ -80,24 +80,5 @@ public class MongoMapperTest {
 		item.setUrl(null);
 		item.getUrl();
 
-	}
-
-	@Test
-	public void testLastfmTrack() {
-		LastfmTrack item = new LastfmTrack();
-		item.setGid(null);
-		item.getGid();
-		item.setImage(null);
-		item.getImage();
-		item.setListeners(0);
-		item.getListeners();
-		item.setMbid(null);
-		item.getMbid();
-		item.setName(null);
-		item.getName();
-		item.setPlaycount(0);
-		item.getPlaycount();
-		item.setUrl(null);
-		item.getUrl();
 	}
 }

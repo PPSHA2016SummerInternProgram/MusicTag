@@ -13,9 +13,8 @@ import org.springframework.stereotype.Service;
 import com.paypal.musictag.dao.HotStatisticsDao;
 import com.paypal.musictag.dao.mongo.mapper.HotInfo;
 import com.paypal.musictag.dao.mongo.mapper.HotRank;
-import com.paypal.musictag.dao.mongo.mapper.LastfmAlbum;
+import com.paypal.musictag.dao.mongo.mapper.LastfmAlbumOrTrack;
 import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
-import com.paypal.musictag.dao.mongo.mapper.LastfmTrack;
 
 @Service("hotStatisticsDaoImpl")
 public class HotStatisticsDaoImpl implements HotStatisticsDao {
@@ -56,11 +55,11 @@ public class HotStatisticsDaoImpl implements HotStatisticsDao {
 			Query searchQuery = new Query(Criteria.where("gid").is(gid));
 			int amount = 0;
 			if ("album".equals(type0)) {
-				LastfmAlbum album = mongoTemplate.findOne(searchQuery, LastfmAlbum.class);
+				LastfmAlbumOrTrack album = mongoTemplate.findOne(searchQuery, LastfmAlbumOrTrack.class, "lastfm.album");
 				amount = Integer.parseInt(
 						String.valueOf("listeners".equals(type1) ? album.getListeners() : album.getPlaycount()));
 			} else {
-				LastfmTrack track = mongoTemplate.findOne(searchQuery, LastfmTrack.class);
+				LastfmAlbumOrTrack track = mongoTemplate.findOne(searchQuery, LastfmAlbumOrTrack.class, "lastfm.track");
 				amount = Integer.parseInt(
 						String.valueOf("listeners".equals(type1) ? track.getListeners() : track.getPlaycount()));
 			}
