@@ -4,7 +4,7 @@ function getStatisticsDataFromServer(entityType, hotType, id, gid, callback) {
 	var args = {
 		id : id,
 		title : id,
-		yText : entityType,
+		yText : 'Amount of ' + entityType,
 		name : subUrl,
 		callback : callback,
 	}
@@ -52,6 +52,9 @@ function drawCharts(response, args) {
 				value : mark,
 				width : 1,
 			} ],
+			title : {
+				text : 'Score'
+			}
 		},
 		yAxis : {
 			title : {
@@ -71,7 +74,7 @@ function drawCharts(response, args) {
 						y2 : 1
 					},
 					stops : [
-							[ 0, '#000000' ],
+							[ 0, Highcharts.getOptions().colors[0] ],
 							[
 									1,
 									Highcharts.Color('#FFFFFF').setOpacity(0)
@@ -89,8 +92,6 @@ function drawCharts(response, args) {
 				threshold : null
 			}
 		},
-
-		colors : [ '#333333' ],
 
 		series : seriesCache,
 		
