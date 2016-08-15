@@ -60,13 +60,19 @@ public class StatisticsServiceImpl implements StatisticsService {
 		
 		return constructResult(linksWithCount);
 	}
-	
+
+	@Override
+    public List<Map<String, Object>> artistReleaseYearlyDist(String artistGid) {
+	    return artistRelationMapper.getReleaseYearlyDist(UUID.fromString(artistGid));
+    }
+
 	private void postProcessLinkAndNode(List<Map<String, Object>> nodes,
 			List<Map<String, Object>> linksWithCount){
 		moveCountFromLinktoNodes(nodes, linksWithCount);
-		
+
 	}
 	
+
 	private void moveCountFromLinktoNodes(List<Map<String, Object>> nodes,
 			List<Map<String, Object>> linksWithCount) {
 		for(Map<String, Object> link : linksWithCount){
@@ -78,6 +84,13 @@ public class StatisticsServiceImpl implements StatisticsService {
 			link.remove("count");
 		}
 	}
+	
+	public List<Map<String, Object>> artistArea(String artistGid){
+		List<Map<String, Object>> tryList = artistRelationMapper.getArtistArea(UUID.fromString(artistGid));
+		return tryList;
+	}
+	
+	
 
 	@Override
 	public Map<String, Object> artistLyricist(String artistGid) {

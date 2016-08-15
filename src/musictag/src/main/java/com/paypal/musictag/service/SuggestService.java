@@ -14,31 +14,4 @@ public interface SuggestService {
 	 */
 	Map<String, Object> suggestAll(String key, int suggestCountPerGroup) throws IOException;
 	
-	/**
-	 * suggest artist names. 
-	 * 
-	 * @param key
-	 * @param suggestCountPerGroup
-	 * @return
-	 * @throws IOException
-	 */
-	Map<String, Object> suggestArtists(String key, int suggestCountPerGroup) throws IOException;
-	
-	/**
-	 * suggest release names.
-	 * @param key
-	 * @param suggestCountPerGroup
-	 * @return
-	 * @throws IOException
-	 */
-	Map<String, Object> suggestReleases(String key, int suggestCountPerGroup) throws IOException;
-	
-	/**
-	 * suggest recording names.
-	 * @param key
-	 * @param suggestCountPerGroup
-	 * @return
-	 * @throws IOException
-	 */
-	Map<String, Object> suggestRecordings(String key, int suggestCountPerGroup) throws IOException;
 }

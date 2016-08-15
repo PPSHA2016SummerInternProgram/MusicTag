@@ -60,4 +60,9 @@ public class StatisticsControllerTest {
 		Map<?, ?> response = statisticsController.recordingPlaycount(StaticValues.recordingGid0);
 		assertEquals(response.get("success"), true);
 	}
+	@Test
+	public void testArtistReleaseYearlyDist() throws IOException {
+		Map<?, ?> response = statisticsController.artistReleaseYearlyDist(StaticValues.recordingGid0);
+		assertEquals(response.get("success"), true);
+	}
 }

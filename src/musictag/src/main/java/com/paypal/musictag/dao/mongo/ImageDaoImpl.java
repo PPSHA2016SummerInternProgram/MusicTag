@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import com.paypal.musictag.dao.ImageDao;
 import com.paypal.musictag.dao.mongo.mapper.CoverartInfo;
 import com.paypal.musictag.dao.mongo.mapper.CoverartNotFound;
-import com.paypal.musictag.dao.mongo.mapper.LastfmAlbum;
+import com.paypal.musictag.dao.mongo.mapper.LastfmAlbumOrTrack;
 import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
 
 @Service("imageDaoImpl")
@@ -46,7 +46,7 @@ public class ImageDaoImpl implements ImageDao {
 
 		Query searchQuery = new Query(Criteria.where("gid").is(albumGid));
 
-		LastfmAlbum albums = mongoTemplate.findOne(searchQuery, LastfmAlbum.class);
+		LastfmAlbumOrTrack albums = mongoTemplate.findOne(searchQuery, LastfmAlbumOrTrack.class, "lastfm.album");
 
 		List<Map<String, Object>> images;
 		if (albums != null && albums.getImage() != null) {

@@ -21,4 +21,11 @@ public class StatisticServiceImplTest {
 		System.out.println(statisticsServiceImpl.artistCreditCount(StaticValues.artistGid0));
 		
 	}
+	
+	@Test
+	public void testtrygetarea(){
+
+		System.out.println(statisticsServiceImpl.artistArea(StaticValues.artistGid0));
+		
+	}
 }

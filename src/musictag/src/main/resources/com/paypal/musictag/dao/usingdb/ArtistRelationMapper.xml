@@ -224,19 +224,46 @@
 		where ar.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 	</select>
+
 	<select id="getReleaseCount" resultType="int">
-        SELECT count(*) AS release_count
-        FROM release
-          JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
-          JOIN artist on acn.artist = artist.id
-        WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		SELECT count(*) AS release_count
+		FROM release
+			JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+			JOIN artist on acn.artist = artist.id
+		WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
 	</select>
 
-    <select id="getRecordingCount" resultType="int">
-        SELECT count(*) AS recording_count
-        FROM recording
-          JOIN artist_credit_name acn ON recording.artist_credit = acn.artist_credit
-          JOIN artist on acn.artist = artist.id
-        WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	<select id="getRecordingCount" resultType="int">
+		SELECT count(*) AS recording_count
+		FROM recording
+			JOIN artist_credit_name acn ON recording.artist_credit = acn.artist_credit
+			JOIN artist on acn.artist = artist.id
+		WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	</select>
+
+	<select id="getReleaseYearlyDist" resultType="map">
+		SELECT COALESCE(release_event.date_year, -1) as date_year, count(*) AS release_count, sum(medium.track_count) as recording_count
+		FROM release
+			JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+			JOIN artist on acn.artist = artist.id
+			JOIN medium on medium.release = release.id
+			JOIN release_event on release_event.release = release.id
+		WHERE artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		group by release_event.date_year
+        ORDER BY date_year
+	</select>
+	
+	<select id="getArtistArea" resultType="map">
+        select name from area where id in (select distinct rc.country from release
+JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+JOIN artist on acn.artist = artist.id
+JOIN release_country rc ON release.id = rc.release
+where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR})
+	</select>
+	
+	<select id="getArtistEdit" resultType="map">
+	select open_time from edit where id in (select edit from artist
+	join edit_artist ea on ea.artist=artist.id
+	where artist.gid = '20244d07-534f-4eff-b4d4-930878889970');
 	</select>
 </mapper>

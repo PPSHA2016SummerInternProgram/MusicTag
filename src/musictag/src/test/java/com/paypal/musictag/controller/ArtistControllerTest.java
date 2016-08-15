@@ -27,7 +27,15 @@ public class ArtistControllerTest {
 
 	@Autowired
 	ArtistController artistController;
-
+	
+	
+	@Test
+	public void testArtistAreas() throws IOException{
+		Map<?,?> map = artistController.artistAreas(StaticValues.artistGid0);
+		assertEquals(map.get("success"),true);
+		assertNotEquals(map.get("data"),null);
+	}
+	
 	@Test
 	public void testProfile() throws IOException {
 		Map<?, ?> map = artistController.profile(StaticValues.artistGid0);

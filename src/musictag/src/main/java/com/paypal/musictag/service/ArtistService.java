@@ -34,4 +34,6 @@ public interface ArtistService {
 	Map<String, Object> tooltipInfo(String gid) throws IOException;
 	
 	Map<String, Object> artistCooperations(Integer sid, Integer tid, CooperationType type);
+	
+	Map<String, Object> similarArtist(String gid) throws Exception;
 }

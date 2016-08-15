@@ -55,7 +55,7 @@ public class ArtistController {
 
 		return MusicTagUtil.wrapResult(artistServiceImpl.basicInfo(gid));
 	}
-	
+
 	@RequestMapping(value = "/{gid}/release-groups-old", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> releaseGroup(@PathVariable("gid") String gid) throws IOException {
@@ -78,6 +78,12 @@ public class ArtistController {
 		return "/WEB-INF/pages/artist-overview.jsp";
 	}
 	
+	@RequestMapping(value = "/{gid}/similar", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> similarArtist(@PathVariable("gid") String gid) throws Exception {
+		return MusicTagUtil.wrapResult(artistServiceImpl.similarArtist(gid));
+	}
+	
 	/*
 	================================================================
 			statistics api for artist
@@ -95,6 +101,11 @@ public class ArtistController {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
 	}
 	
+	@RequestMapping(value = "/{gid}/artist-areas", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistAreas(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistArea(gid));
+	}
 	@RequestMapping(value = "/{gid}/artist-lyricists", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistLyricists(@PathVariable("gid") String gid) throws IOException {

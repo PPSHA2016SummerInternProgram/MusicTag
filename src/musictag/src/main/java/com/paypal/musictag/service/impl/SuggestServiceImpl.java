@@ -2,13 +2,20 @@ package com.paypal.musictag.service.impl;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.paypal.musictag.dao.usingdb.CountryAndDateMapper;
 import com.paypal.musictag.service.SuggestService;
 import com.paypal.musictag.util.MusicTagUtil;
 
@@ -22,6 +29,9 @@ public class SuggestServiceImpl implements SuggestService {
 			+ "suggest";
 
 	private static Logger logger = LoggerFactory.getLogger(SuggestServiceImpl.class);
+
+	@Autowired
+	private CountryAndDateMapper countryAndDateMapper;
 
 	@Override
 	public Map<String, Object> suggestAll(String key, int suggestCountPerGroup) {
@@ -53,27 +63,83 @@ public class SuggestServiceImpl implements SuggestService {
 		return result;
 	}
 
-	@Override
-	public Map<String, Object> suggestArtists(String key, int suggestCount) throws IOException {
+	private Map<String, Object> suggestArtists(String key, int suggestCount) throws IOException {
 		String url = buildSuggestQuery(solrArtistSuggestURL, key, suggestCount);
 		return MusicTagUtil.jsontoMap(
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
 
 	}
 
-	@Override
-	public Map<String, Object> suggestReleases(String key, int suggestCount) throws IOException {
-		String url = buildSuggestQuery(solrReleaseSuggestURL, key, suggestCount);
-		return MusicTagUtil.jsontoMap(
-				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
-
+	@SuppressWarnings("unchecked")
+	private List<Map<String, Object>> getSuggestions(String key, Map<String, Object> objects) {
+		Map<String, Object> suggest = (Map<String, Object>) objects.get("suggest");
+		Map<String, Object> suggester = (Map<String, Object>) suggest.get("suggester");
+		Map<String, Object> value = (Map<String, Object>) suggester.get(key);
+		return (List<Map<String, Object>>) value.get("suggestions");
 	}
 
-	@Override
-	public Map<String, Object> suggestRecordings(String key, int suggestCount) throws IOException {
-		String url = buildSuggestQuery(solrRecordingSuggestURL, key, suggestCount);
-		return MusicTagUtil.jsontoMap(
+	private List<UUID> fillGids(List<Map<String, Object>> suggestions) {
+		List<UUID> gids = new ArrayList<>();
+		for (Map<String, Object> release : suggestions) {
+			String gid = String.valueOf(release.get("payload"));
+			gids.add(UUID.fromString(gid));
+		}
+		return gids;
+	}
+
+	private void addCountryAndDate(List<Map<String, Object>> suggestions, List<Map<String, Object>> countryAndDate) {
+		Set<String> unique = new HashSet<>();
+		for (int i = 0; i < suggestions.size(); i++) {
+			Map<String, Object> release = suggestions.get(i);
+			String gid = String.valueOf(release.get("payload"));
+			for (Map<String, Object> meta : countryAndDate) {
+				if (String.valueOf(meta.get("gid")).equals(gid)) {
+					release.put("country-date", meta);
+				}
+			}
+			if (!release.containsKey("country-date")) {
+				suggestions.remove(i--);
+				continue;
+			}
+			@SuppressWarnings("unchecked")
+			Map<String, Object> meta = (Map<String, Object>) release.get("country-date");
+			if (meta.get("country") == null || meta.get("date_year") == null) {
+				suggestions.remove(i--);
+				continue;
+			}
+			String key = release.get("term") + "-" + meta.get("country") + "-" + meta.get("date_year");
+			if (unique.contains(key)) {
+				suggestions.remove(i--);
+				continue;
+			}
+			unique.add(key);
+		}
+	}
+
+	private Map<String, Object> suggestReleases(String key, int suggestCount) throws IOException {
+		String url = buildSuggestQuery(solrReleaseSuggestURL, key, suggestCount);
+		Map<String, Object> releases = MusicTagUtil.jsontoMap(
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
+		List<Map<String, Object>> suggestions = getSuggestions(key, releases);
+		List<UUID> gids = fillGids(suggestions);
+		if (!gids.isEmpty()) {
+			List<Map<String, Object>> countryAndDate = countryAndDateMapper.releaseCountryAndDate(gids);
+			addCountryAndDate(suggestions, countryAndDate);
+		}
+		return releases;
+	}
+
+	private Map<String, Object> suggestRecordings(String key, int suggestCount) throws IOException {
+		String url = buildSuggestQuery(solrRecordingSuggestURL, key, suggestCount);
+		Map<String, Object> recordings = MusicTagUtil.jsontoMap(
+				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
+		List<Map<String, Object>> suggestions = getSuggestions(key, recordings);
+		List<UUID> gids = fillGids(suggestions);
+		if (!gids.isEmpty()) {
+			List<Map<String, Object>> countryAndDate = countryAndDateMapper.recordingCountryAndDate(gids);
+			addCountryAndDate(suggestions, countryAndDate);
+		}
+		return recordings;
 	}
 
 	private String buildSuggestQuery(String url, String key, int suggestCount) {
