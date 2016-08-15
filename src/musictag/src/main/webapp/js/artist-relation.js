@@ -10,7 +10,6 @@ $(document).ready(
 				$.get("/musictag/artist/" + curArtistGid + "/artist-credit-counts",
 						function(data) {
 							artistRelationChart.hideLoading();
-							var rootNode;
 							data.data.nodes
 									.forEach(function(node) {
 										if (node.gid === curArtistGid) {
