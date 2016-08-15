@@ -120,8 +120,36 @@ public final class MusixMatchCrawler {
             lyricConnector.insertOneIntoFoundTable(doc);
             logger.info("[Lyric found] work: " + workId + " (" + doc.get("work_mbid") + ")" );
         }
-
     }
+
+    public void crawlOneLimitedLyric (String apiKey) throws IOException, SQLException, NoNextException, OutOfLimitException {
+        Map<String, Object> lyric = lyricConnector.next();
+        String work_mbid =(String) lyric.get("work_mbid");
+        String recording_mbid =(String) lyric.get("recording_mbid");
+        logger.info("[Crawl limited lyrics|start] recording: " + recording_mbid );
+
+        Map<String, Object> doc = new HashMap<>();
+        Map<String, Object> json = null;
+        Map<String, Object> msg = null;
+        json = getLyricByMBID(recording_mbid, apiKey);
+        msg = (Map<String, Object>) json.get("message");
+        int status_code = (int) ( (Map<String, Object>) msg.get("header")).get("status_code");
+        if( status_code == StatusCode.REQ_SUCCESS.getStatusCode() ) {
+
+            Map<String, Object> body = ((Map<String, Object>) msg.get("body"));
+            doc.put("lyric_limited", ((Map<String, Object>) body.get("lyrics")).get("lyrics_body"));
+            Map<String, Object> filter = new HashMap<>();
+            filter.put("work_mbid", work_mbid);
+            lyricConnector.updateOneInFoundTable(filter, doc);
+            logger.info("[Crawl limited lyrics|found] recording: " + recording_mbid );
+        } else if( status_code != StatusCode.RESOURCE_NOT_FOUND.getStatusCode()) {
+            throw new OutOfLimitException("recording: " + recording_mbid );
+        } else {
+            logger.info("[Crawl limited lyrics|not found] recording: " + recording_mbid );
+        }
+    }
+
+
 
     class CrawlLyricUrlTask implements Runnable {
         private final String apiKey;
@@ -151,6 +179,34 @@ public final class MusixMatchCrawler {
             }
         }
     }
+    class CrawlLyricLimitedTask implements Runnable {
+        private final String apiKey;
+
+        CrawlLyricLimitedTask(String apiKey) {
+            this.apiKey = apiKey;
+        }
+
+        @Override
+        public void run() {
+            while( true ) {
+                logger.info("Limited Lyric crawler started, apiKey is " + apiKey );
+                try {
+                    crawlOneLimitedLyric(apiKey);
+                } catch (IOException | SQLException e) {
+                    logger.error("crawl limited lyric error");
+                    logger.error(null, e);
+                } catch (NoNextException e) {
+                    logger.error("No lyric url left");
+                    logger.error(null, e);
+                    break;
+                } catch (OutOfLimitException e) {
+                    logger.error("MusixMatch limit reached");
+                    logger.error(null, e);
+                    break;
+                }
+            }
+        }
+    }
 
     public void startCrawlingLyricUrl(int threadCnt) {
         ExecutorService es = Executors.newFixedThreadPool(threadCnt);
@@ -159,9 +215,18 @@ public final class MusixMatchCrawler {
         }
     }
 
+    public void startCrawlingLimitedLyric(int threadCnt) {
+        ExecutorService es = Executors.newFixedThreadPool(threadCnt);
+        for(int i = 0; i < threadCnt; i++) {
+            es.execute(new CrawlLyricLimitedTask(ApiKeys[i % ApiKeys.length]));
+        }
+    }
+
+
     static public void main(String args[]) throws SQLException, IOException, NoNextException, OutOfLimitException {
-        MusixMatchCrawler mmc = new MusixMatchCrawler(); 
+        MusixMatchCrawler mmc = new MusixMatchCrawler();
+        mmc.crawlOneLimitedLyric(ApiKeys[0]);
         int threadCnt = 12;
-        mmc.startCrawlingLyricUrl(threadCnt);
+        mmc.startCrawlingLimitedLyric(threadCnt);
     }
 }
