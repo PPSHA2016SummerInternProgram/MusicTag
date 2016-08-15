@@ -30,8 +30,6 @@ $(document).ready(
 											Math.seed = node.id;
 											node.x = Math.seededRandom(500, -500);
 											node.y = Math.seededRandom(250, -250);
-											console.log(node.id + ' x: ' + node.x + ', y: ' + node.y);
-											rootNode = node;
 										} else {
 											node.itemStyle = null;
 											node.symbolSize = Math
