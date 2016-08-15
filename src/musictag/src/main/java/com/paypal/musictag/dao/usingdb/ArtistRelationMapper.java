@@ -17,6 +17,24 @@ public interface ArtistRelationMapper {
 	
 	List<Map<String, Object>> getCooperationsOnReleaseOfArtists(@Param(value = "sid") Integer sid, @Param(value = "tid") Integer tid);
 	
+	List<Map<String, Object>> findReleaseLyricistLink(@Param(value="artistGid") UUID artistGid);
+	
+	List<Map<String, Object>> getReleaseLyricCooperationsOfArtist(@Param(value = "sid") Integer sid, @Param(value = "tid") Integer tid);
+	
+	List<Map<String, Object>> findReleaseComposerLink(@Param(value="artistGid") UUID artistGid);
+	
+	List<Map<String, Object>> getReleaseComposerCooperationsOfArtist(@Param(value = "sid") Integer sid, @Param(value = "tid") Integer tid);
+	
+	List<Map<String, Object>> findRecordingLyricistLink(@Param(value="artistGid") UUID artistGid);
+	
+	List<Map<String, Object>> getRecordingLyricCooperationsOfArtists(@Param(value = "sid") Integer sid, @Param(value = "tid") Integer tid);
+	
+	List<Map<String, Object>> findRecordingComposerLink(@Param(value="artistGid") UUID artistGid);
+
+	List<Map<String, Object>> getRecordingComposerCooperationsOfArtists(@Param(value = "sid") Integer sid, @Param(value = "tid") Integer tid);
+	
+	List<Map<String, Object>> findArtistNode(@Param(value="artistIds") List<Integer> ids);
+	
 	int getReleaseCount(@Param(value = "artistGid") UUID artistGid);
 
 	int getRecordingCount(@Param(value = "artistGid") UUID artistGid);

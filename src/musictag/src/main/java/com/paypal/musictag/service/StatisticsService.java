@@ -17,4 +17,8 @@ public interface StatisticsService {
 	Map<String, Object> recordingPlaycount(String gid);
 	
 	Map<String, Object> artistCreditCount(String artistGid);
+	
+	Map<String, Object> artistLyricist(String artistGid);
+	
+	Map<String, Object> artistComposer(String artistGid);
 }

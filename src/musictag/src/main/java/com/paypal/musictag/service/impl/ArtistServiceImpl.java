@@ -18,6 +18,7 @@ import com.paypal.musictag.dao.usingdb.ArtistRelationMapper;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
 import com.paypal.musictag.dao.usingdb.resulthandler.ReleaseesCountsMapResultHandler;
 import com.paypal.musictag.service.ArtistService;
+import com.paypal.musictag.util.CooperationType;
 import com.paypal.musictag.util.MusicTagUtil;
 
 @Service("artistServiceImpl")
@@ -180,10 +181,24 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public Map<String, Object> artistCooperations(Integer sid, Integer tid) {
+	public Map<String, Object> artistCooperations(Integer sid, Integer tid, CooperationType type) {
+		if (type == null) {
+			throw new IllegalArgumentException("CooperationType should not be null");
+		}
 		Map<String, Object> result = new HashMap<>();
-		result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
-		result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+		if (type == CooperationType.CREDIT) {
+			result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
+			result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
+		}else if (type == CooperationType.LYRICIST) {
+			result.put("releases", artistRelationMapper.getReleaseLyricCooperationsOfArtist(sid, tid));
+			result.put("recordings", artistRelationMapper.getRecordingLyricCooperationsOfArtists(sid, tid));
+		}else if (type == CooperationType.COMPOSER) {
+			result.put("releases", artistRelationMapper.getReleaseComposerCooperationsOfArtist(sid, tid));
+			result.put("recordings", artistRelationMapper.getRecordingComposerCooperationsOfArtists(sid, tid));
+		}else {
+			throw new AssertionError("should not reach here");
+		}
+		
 		return result;
 	}
 }

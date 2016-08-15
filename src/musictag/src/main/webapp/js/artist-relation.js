@@ -1,131 +1,309 @@
 $(document).ready(
 		function() {
-			var artistRelationChart = echarts.init(document
-					.getElementById('artist-relations'));
-			artistRelationChart.showLoading();
-			var curArtistGid = getUuid();
-			$.get("/musictag/artist/" + curArtistGid + "/artist-credit-counts",
-					function(data) {
-						artistRelationChart.hideLoading();
-						data.data.nodes
-								.forEach(function(node) {
-									if (node.gid === curArtistGid) {
-										node.itemStyle = {
-											normal : {
-												color : '#990033'
-											}
-										};
-										node.symbolSize = 20;
-										node.label = {
+			initArtistCredit();
+			
+			function initArtistCredit(){
+				var artistRelationChart = echarts.init(document
+						.getElementById('artist-relations'));
+				artistRelationChart.showLoading();
+				var curArtistGid = getUuid();
+				$.get("/musictag/artist/" + curArtistGid + "/artist-credit-counts",
+						function(data) {
+							artistRelationChart.hideLoading();
+							var rootNode;
+							data.data.nodes
+									.forEach(function(node) {
+										if (node.gid === curArtistGid) {
+											node.itemStyle = {
 												normal : {
-													show : node.symbolSize > 10,
-													textStyle: {
-														color: '#990033'
+													color : '#990033'
+												}
+											};
+											node.symbolSize = 20;
+											node.label = {
+													normal : {
+														show : node.symbolSize > 10,
+														textStyle: {
+															color: '#990033'
+														}
+													}
+											};
+											Math.seed = node.id;
+											node.x = Math.seededRandom(500, -500);
+											node.y = Math.seededRandom(250, -250);
+											console.log(node.id + ' x: ' + node.x + ', y: ' + node.y);
+											rootNode = node;
+										} else {
+											node.itemStyle = null;
+											node.symbolSize = Math
+													.log(node.symbolSize * 3) * 3;
+											node.label = {
+													normal : {
+														show : node.symbolSize > 10,
+													}
+											};
+										}
+										node.value = node.symbolSize;
+										Math.seed = node.id;
+										node.x = Math.seededRandom(500, -500);
+										node.y = Math.seededRandom(250, -250);
+									});
+
+							data.data.links.forEach(function(node) {
+								node.source = node.source + "";
+								node.target = node.target + "";
+
+							});
+							option = {
+								title : {
+									text : 'Artist Relation',
+									top : 'top',
+									left : 'right'
+								},
+								visualMap: {
+								    // 不显示 visualMap 组件，只用于明暗度的映射
+								    show: false,
+								    min: 0,
+								    max: 40,
+								    inRange: {
+								        // 明暗度的范围是 0 到 1
+								        colorLightness: [0, 1]
+								    }
+								},
+								tooltip : {
+									enterable : true,
+									showDelay: 300,
+									hideDelay: 500,
+									backgroundColor: 'rgba(162,180,186,0.7)',
+									formatter: function (params, ticket, callback) {
+										if(params.dataType === "node"){
+										     $.get('/musictag/artist/' + params.data.gid + '/tooltip-info', function (content) {
+										         callback(ticket, artistTooltipHtml(content));
+										     });
+											
+										}else if(params.dataType === "edge"){
+											if(params.seriesName === "Credit Relation"){
+												$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/type/credit/cooperations', function (content) {
+													callback(ticket, cooperationTooltipHtml(content));
+											     });
+											}else if(params.seriesName === "Lyricist Relation"){
+												$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/type/lyricist/cooperations', function (content) {
+													callback(ticket, cooperationTooltipHtml(content));
+											     });
+											}else if(params.seriesName === "Composer Relation"){
+												$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/type/composer/cooperations', function (content) {
+													callback(ticket, cooperationTooltipHtml(content));
+											     });
+											}
+										}
+									    return 'Loading';
+									 }
+								},
+								animationDuration : 1500,
+								animationEasingUpdate : 'quinticInOut',
+								series : [ {
+									name : 'Credit Relation',
+									type : 'graph',
+									layout : 'none', // circular
+									data : data.data.nodes,
+									links : data.data.links,
+									roam : true,
+									xAxisIndex: 0,
+									yAxisIndex: 0,
+									focusNodeAdjacency: true,
+									label : {
+										normal : {
+											position : 'right',
+											formatter : '{b}',
+											textStyle : {
+												color : '#a2b4ba'
+											}
+										}
+									},
+									lineStyle : {
+										normal : {
+											color : 'source',
+											curveness : 0.3,
+										}
+									},
+									itemStyle : {
+										normal : {
+											color : '#337ab7'
+										}
+									}
+								}]
+							};
+
+							artistRelationChart.setOption(option);
+							
+							$.get("/musictag/artist/" + curArtistGid + "/artist-lyricists", function(lyricistData){
+								lyricistData.data.nodes
+									.forEach(function(node) {
+										if (node.gid === curArtistGid) {
+											node.itemStyle = {
+												normal : {
+													color : '#990099'
+												}
+											};
+											node.symbolSize = 20;
+											node.label = {
+													normal : {
+														show : node.symbolSize > 10,
+														textStyle: {
+															color: '#990099'
+														}
+													}
+											};
+										} else {
+											node.itemStyle = null;
+											node.symbolSize = Math
+													.log(node.symbolSize * 3) * 5;
+											node.label = {
+													normal : {
+														show : node.symbolSize > 10,
+													}
+											};
+										}
+										node.value = node.symbolSize;
+										Math.seed = node.id;
+										node.x = Math.seededRandom(500, -500);
+										node.y = Math.seededRandom(250, -250);
+									});
+
+								lyricistData.data.links.forEach(function(node) {
+									node.source = node.source + "";
+									node.target = node.target + "";
+		
+								});
+								
+								var lyricistsSeries = {
+									name : 'Lyricist Relation',
+									type : 'graph',
+									layout : 'none', // circular
+									data : lyricistData.data.nodes,
+									links : lyricistData.data.links,
+									roam : true,
+									focusNodeAdjacency: true,
+									label : {
+										normal : {
+											position : 'right',
+											formatter : '{b}',
+											textStyle : {
+												color : '#a2b4ba'
+											}
+										}
+									},
+									lineStyle : {
+										normal : {
+											color : 'source',
+											curveness : 0.3,
+										}
+									},
+								};
+								option.series.push(lyricistsSeries);
+								artistRelationChart.setOption(option);
+
+								
+//								lyricistData.data.links.forEach(function(link){
+//									link.lineStyle = {
+//											normal : {
+//												color : 'source',
+//												curveness : 1,
+//											}	
+//									}
+//								});
+//								var newdata = data.data.nodes.concat(lyricistData.data.nodes);
+//								var newlinks = data.data.links.concat(lyricistData.data.links);
+//								console.log(JSON.stringify(lyricistData.data.links));
+//								console.log(JSON.stringify(data.data.nodes));
+//								console.log(JSON.stringify(newdata));
+//								console.log(JSON.stringify(newlinks));
+//								artistRelationChart.setOption({
+//									series: [{
+//										name: 'Credit Relation',
+//										links: newlinks
+//									}]
+//								});
+								
+								$.get("/musictag/artist/" + curArtistGid + "/artist-composers", function(composerData){
+									composerData.data.nodes
+										.forEach(function(node) {
+											if (node.gid === curArtistGid) {
+												node.itemStyle = {
+													normal : {
+														color : '#990099'
+													}
+												};
+												node.symbolSize = 20;
+												node.label = {
+														normal : {
+															show : node.symbolSize > 10,
+															textStyle: {
+																color: '#990099'
+															}
+														}
+												};
+											} else {
+												node.itemStyle = null;
+												node.symbolSize = Math
+														.log(node.symbolSize * 3) * 5;
+												node.label = {
+														normal : {
+															show : node.symbolSize > 10,
+														}
+												};
+											}
+											node.value = node.symbolSize;
+											Math.seed = node.id;
+											node.x = Math.seededRandom(500, -500);
+											node.y = Math.seededRandom(250, -250);
+										});
+	
+									composerData.data.links.forEach(function(node) {
+										node.source = node.source + "";
+										node.target = node.target + "";
+			
+									});
+									
+									var composerSeries = {
+											name : 'Composer Relation',
+											type : 'graph',
+											layout : 'none', // circular
+											data : composerData.data.nodes,
+											links : composerData.data.links,
+											roam : true,
+											focusNodeAdjacency: true,
+											label : {
+												normal : {
+													position : 'right',
+													formatter : '{b}',
+													textStyle : {
+														color : '#a2b4ba'
 													}
 												}
-										};
-									} else {
-										node.itemStyle = null;
-										node.symbolSize = Math
-												.log(node.symbolSize * 3) * 3;
-										node.label = {
+											},
+											lineStyle : {
 												normal : {
-													show : node.symbolSize > 10,
+													color : 'source',
+													curveness : 0.3,
 												}
+											},
 										};
-									}
-									node.value = node.symbolSize;
-									node.x = Math.random() * 1000;
-									node.y = Math.random() * 500;
-								});
+										option.series.push(composerSeries);
+										artistRelationChart.setOption(option);
+								}, 'json');
+								
+							}, 'json');
+						}, 'json');
 
-						data.data.links.forEach(function(node) {
-							node.source = node.source + "";
-							node.target = node.target + "";
-
+				artistRelationChart.on('click',
+						function(params) {
+							if (params.data.gid) {
+								location.href = '/musictag/artist/'
+										+ params.data.gid + '/';
+							}
 						});
-						option = {
-							title : {
-								text : 'Artist Relation',
-								top : 'top',
-								left : 'right'
-							},
-							visualMap: {
-							    // 不显示 visualMap 组件，只用于明暗度的映射
-							    show: false,
-							    min: 0,
-							    max: 40,
-							    inRange: {
-							        // 明暗度的范围是 0 到 1
-							        colorLightness: [0, 1]
-							    }
-							},
-							tooltip : {
-								enterable : true,
-								showDelay: 300,
-								hideDelay: 500,
-								backgroundColor: 'rgba(162,180,186,0.7)',
-								formatter: function (params, ticket, callback) {
-									if(params.dataType === "node"){
-									     $.get('/musictag/artist/' + params.data.gid + '/tooltip-info', function (content) {
-									         callback(ticket, artistTooltipHtml(content));
-									     });
-										
-									}else if(params.dataType === "edge"){
-										if(params.seriesName === "Credit Relation"){
-//											console.log(JSON.stringify(params));
-//											console.log(JSON.stringify(ticket));
-											$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/cooperations', function (content) {
-										         callback(ticket, cooperationTooltipHtml(content));
-										     });
-										}
-									}
-								    return 'Loading';
-								 }
-							},
-							animationDuration : 1500,
-							animationEasingUpdate : 'quinticInOut',
-							series : [ {
-								name : 'Credit Relation',
-								type : 'graph',
-								layout : 'none', // circular
-								data : data.data.nodes,
-								links : data.data.links,
-								roam : true,
-								label : {
-									normal : {
-										position : 'right',
-										formatter : '{b}',
-										textStyle : {
-											color : '#a2b4ba'
-										}
-									}
-								},
-								lineStyle : {
-									normal : {
-										color : 'source',
-										curveness : 0.3,
-									}
-								},
-								itemStyle : {
-									normal : {
-										color : '#337ab7'
-									}
-								}
-							} ]
-						};
-
-						artistRelationChart.setOption(option);
-
-					}, 'json');
-
-			artistRelationChart.on('click',
-					function(params) {
-						if (params.data.gid) {
-							location.href = '/musictag/artist/'
-									+ params.data.gid + '/';
-						}
-					});
+			}
 			
 			function artistTooltipHtml(content){
 				var img = content.data['commons-img'] ? content.data['commons-img'] : window.UrlHelper.defaultArtistCoverUrl;

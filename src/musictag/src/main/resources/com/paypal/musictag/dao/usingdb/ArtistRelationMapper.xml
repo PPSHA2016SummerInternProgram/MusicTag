@@ -19,29 +19,173 @@
 	
 	select * from first_level;
 	
-	<!-- get second level relationship -->
-<!-- 	union
-	(select fl.target as source, acn2.artist as target,sum(ac1.ref_count) as count
-	from artist_credit_name as acn1
-		join first_level as fl on fl.target = acn1.artist
-		join artist as ar1 on ar1.id = acn1.artist
-		join artist_credit as ac1 on acn1.artist_credit = ac1.id
-		join artist_credit_name as acn2 on acn2.artist_credit = acn1.artist_credit
-		join artist as ar2 on ar2.id = acn2.artist
-	where fl.target != acn2.artist and ar2.gid !=#{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
-	group by fl.target, acn2.artist
-	order by count desc
-	limit 30);
- -->	
 	</select>
 	
-	<select id="findArtistCreditNode" resultType="map">
-		select id, gid, name 
+	<select id="findArtistNode" resultType="map">
+		select id, gid, name
 		from artist
 		where id in
 		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
 			#{artistId}
 		</foreach>
+	</select>
+	
+	<select id="findArtistCreditNode" resultType="map">
+		select id, gid, name
+		from artist
+		where id in
+		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
+			#{artistId}
+		</foreach>
+	</select>
+	
+	<select id="findReleaseLyricistLink" resultType="map">
+		SELECT artist.id as source, ar1.id as target, count(release.id) as count
+		FROM release
+			JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+			JOIN artist on acn.artist = artist.id
+			JOIN l_artist_release as lar on lar.entity1 = release.id
+			JOIN artist as ar1 on ar1.id = lar.entity0
+			JOIN link on lar.link = link.id
+			JOIN link_type as lt on lt.id = link.link_type
+		WHERE lt.entity_type0='artist' and lt.entity_type1 = 'release' and  lt.name='lyricist' and artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		group by source, target
+		order by count desc
+		limit 5;
+	</select>
+	
+	<select id="findReleaseLyricistNode" resultType="map">
+		select id, gid, name, 2 as category
+		from artist
+		where id in
+		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
+			#{artistId}
+		</foreach>
+	</select>
+	
+	<select id="getReleaseLyricCooperationsOfArtist" resultType="map">
+		SELECT rls.gid, rls.name, area.name as country, rc.date_year, rc.date_month, rc.date_day
+		FROM release as rls
+			JOIN release_country as rc on rls.id = rc.release
+			JOIN country_area as ca on rc.country = ca.area
+			JOIN area on ca.area = area.id
+			JOIN artist_credit_name acn ON rls.artist_credit = acn.artist_credit
+			JOIN l_artist_release as lar on lar.entity1 = rls.id
+			JOIN link on lar.link = link.id
+			JOIN link_type as lt on lt.id = link.link_type
+		WHERE lt.entity_type0='artist' and lt.entity_type1 = 'release' and  lt.name='lyricist'
+			and acn.artist = #{sid} and lar.entity0 = #{tid}
+	</select>
+	
+	<select id="findReleaseComposerLink" resultType="map">
+		SELECT artist.id as source, ar1.id as target, count(release.id) as count
+		FROM release
+			JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+			JOIN artist on acn.artist = artist.id
+			JOIN l_artist_release as lar on lar.entity1 = release.id
+			JOIN artist as ar1 on ar1.id = lar.entity0
+			JOIN link on lar.link = link.id
+			JOIN link_type as lt on lt.id = link.link_type
+		WHERE lt.entity_type0='artist' and lt.entity_type1 = 'release' and  lt.name='composer' and artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		group by source, target
+		order by count desc
+		limit 5;
+	</select>
+	
+	<select id="getReleaseComposerCooperationsOfArtist" resultType="map">
+		SELECT rls.gid, rls.name, area.name as country, rc.date_year, rc.date_month, rc.date_day
+		FROM release as rls
+			JOIN release_country as rc on rls.id = rc.release
+			JOIN country_area as ca on rc.country = ca.area
+			JOIN area on ca.area = area.id
+			JOIN artist_credit_name acn ON rls.artist_credit = acn.artist_credit
+			JOIN l_artist_release as lar on lar.entity1 = rls.id
+			JOIN link on lar.link = link.id
+			JOIN link_type as lt on lt.id = link.link_type
+		WHERE lt.entity_type0='artist' and lt.entity_type1 = 'release' and  lt.name='composer'
+			and acn.artist = #{sid} and lar.entity0 = #{tid}
+	</select>
+	
+	<select id="findReleaseComposerNode" resultType="map">
+		select id, gid, name, 3 as category
+		from artist
+		where id in
+		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
+			#{artistId}
+		</foreach>
+	</select>
+	
+	<select id="findRecordingLyricistLink" resultType="map">
+		select artist.id as source, ar1.id as target, count(recording.id) as count
+		from recording
+			join artist_credit_name as acn on acn.artist_credit = recording.artist_credit
+			join artist on artist.id = acn.artist
+			join l_recording_work as lrw on lrw.entity0 = recording.id
+			join work on work.id = lrw.entity1
+			join l_artist_work as law on law.entity1 = work.id
+			join artist as ar1 on ar1.id = law.entity0
+			join link on link.id = law.link
+			join link_type as lt on link.link_type = lt.id
+		where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR} and lt.entity_type0='artist' and lt.entity_type1='work' and lt.name='lyricist'
+			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		group by source, target
+		order by count desc
+		limit 5;
+	</select>
+	
+	<select id="getRecordingLyricCooperationsOfArtists" resultType="map">
+		SELECT rcd.gid, rcd.name, rcd.length
+		FROM recording as rcd
+			JOIN artist_credit_name as acn on acn.artist_credit = rcd.artist_credit
+			JOIN l_recording_work as lrw on lrw.entity0 = rcd.id
+			JOIN work on work.id = lrw.entity1
+			JOIN l_artist_work as law on law.entity1 = work.id
+			JOIN link on link.id = law.link
+			JOIN link_type as lt on link.link_type = lt.id
+		WHERE lt.entity_type0='artist' and lt.entity_type1='work' and lt.name='lyricist'
+			and acn.artist = #{sid} and law.entity0 = #{tid}
+	</select>
+	
+	<select id="findRecordingLyricistNode" resultType="map">
+		select id, gid, name, 4 as category
+		from artist
+		where id in
+		<foreach item="artistId" collection='artistIds' open="(" separator="," close=")">
+			#{artistId}
+		</foreach>
+	</select>
+	
+	<select id="findRecordingComposerLink" resultType="map">
+		select artist.id as source, ar1.id as target, count(recording.id) as count
+		from recording
+			join artist_credit_name as acn on acn.artist_credit = recording.artist_credit
+			join artist on artist.id = acn.artist
+			join l_recording_work as lrw on lrw.entity0 = recording.id
+			join work on work.id = lrw.entity1
+			join l_artist_work as law on law.entity1 = work.id
+			join artist as ar1 on ar1.id = law.entity0
+			join link on link.id = law.link
+			join link_type as lt on link.link_type = lt.id
+		where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR} and lt.entity_type0='artist' and lt.entity_type1='work' and lt.name='composer'
+			and ar1.gid != #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+		group by source, target
+		order by count desc
+		limit 5;
+	</select>
+	
+	<select id="getRecordingComposerCooperationsOfArtists" resultType="map">
+		SELECT rcd.gid, rcd.name, rcd.length
+		FROM recording as rcd
+			JOIN artist_credit_name as acn on acn.artist_credit = rcd.artist_credit
+			JOIN l_recording_work as lrw on lrw.entity0 = rcd.id
+			JOIN work on work.id = lrw.entity1
+			JOIN l_artist_work as law on law.entity1 = work.id
+			JOIN link on link.id = law.link
+			JOIN link_type as lt on link.link_type = lt.id
+		WHERE lt.entity_type0='artist' and lt.entity_type1='work' and lt.name='composer'
+			and acn.artist = #{sid} and law.entity0 = #{tid}
 	</select>
 	
 	<select id="getCooperationsOnRecordingOfArtists" resultType="map">
@@ -53,6 +197,7 @@
 		from recording as rcd
 		where rcd.artist_credit in (select artist_credit from artist_credit_ids)
 			and rcd.gid not in (select gid from recording_gid_redirect)
+		limit 5;
 	</select>
 	
 	<select id="getCooperationsOnReleaseOfArtists" resultType="map">
@@ -67,6 +212,7 @@
 			join area on ca.area = area.id
 		where rls.artist_credit in (select artist_credit from artist_credit_ids)
 			and rls.gid not in (select gid from release_gid_redirect)
+			limit 5;
 	</select>
 	
 	<select id="getArtistCountInFirstLevel" resultType="map">
