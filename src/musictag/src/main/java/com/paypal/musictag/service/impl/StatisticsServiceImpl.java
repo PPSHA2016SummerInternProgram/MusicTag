@@ -115,6 +115,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return tryList;
 	}
 	
+	public List<Map<String, Object>> artistEdit(String artistGid){
+		List<Map<String, Object>> tryList = artistRelationMapper.getArtistEdit(UUID.fromString(artistGid));
+		return tryList;
+	}
+	
+	
 	
 
 	@Override

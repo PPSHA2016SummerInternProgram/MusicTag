@@ -256,15 +256,26 @@
 	
 	<select id="getArtistArea" resultType="map">
         select name from area where id in (select distinct rc.country from release
-JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
-JOIN artist on acn.artist = artist.id
-JOIN release_country rc ON release.id = rc.release
-where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR})
+		JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+		JOIN artist on acn.artist = artist.id
+		JOIN release_country rc ON release.id = rc.release
+		where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR})
 	</select>
 	
+	<!--  
 	<select id="getArtistEdit" resultType="map">
-	select open_time from edit where id in (select edit from artist
-	join edit_artist ea on ea.artist=artist.id
-	where artist.gid = '20244d07-534f-4eff-b4d4-930878889970');
+		select open_time from edit where id in (select edit from artist
+		join edit_artist ea on ea.artist=artist.id
+		where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR})
 	</select>
+	-->
+	
+	<select id="getArtistEdit" resultType="map">
+	select date_part('year',open_time) as year,count(*) from edit where id in (select edit from artist
+	join edit_artist ea on ea.artist=artist.id
+	where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR})
+	group by year
+	order by year;
+	</select>
+	
 </mapper>

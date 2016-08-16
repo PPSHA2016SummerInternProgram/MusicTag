@@ -20,7 +20,7 @@ $(document).ready(function(){
 					
 					option = {
 					    title : {
-					        text: 'World Population (2016)',
+					        text: 'Release Areas',
 					        //subtext: 'from United Nations, Total population, both sexes combined, as of 1 July (thousands)',
 					        //sublink : 'http://esa.un.org/wpp/Excel-Data/population.htm',
 					        left: 'center',
@@ -32,11 +32,12 @@ $(document).ready(function(){
 					            var value = (params.value + '').split('.');
 					            value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
 					                    + '.' + value[1];
-					            return params.seriesName + '<br/>' + params.name + ' : ' + value;
+					            //return params.seriesName + '<br/>' + params.name + ' : ' + value;
+					            return params.name;
 					        }
 					    },
 					    toolbox: {
-					        show : true,
+					        show : false,
 					        orient : 'vertical',
 					        left: 'right',
 					        top: 'center',
@@ -48,7 +49,8 @@ $(document).ready(function(){
 					        }
 					    },
 					    visualMap: {
-					        type: 'continuous',
+					        show:false,
+					    	type: 'continuous',
 					        min: 0,
 					        max: 1000000,
 					        text:['High','Low'],
