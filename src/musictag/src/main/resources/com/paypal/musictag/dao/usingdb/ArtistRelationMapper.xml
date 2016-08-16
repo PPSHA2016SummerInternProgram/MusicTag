@@ -146,6 +146,7 @@
 			JOIN link_type as lt on link.link_type = lt.id
 		WHERE lt.entity_type0='artist' and lt.entity_type1='work' and lt.name='lyricist'
 			and acn.artist = #{sid} and law.entity0 = #{tid}
+		limit 10
 	</select>
 	
 	<select id="findRecordingLyricistNode" resultType="map">
