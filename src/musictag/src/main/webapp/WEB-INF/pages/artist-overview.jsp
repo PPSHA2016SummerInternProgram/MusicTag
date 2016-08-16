@@ -22,9 +22,9 @@
 <script src="<%=request.getContextPath()%>/js/statistics.js"></script>
 <script src="<%=request.getContextPath()%>/js/echarts.js"></script>
 <script src="<%=request.getContextPath()%>/js/world.js"></script>
-<script src="<%=request.getContextPath()%>/js/artist-relation.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist-area.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist-edit.js"></script>
+<script src="<%=request.getContextPath()%>/js/artist-relation.js"></script>
 </head>
 <body>
 
