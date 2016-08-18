@@ -291,10 +291,15 @@ $(document).ready(
 			}
 			
 			function cooperationTooltipHtml(content){
-				var html = '<div style="width: 500px; word-wrap: break-word; white-space:normal;">' + 
-					buildRecordingTable(content.data.recordings) +
-					buildReleaseTable(content.data.releases) +
-					'</div>';
+				var html = '<div style="width: 500px; word-wrap: break-word; white-space:normal;">';
+				if(content.data.recordings && content.data.recordings.length > 0){
+					html += buildRecordingTable(content.data.recordings);
+				}
+				if(content.data.releases && content.data.releases.length > 0){
+					html += buildReleaseTable(content.data.releases);
+				}
+					
+				html += '</div>';
 				return html;
 			}
 			
