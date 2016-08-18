@@ -17,9 +17,20 @@ $(document).ready(function(){
 	var curArtistGid = getUuid();
 		$.get("/musictag/artist/"+curArtistGid+"/artist-areas",
 				function(data){
+					var count_all=0;
+					var count_china=0;
 					data.data.forEach(function(node){
-						node.value=1000000;
+						//node.value=node.count;
+						count_all=count_all+node.count;
+						node.value=node.count;
+						if(node.name === "United States"){
+							//alert("OOOOOO");
+							node.name='United States of America';
+						}else if(node.name==="Hong Kong"||node.name==="Taiwan"||node.name==="China"){
+							count_china=count_china+node.count;
+						}
 					})
+					data.data.push({name:"China",value:count_china});
 					
 					if(data.data.length < 1){
 						$('#artist-area').hide()
@@ -37,10 +48,15 @@ $(document).ready(function(){
 					        trigger: 'item',
 					        formatter : function (params) {
 					            var value = (params.value + '').split('.');
-					            value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
-					                    + '.' + value[1];
-					            //return params.seriesName + '<br/>' + params.name + ' : ' + value;
-					            return params.name;
+					            //value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,')
+					            //       + '.' + value[1];
+					            value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
+					            //alert(value);
+					            if(value=='NaN'){
+					            	return params.name + ' : ' + '0';
+					            }else{return params.name + ' : ' + value;}
+					        
+					         
 					        }
 					    },
 					    toolbox: {
@@ -56,14 +72,16 @@ $(document).ready(function(){
 					        }
 					    },
 					    visualMap: {
-					        show:false,
+					        show:true,
 					    	type: 'continuous',
 					        min: 0,
-					        max: 1000000,
+					        max: 50,
 					        text:['High','Low'],
 					        realtime: false,
 					        calculable : true,
-					        color: ['orangered','yellow','lightskyblue']
+					        inRange: {
+				                color: ['lightskyblue','yellow', 'orangered','red']
+				            }
 					    },
 					    series : [
 					        {
