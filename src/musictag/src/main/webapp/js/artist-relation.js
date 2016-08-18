@@ -52,7 +52,6 @@ $(document).ready(
 									node.target = node.target + "";
 
 								});
-								console.log(JSON.stringify(data.data));
 								option = {
 									title : {
 										text : 'Artist Relation',
