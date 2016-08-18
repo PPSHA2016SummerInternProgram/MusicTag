@@ -4,8 +4,13 @@ $(document).ready(function(){
 	
 	var curArtistGid = getUuid();
 	
-	
-	
+	var oldResize = window.onresize; 
+	window.onresize=function(){
+		if(oldResize){
+			oldResize();
+		}
+		artistEditChart.resize();
+	}
 
 	$.get("/musictag/artist/"+curArtistGid+"/artist-edit",
 			function(edit){
