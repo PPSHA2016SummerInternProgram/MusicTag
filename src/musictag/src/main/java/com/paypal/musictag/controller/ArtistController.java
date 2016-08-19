@@ -31,6 +31,13 @@ public class ArtistController {
 	@Autowired
 	private StatisticsService statisticsServiceImpl;
 
+	@RequestMapping(value = "/{gid}/distribution/{type}", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> distribution(@PathVariable("gid") String gid, @PathVariable("type") String type)
+			throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.distributionDetail(gid, type));
+	}
+	
 	@RequestMapping(value = "/{gid}/profile", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> profile(@PathVariable("gid") String gid) throws IOException {

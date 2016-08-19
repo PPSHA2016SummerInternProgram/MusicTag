@@ -27,7 +27,7 @@ public class StatisticsController {
 
 	@RequestMapping(value = "/distribution", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> distribution(Boolean refresh) throws IOException {
+	public Map<String, Object> distribution() throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.distribution());
 	}
 

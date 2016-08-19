@@ -10,10 +10,13 @@ import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import com.paypal.musictag.dao.HotStatisticsDao;
 import com.paypal.musictag.dao.mongo.mapper.Distribution;
+import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
 import com.paypal.musictag.dao.usingdb.ArtistRelationMapper;
 import com.paypal.musictag.service.StatisticsService;
 import com.paypal.musictag.util.MusicTagUtil;
@@ -28,6 +31,78 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	@Resource(name = "mongoTemplate")
 	private MongoTemplate mongoTemplate;
+
+	@Override
+	public Map<String, Object> distributionDetail(String gid, String type) {
+		checkDistributionType(type);
+
+		Query searchQuery = new Query(Criteria.where("type").is(type));
+		Distribution distribution = mongoTemplate.findOne(searchQuery, Distribution.class);
+
+		Map<String, Object> map = new HashMap<>();
+		map.put("distribution", distribution);
+		map.put("rank", findRank(gid, type, distribution.getMin(), distribution.getMax()));
+
+		return map;
+	}
+
+	private Map<String, Object> findRank(String gid, String type, int min, int max) {
+		int amount = 0;
+		int xAxis = 0;
+		switch (type) {
+		case "edit_amount":
+			break;
+		case "recording_amount":
+			break;
+		case "release_amount":
+			break;
+		case "active_years":
+			break;
+		case "contacts_amount":
+			break;
+		case "country_amount":
+			break;
+		case "listener_amount":
+			amount = getArtistListenersOrPlay(gid, "listeners");
+			xAxis = (int) (Math.log(amount + 1) * 1.5);
+			break;
+		case "play_amount":
+			amount = getArtistListenersOrPlay(gid, "playcount");
+			xAxis = (int) (Math.log(amount + 1) * 1.5);
+			break;
+		}
+		Map<String, Object> map = new HashMap<>();
+		map.put("amount", amount);
+		map.put("xAxis", xAxis);
+		int prettyXAxis = Math.min(Math.max(min, xAxis), max);
+		int score = (int)((double)(prettyXAxis - min) / (max - min) * 100);
+		map.put("score", score);
+		return map;
+	}
+
+	private int getArtistListenersOrPlay(String gid, String type) {
+		Query searchQuery = new Query(Criteria.where("gid").is(gid));
+		LastfmArtist artist = mongoTemplate.findOne(searchQuery, LastfmArtist.class);
+		int amount = 0;
+		if (artist != null) {
+			Map<String, Object> stats = artist.getStats();
+			if (stats != null) {
+				amount = Integer.parseInt(String.valueOf(stats.get(type)));
+			}
+		}
+		return amount;
+	}
+
+	private void checkDistributionType(String type) {
+		String[] types = { "edit_amount", "recording_amount", "release_amount", "active_years", "contacts_amount",
+				"country_amount", "listener_amount", "play_amount" };
+		for (String t : types) {
+			if (t.equals(type)) {
+				return;
+			}
+		}
+		throw new IllegalArgumentException("Don't support distribution type: " + type);
+	}
 
 	@Override
 	public Map<String, Object> distribution() {
@@ -112,25 +187,23 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	public List<Map<String, Object>> artistArea(String artistGid) {
 		List<Map<String, Object>> mapList = artistRelationMapper.getArtistArea(UUID.fromString(artistGid));
-		
+
 		return mapList;
 	}
-	
-	public List<Map<String, Object>> artistEdit(String artistGid){
+
+	public List<Map<String, Object>> artistEdit(String artistGid) {
 		List<Map<String, Object>> tryList = artistRelationMapper.getArtistEdit(UUID.fromString(artistGid));
 
 		return tryList;
 	}
-	
-	
-	
 
 	@Override
 	public Map<String, Object> artistLyricist(String artistGid) {
-		//link info
-		List<Map<String, Object>> linksWithCount = artistRelationMapper.findReleaseLyricistLink(UUID.fromString(artistGid));
+		// link info
+		List<Map<String, Object>> linksWithCount = artistRelationMapper
+				.findReleaseLyricistLink(UUID.fromString(artistGid));
 		linksWithCount.addAll(artistRelationMapper.findRecordingLyricistLink(UUID.fromString(artistGid)));
-		
+
 		return constructResult(linksWithCount);
 	}
 
@@ -138,10 +211,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 		List<Integer> ids = MusicTagUtil.extractUniqueIds(linksWithCount);
 		List<Map<String, Object>> nodes = new LinkedList<>();
 		if (ids.size() > 0) {
-			nodes = artistRelationMapper.findArtistNode(ids);	
+			nodes = artistRelationMapper.findArtistNode(ids);
 			postProcessLinkAndNode(nodes, linksWithCount);
 		}
-		
+
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("links", linksWithCount);
 		resultMap.put("nodes", nodes);
@@ -150,10 +223,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	@Override
 	public Map<String, Object> artistComposer(String artistGid) {
-		//link info
-		List<Map<String, Object>> linksWithCount = artistRelationMapper.findReleaseComposerLink(UUID.fromString(artistGid));
+		// link info
+		List<Map<String, Object>> linksWithCount = artistRelationMapper
+				.findReleaseComposerLink(UUID.fromString(artistGid));
 		linksWithCount.addAll(artistRelationMapper.findRecordingComposerLink(UUID.fromString(artistGid)));
-		
+
 		return constructResult(linksWithCount);
 	}
 }

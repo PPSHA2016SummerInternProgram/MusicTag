@@ -15,6 +15,10 @@ public class Distribution {
 
 	private List<Object> data;
 
+	private int min;
+
+	private int max;
+
 	public String getId() {
 		return id;
 	}
@@ -45,6 +49,22 @@ public class Distribution {
 
 	public void setData(List<Object> data) {
 		this.data = data;
+	}
+
+	public int getMin() {
+		return min;
+	}
+
+	public void setMin(int min) {
+		this.min = min;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 
 }
