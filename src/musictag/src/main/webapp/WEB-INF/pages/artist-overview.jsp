@@ -6,6 +6,8 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css"
+    href="<%=request.getContextPath()%>/css/header.css" />
+<link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/release.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/albums.css" />
@@ -20,84 +22,39 @@
 <script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
 <script src="<%=request.getContextPath()%>/js/statistics.js"></script>
-<script src="<%=request.getContextPath()%>/js/echarts.js"></script>
-<script src="<%=request.getContextPath()%>/js/world.js"></script>
-<script src="<%=request.getContextPath()%>/js/artist-area.js"></script>
-<script src="<%=request.getContextPath()%>/js/artist-edit.js"></script>
-<script src="<%=request.getContextPath()%>/js/artist-relation.js"></script>
 </head>
 <body>
 
+	<% int active_tab  = 0; %>
 	<%@ include file="_navbar.html"%>
-	<div class="artist-background">
-		<div class="artist-background-top"></div>
-	</div>
-	<div class="container "
-		style="margin-top: -120px; padding-bottom: 100px;">
-		<div style="height: 120px;">
-			<div class="release-cover img-circle-wrapper">
-				<img width="160" data-artist-overview-image
-					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
-			</div>
-		</div>
+    <%@ include file="_artist_header.jsp"%>
 
-		<div class="artist-overview" data-artist-overview
-			style="margin-top: -100px;">
-
-
+	<div class="container">
+		<div class="artist-overview" data-artist-overview>
 			<div class="artist-overview-basic-info">
 				<div class="container">
-					<p class="artist-overview-name"
-						style="font-size: 30px; color: white;" data-artist-overview-name>周杰倫</p>
 				</div>
 
 				<div style="margin-top: -30px;">
 					<div class="artist-overview-key">Gender:</div>
-					<div class="artist-overview-value" data-artist-overview-gender>Male</div>
+					<div class="artist-overview-value" data-artist-overview-gender></div>
 					<div class="artist-overview-key">Area:</div>
-					<div class="artist-overview-value" data-artist-overview-area>Taiwan</div>
+					<div class="artist-overview-value" data-artist-overview-area></div>
 
 
 					<div class="artist-overview-key">Profile:</div>
 					<div class="artist-overview-value">
 						<div class="artist-overview-profile-less"
 							id="artist-overview-profile" data-artist-overview-profile>
-							Jay Chou (traditional Chinese: 周杰倫; simplified Chinese: 周杰伦;
-							pinyin: Zhōu Jiélún; Wade–Giles: Chou Chieh-lun; Pe̍h-ōe-jī: Chiu
-							Kia̍t-lûn; born January 18, 1979) is a Taiwanese musician,
-							singer-songwriter, music and film producer, actor and director
-							who has won the World Music Award four times. He is well-known
-							for composing all his own songs and songs for other singers. In
-							1998 he was discovered in a talent contest where he displayed his
-							piano and song-writing skills. Over the next two years, he was
-							hired to compose for popular Mandarin singers. Although he was
-							trained in classical music, Chou combines Chinese and Western
-							music styles to produce songs that fuse R B, rock and pop genres,
-							covering issues such as domestic violence, war, and urbanization.
-							<br> <br> In 2000, Chou released his first album,
-							titled Jay, under the record company Alfa Music. Since then he
-							has released one album per year except in 2009, selling several
-							million copies each. His music has gained recognition throughout
-							Asia, most notably in regions such as Taiwan, China, Hong Kong,
-							Japan, Malaysia, Indonesia, India, Singapore, Thailand, Vietnam
-							and in overseas Asian communities, winning more than 20 awards
-							each year. He has sold more than 28 million albums worldwide up
-							to 2010.[2] He debuted his acting career in Initial D (2005), for
-							which he won Best Newcomer Actor in both the Hong Kong Film
-							Awards and the Golden Horse Awards, and was nominated for Best
-							Supporting Actor by Hong Kong Film Awards for his role in Curse
-							of the Golden Flower (2006). He produced the theme song for the
-							film Ocean Heaven starring Jet Li. His career now extends into
-							directing and running his own record company JVR Music.
 						</div>
 						<div class="readmore_toggler">
 							<span class="readmore_single_toggler"
 								id="artist-overview-profile-read-more">More <i
-								style="font-size: 10"
+								style="font-size: 10px"
 								class="glyphicon glyphicon-triangle-bottom"></i></span> <span
 								class="readmore_single_toggler" style="display: none;"
 								id="artist-overview-profile-read-less">Less <i
-								style="font-size: 10;" class="glyphicon glyphicon-triangle-top"></i>
+								style="font-size: 10px;" class="glyphicon glyphicon-triangle-top"></i>
 							</span>
 						</div>
 					</div>
@@ -112,11 +69,11 @@
 							<div class="readmore_toggler">
 								<span class="readmore_single_toggler"
 									id="artist-hot-chart-read-more">See More <i
-									style="font-size: 10"
+									style="font-size: 10px"
 									class="glyphicon glyphicon-triangle-bottom"></i></span> <span
 									class="readmore_single_toggler" style="display: none;"
 									id="artist-hot-chart-read-less">Hide <i
-									style="font-size: 10;" class="glyphicon glyphicon-triangle-top"></i>
+									style="font-size: 10px;" class="glyphicon glyphicon-triangle-top"></i>
 								</span>
 							</div>
 						</div>
@@ -148,11 +105,7 @@
 			</div>
 		</div>
 
-		<div id="artist-relations" style="width: 100%; height: 400px;"></div>
-		<div id="artist-area" style="width: 100%; height: 400px;"></div>
-		<div id="artist-release-dist"></div>
-		<div id="artist-edit" style="width:100%;height:400px;"></div>
-		
+
 		<div id="albums-wrapper" style="display: none">
 			<%@ include file="_albums.jsp"%>
 		</div>
@@ -200,7 +153,6 @@
 		</div>
 
 	</div>
-
 
 </body>
 </html>
