@@ -18,29 +18,11 @@ function defaultReceivedBasicInfo(response) {
 	var info = response.data;
 	basicInfo = info;
 	var name = getValue(info, 'name');
-//	var gender = getValue(info, 'gender');
-//	var area = getValue(info, 'area', 'name');
 	var image = getValue(info, 'commons-img');
-//	var lifeSpanBegin = getValue(info, 'life-span', 'begin');
-//	var lifeSpanEnd = getValue(info, 'life-span', 'end');
-//	var lifeSpan = '';
-//	if (!isEmpty(lifeSpanBegin) || !isEmpty(lifeSpanEnd)) {
-//		lifeSpan = (isEmpty(lifeSpanBegin) ? '?' : lifeSpanBegin) + '~'
-//				+ (isEmpty(lifeSpanEnd) ? '?' : lifeSpanEnd);
-//	}
-
 	$('[data-artist-overview-name]').text(name);
-//	$('[data-artist-overview-gender]').text(gender);
-//	$('[data-artist-overview-area]').text(area);
-//	$('[data-artist-overview-life-span]').text(lifeSpan);
 	$('[data-artist-overview-image]').attr('src', image);
-
-//	showBasicInfo();
-
+	
 	getImageFromServer();
-//	getRelLinksFromServer();
-
-//	showHotCharts();
 	showRadar();
 }
 

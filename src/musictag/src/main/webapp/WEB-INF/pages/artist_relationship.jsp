@@ -1,12 +1,18 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
 <html lang="zh-CN">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/artist_header.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/release.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/albums.css" />
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/artist-overview.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/artist_header.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/release.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/albums.css" />
+<link rel="stylesheet" type="text/css"
+	href="<%=request.getContextPath()%>/css/artist-overview.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
@@ -15,12 +21,28 @@
 <script src="<%=request.getContextPath()%>/js/artist-relation.js"></script>
 </head>
 <body>
-	<% int active_tab  = 1; %>
+	<%
+		int active_tab = 1;
+	%>
 	<%@ include file="_navbar.html"%>
-    <%@ include file="_artist_header.jsp"%>
+	<%@ include file="_artist_header.jsp"%>
 
-    <div class="container">
-        <div id="artist-relations" style="width: 100%; height: 400px;"></div>
-    </div>
+	<div class="container">
+		<div id="artist-relations" style="width: 100%; height: 400px;"></div>
+
+		<div style="margin-top: 100px">
+			<p>
+				This is the distribution chart of Contacts Amount. <br>We can
+				see if the artist has a strong relationship with others.
+			</p>
+			<div id="contacts_amount"></div>
+			<script>
+				$(function() {
+					drawDistribution('contacts_amount', 'contacts_amount',
+							'Contacts Amount Distribution');
+				});
+			</script>
+		</div>
+	</div>
 </body>
 </html>
