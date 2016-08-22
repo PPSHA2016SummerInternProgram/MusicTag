@@ -18,6 +18,7 @@ import com.paypal.musictag.dao.HotStatisticsDao;
 import com.paypal.musictag.dao.mongo.mapper.Distribution;
 import com.paypal.musictag.dao.mongo.mapper.LastfmArtist;
 import com.paypal.musictag.dao.usingdb.ArtistRelationMapper;
+import com.paypal.musictag.dao.usingdb.DistributionMapper;
 import com.paypal.musictag.service.StatisticsService;
 import com.paypal.musictag.util.MusicTagUtil;
 
@@ -28,9 +29,24 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private HotStatisticsDao hotStatisticsDaoImpl;
 	@Autowired
 	private ArtistRelationMapper artistRelationMapper;
+	@Autowired
+	private DistributionMapper distributionMapper;
 
 	@Resource(name = "mongoTemplate")
 	private MongoTemplate mongoTemplate;
+
+	@Override
+	public Map<String, Object> distributionScores(String gid) {
+		String[] types = { "edit_amount", "recording_amount", "release_amount", "active_years", "contacts_amount",
+				"country_amount", "listener_amount", "play_amount" };
+		Map<String, Object> result = new HashMap<>();
+		for (String type : types) {
+			Map<String, Object> item = distributionDetail(gid, type);
+			item.put("distribution", null);
+			result.put(type, item);
+		}
+		return result;
+	}
 
 	@Override
 	public Map<String, Object> distributionDetail(String gid, String type) {
@@ -49,33 +65,54 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private Map<String, Object> findRank(String gid, String type, int min, int max) {
 		int amount = 0;
 		int xAxis = 0;
-		switch (type) {
-		case "edit_amount":
-			break;
-		case "recording_amount":
-			break;
-		case "release_amount":
-			break;
-		case "active_years":
-			break;
-		case "contacts_amount":
-			break;
-		case "country_amount":
-			break;
-		case "listener_amount":
-			amount = getArtistListenersOrPlay(gid, "listeners");
-			xAxis = (int) (Math.log(amount + 1) * 1.5);
-			break;
-		case "play_amount":
-			amount = getArtistListenersOrPlay(gid, "playcount");
-			xAxis = (int) (Math.log(amount + 1) * 1.5);
-			break;
+		int prettyXAxis = 0;
+		int score = 0;
+		try {
+			Map<String, Object> params = new HashMap<>();
+			params.put("gid", UUID.fromString(gid));
+			switch (type) {
+			case "edit_amount":
+				amount = distributionMapper.editAmount(params);
+				xAxis = (int) (Math.log(1 + Math.pow(amount, 0.2)) * 15);
+				break;
+			case "recording_amount":
+				amount = distributionMapper.recordingAmount(params);
+				xAxis = (int) (Math.log((1 + Math.pow(amount, 0.7))) * 5);
+				break;
+			case "release_amount":
+				amount = distributionMapper.releaseAmount(params);
+				xAxis = (int) (Math.log((1 + Math.pow(amount, 0.6))) * 5);
+				break;
+			case "active_years":
+				amount = distributionMapper.activeYears(params);
+				xAxis = (int) (((Math.pow(amount, 0.2) - 0.7)) * 10);
+				break;
+			case "contacts_amount":
+				amount = distributionMapper.contactsAmount(params);
+				xAxis = (int) (((Math.pow(amount, 0.02) - 0.95)) * 100);
+				break;
+			case "country_amount":
+				amount = distributionMapper.countryAmount(params);
+				xAxis = (int) ((Math.pow(amount, 0.48) * 5));
+				break;
+			case "listener_amount":
+				amount = getArtistListenersOrPlay(gid, "listeners");
+				xAxis = (int) (Math.log(amount + 1) * 1.5);
+				break;
+			case "play_amount":
+				amount = getArtistListenersOrPlay(gid, "playcount");
+				xAxis = (int) (Math.log(amount + 1) * 1.5);
+				break;
+			}
+			prettyXAxis = Math.min(Math.max(min, xAxis), max);
+			score = (int) ((double) (prettyXAxis - min) / (max - min) * 100);
+		} catch (Exception e) {
+			// Ignore the exception.
+			e.printStackTrace();
 		}
 		Map<String, Object> map = new HashMap<>();
 		map.put("amount", amount);
 		map.put("xAxis", xAxis);
-		int prettyXAxis = Math.min(Math.max(min, xAxis), max);
-		int score = (int)((double)(prettyXAxis - min) / (max - min) * 100);
 		map.put("score", score);
 		return map;
 	}

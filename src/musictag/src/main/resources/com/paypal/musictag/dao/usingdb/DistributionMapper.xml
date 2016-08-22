@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paypal.musictag.dao.usingdb.DistributionMapper">
+	<select id="editAmount" resultType="Integer">
+		select count(*)
+		from artist
+		join edit_artist ea on ea.artist=artist.id
+		where artist.gid = #{gid};
+	</select>
+	<select id="recordingAmount" resultType="Integer">
+		SELECT count(*) AS recording_count
+		FROM recording
+		JOIN artist_credit_name acn ON recording.artist_credit = acn.artist_credit
+		JOIN artist on acn.artist = artist.id
+		WHERE artist.gid = #{gid};
+	</select>
+	<select id="releaseAmount" resultType="Integer">
+		SELECT count(*) AS release_count
+		FROM release
+		JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+		JOIN artist on acn.artist = artist.id
+		WHERE artist.gid = #{gid};
+	</select>
+	<select id="activeYears" resultType="Integer">
+		select (x.end - x.start) as active_years from
+		(select min(re.date_year) as start, max(re.date_year) as end from release
+		JOIN artist_credit_name acn ON release.artist_credit =
+		acn.artist_credit
+		JOIN artist on acn.artist = artist.id
+		JOIN release_event re on re.release = release.id
+		where artist.gid = #{gid}
+		and re.date_year is not NULL) x;
+	</select>
+	<select id="contactsAmount" resultType="Integer">
+		select count(distinct acn1.artist)
+		from artist_credit_name as acn
+		join artist as ar on acn.artist = ar.id
+		join artist_credit_name as acn1 on acn.artist_credit = acn1.artist_credit
+		join artist as ar1 on ar1.id = acn1. artist
+		where ar.gid = #{gid}
+		and ar1.gid != #{gid};
+	</select>
+	<select id="countryAmount" resultType="Integer">
+		select count(*)
+		from artist
+		join edit_artist ea on ea.artist=artist.id
+		where artist.gid = #{gid};
+	</select>
+</mapper>
