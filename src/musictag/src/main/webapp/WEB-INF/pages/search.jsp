@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta content='text/html; charset=ISO-8859-1' http-equiv='Content-Type'>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type'>
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/bootstrap.css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/release.css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/artist-overview.css" />

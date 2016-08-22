@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css"
-	href="<%=request.getContextPath()%>/css/header.css" />
+    href="<%=request.getContextPath()%>/css/artist_header.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/release.css" />
 <link rel="stylesheet" type="text/css"
@@ -24,9 +24,7 @@
 </head>
 <body>
 
-	<%
-		int active_tab = 0;
-	%>
+	<% int active_tab = 0; %>
 	<%@ include file="_navbar.html"%>
 	<%@ include file="_artist_header.jsp"%>
 	<div class="container">
@@ -38,7 +36,7 @@
 			</div>
 			<div class="artist-overview-basic-info">
 				<!-- <div class="container"></div> -->
-				<div style="margin-top: -30px;">
+				<div>
 					<div class="artist-overview-key">Gender:</div>
 					<div class="artist-overview-value" data-artist-overview-gender></div>
 					<div class="artist-overview-key">Area:</div>
