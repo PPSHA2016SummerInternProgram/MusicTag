@@ -3,10 +3,13 @@ package com.paypal.musictag.controller;
 import java.io.IOException;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,8 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.paypal.musictag.service.SearchService;
 import com.paypal.musictag.util.MusicTagUtil;
-
-import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/search")
@@ -33,18 +34,12 @@ public class SearchController {
 		return "/WEB-INF/pages/search.jsp";
 	}
 
-	@RequestMapping(value = "/all", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> searchAll(@RequestParam("key") String key, @RequestParam("perPage") int perPage)
-			throws IOException {
-		return MusicTagUtil.wrapResult(searchServiceImpl.searchAll(key, perPage));
-	}
-
 	@RequestMapping(value = "/artist", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> searchArtist(@RequestParam("key") String key, @RequestParam("currPage") int currPage,
-			@RequestParam("perPage") int perPage) throws IOException {
-		return MusicTagUtil.wrapResult(searchServiceImpl.searchArtist(key, currPage, perPage));
+			@RequestParam("perPage") int perPage, @RequestParam MultiValueMap<String, String> allRequestParams) throws IOException {
+		System.out.println(allRequestParams);
+		return MusicTagUtil.wrapResult(searchServiceImpl.searchArtist(key, currPage, perPage, allRequestParams));
 	}
 
 	@RequestMapping(value = "/release", method = RequestMethod.GET)
