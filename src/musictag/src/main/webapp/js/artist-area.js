@@ -7,6 +7,13 @@ $(document).ready(function(){
 	        map: 'world'
 	    }]
 	});
+	var oldResize = window.onresize;
+	window.onresize = function() {
+		if(oldResize){
+			oldResize();
+		}
+		artistAreaChart.resize();
+	}
 	var curArtistGid = getUuid();
 		$.get("/musictag/artist/"+curArtistGid+"/artist-areas",
 				function(data){

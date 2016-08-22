@@ -31,6 +31,13 @@ public class ArtistController {
 	@Autowired
 	private StatisticsService statisticsServiceImpl;
 
+	@RequestMapping(value = "/{gid}/distribution/{type}", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> distribution(@PathVariable("gid") String gid, @PathVariable("type") String type)
+			throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.distributionDetail(gid, type));
+	}
+	
 	@RequestMapping(value = "/{gid}/profile", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> profile(@PathVariable("gid") String gid) throws IOException {
@@ -72,12 +79,52 @@ public class ArtistController {
 
 	@RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
 	public String artistOverview(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
-		
+
 		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/"+request.getRemoteAddr());
-		
+
 		return "/WEB-INF/pages/artist-overview.jsp";
 	}
-	
+
+	@RequestMapping(value = "/{gid}/relationship", method = RequestMethod.GET)
+	public String artistRelationship(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
+		
+		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/relationship"+request.getRemoteAddr());
+		
+		return "/WEB-INF/pages/artist_relationship.jsp";
+	}
+
+	@RequestMapping(value = "/{gid}/popularity", method = RequestMethod.GET)
+	public String artistPopularity(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
+
+		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/popularity"+request.getRemoteAddr());
+
+		return "/WEB-INF/pages/artist_popularity.jsp";
+	}
+
+	@RequestMapping(value = "/{gid}/influence", method = RequestMethod.GET)
+	public String artistInfluence(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
+
+		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/influence"+request.getRemoteAddr());
+
+		return "/WEB-INF/pages/artist_influence.jsp";
+	}
+
+	@RequestMapping(value = "/{gid}/productivity", method = RequestMethod.GET)
+	public String artistProductivity(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
+
+		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/productivity"+request.getRemoteAddr());
+
+		return "/WEB-INF/pages/artist_productivity.jsp";
+	}
+
+	@RequestMapping(value = "/{gid}/active-span", method = RequestMethod.GET)
+	public String artistActiveSpan(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
+
+		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/active_span"+request.getRemoteAddr());
+
+		return "/WEB-INF/pages/artist_active_span.jsp";
+	}
+
 	@RequestMapping(value = "/{gid}/similar", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> similarArtist(@PathVariable("gid") String gid) throws Exception {

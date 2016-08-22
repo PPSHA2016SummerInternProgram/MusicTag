@@ -4,7 +4,6 @@ $(function() {
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-	Statistics.drawArtistReleaseDist($('#artist-release-dist'), getUuid());
 	showSimilarArtists();
 });
 

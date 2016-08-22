@@ -137,12 +137,44 @@ public class ArtistControllerTest {
 
 	@Test
 	public void testArtistOverview() {
-
 		HttpServletRequest request = new MockHttpServletRequest();
-
 		String page = artistController.artistOverview(null, StaticValues.artistGid0, request);
-
 		assertEquals(page, "/WEB-INF/pages/artist-overview.jsp");
+	}
+
+	@Test
+	public void testArtistRelationship() {
+	    HttpServletRequest request = new MockHttpServletRequest();
+		String page = artistController.artistRelationship(null, StaticValues.artistGid0, request);
+		assertEquals(page, "/WEB-INF/pages/artist_relationship.jsp");
+	}
+
+	@Test
+	public void testArtistPopularity() {
+	    HttpServletRequest request = new MockHttpServletRequest();
+		String page = artistController.artistPopularity(null, StaticValues.artistGid0, request);
+		assertEquals(page, "/WEB-INF/pages/artist_popularity.jsp");
+	}
+
+	@Test
+	public void testArtistInfluence() {
+	    HttpServletRequest request = new MockHttpServletRequest();
+		String page = artistController.artistInfluence(null, StaticValues.artistGid0, request);
+		assertEquals(page, "/WEB-INF/pages/artist_influence.jsp");
+	}
+
+	@Test
+	public void testArtistProductivity() {
+	    HttpServletRequest request = new MockHttpServletRequest();
+		String page = artistController.artistProductivity(null, StaticValues.artistGid0, request);
+		assertEquals(page, "/WEB-INF/pages/artist_productivity.jsp");
+	}
+
+	@Test
+	public void testArtistActiveSpan() {
+	    HttpServletRequest request = new MockHttpServletRequest();
+		String page = artistController.artistActiveSpan(null, StaticValues.artistGid0, request);
+		assertEquals(page, "/WEB-INF/pages/artist_active_span.jsp");
 	}
 	
 	@Test
