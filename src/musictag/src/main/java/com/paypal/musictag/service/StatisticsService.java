@@ -5,10 +5,15 @@ import java.util.Map;
 
 public interface StatisticsService {
 
-Map<String, Object> distributionDetail(String gid, String type);	Map<String, Object> distribution();
+	Map<String, Object> distributionDetail(String gid, String type);
 
+	Map<String, Object> distribution();
+	
+	Map<String, Object> distributionScores(String gid);
 	Map<String, Object> releaseInfo(String gid);
 	
+	Map<String, Object> distributionScores(String gid);
+
 	Map<String, Object> artistListeners(String gid);
 
 	Map<String, Object> artistPlaycount(String gid);

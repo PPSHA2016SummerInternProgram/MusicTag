@@ -23,13 +23,19 @@ import com.paypal.musictag.util.MusicTagUtil;
 @Controller
 @RequestMapping("/artist")
 public class ArtistController {
-	
-	private static Logger logger = Logger.getLogger(ArtistController.class);  
-	
+
+	private static Logger logger = Logger.getLogger(ArtistController.class);
+
 	@Autowired
 	private ArtistService artistServiceImpl;
 	@Autowired
 	private StatisticsService statisticsServiceImpl;
+
+	@RequestMapping(value = "/{gid}/distribution/scores/", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> distributionScores(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.distributionScores(gid));
+	}
 
 	@RequestMapping(value = "/{gid}/distribution/{type}", method = RequestMethod.GET)
 	@ResponseBody
@@ -37,7 +43,7 @@ public class ArtistController {
 			throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.distributionDetail(gid, type));
 	}
-	
+
 	@RequestMapping(value = "/{gid}/profile", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> profile(@PathVariable("gid") String gid) throws IOException {
@@ -80,23 +86,23 @@ public class ArtistController {
 	@RequestMapping(value = "/{gid}/", method = RequestMethod.GET)
 	public String artistOverview(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
 
-		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/"+request.getRemoteAddr());
+		logger.info("<<<UserRecords>>>/" + "ArtistPage/" + gid + "/" + request.getRemoteAddr());
 
 		return "/WEB-INF/pages/artist-overview.jsp";
 	}
 
 	@RequestMapping(value = "/{gid}/relationship", method = RequestMethod.GET)
 	public String artistRelationship(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
-		
-		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/relationship"+request.getRemoteAddr());
-		
+
+		logger.info("<<<UserRecords>>>/" + "ArtistPage/" + gid + "/relationship" + request.getRemoteAddr());
+
 		return "/WEB-INF/pages/artist_relationship.jsp";
 	}
 
 	@RequestMapping(value = "/{gid}/popularity", method = RequestMethod.GET)
 	public String artistPopularity(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
 
-		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/popularity"+request.getRemoteAddr());
+		logger.info("<<<UserRecords>>>/" + "ArtistPage/" + gid + "/popularity" + request.getRemoteAddr());
 
 		return "/WEB-INF/pages/artist_popularity.jsp";
 	}
@@ -104,7 +110,7 @@ public class ArtistController {
 	@RequestMapping(value = "/{gid}/influence", method = RequestMethod.GET)
 	public String artistInfluence(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
 
-		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/influence"+request.getRemoteAddr());
+		logger.info("<<<UserRecords>>>/" + "ArtistPage/" + gid + "/influence" + request.getRemoteAddr());
 
 		return "/WEB-INF/pages/artist_influence.jsp";
 	}
@@ -112,7 +118,7 @@ public class ArtistController {
 	@RequestMapping(value = "/{gid}/productivity", method = RequestMethod.GET)
 	public String artistProductivity(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
 
-		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/productivity"+request.getRemoteAddr());
+		logger.info("<<<UserRecords>>>/" + "ArtistPage/" + gid + "/productivity" + request.getRemoteAddr());
 
 		return "/WEB-INF/pages/artist_productivity.jsp";
 	}
@@ -120,7 +126,7 @@ public class ArtistController {
 	@RequestMapping(value = "/{gid}/active-span", method = RequestMethod.GET)
 	public String artistActiveSpan(ModelMap model, @PathVariable("gid") String gid, HttpServletRequest request) {
 
-		logger.info("<<<UserRecords>>>/"+"ArtistPage/"+gid+"/active_span"+request.getRemoteAddr());
+		logger.info("<<<UserRecords>>>/" + "ArtistPage/" + gid + "/active_span" + request.getRemoteAddr());
 
 		return "/WEB-INF/pages/artist_active_span.jsp";
 	}
@@ -130,12 +136,12 @@ public class ArtistController {
 	public Map<String, Object> similarArtist(@PathVariable("gid") String gid) throws Exception {
 		return MusicTagUtil.wrapResult(artistServiceImpl.similarArtist(gid));
 	}
-	
+
 	/*
-	================================================================
-			statistics api for artist
-	================================================================		
-	*/
+	 * ================================================================
+	 * statistics api for artist
+	 * ================================================================
+	 */
 	/**
 	 * 
 	 * @param gid
@@ -147,7 +153,7 @@ public class ArtistController {
 	public Map<String, Object> artistCreditCount(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
 	}
-	
+
 	@RequestMapping(value = "/{gid}/artist-areas", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistAreas(@PathVariable("gid") String gid) throws IOException {
@@ -159,42 +165,45 @@ public class ArtistController {
 	public Map<String, Object> artistAreasDetails(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistAreaDetails(gid));
 	}
-	
+
 	@RequestMapping(value = "/{gid}/artist-edit", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistEdit(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistEdit(gid));
 	}
-	
+
 	@RequestMapping(value = "/{gid}/artist-lyricists", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistLyricists(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistLyricist(gid));
 	}
-	
+
 	@RequestMapping(value = "/{gid}/artist-composers", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistComposers(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistComposer(gid));
 	}
-	
-	@RequestMapping(value="/{gid}/tooltip-info", method = RequestMethod.GET)
+
+	@RequestMapping(value = "/{gid}/tooltip-info", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException{
+	public Map<String, Object> tooltipInfo(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(artistServiceImpl.tooltipInfo(gid));
 	}
-	
+
 	/**
 	 * 
 	 * @param sourceId
 	 * @param targetId
-	 * @param type: credit, lyricist or composer.
+	 * @param type:
+	 *            credit, lyricist or composer.
 	 * @return
 	 */
-	@RequestMapping(value="/{sid}/target-artist/{tid}/type/{type}/cooperations", method = RequestMethod.GET)
+	@RequestMapping(value = "/{sid}/target-artist/{tid}/type/{type}/cooperations", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> artistCooperations(@PathVariable("sid") Integer sourceId, @PathVariable("tid") Integer targetId, @PathVariable("type") String type) {
-		return MusicTagUtil.wrapResult(artistServiceImpl.artistCooperations(sourceId, targetId, CooperationType.valueOf(type.toUpperCase())));
+	public Map<String, Object> artistCooperations(@PathVariable("sid") Integer sourceId,
+			@PathVariable("tid") Integer targetId, @PathVariable("type") String type) {
+		return MusicTagUtil.wrapResult(
+				artistServiceImpl.artistCooperations(sourceId, targetId, CooperationType.valueOf(type.toUpperCase())));
 	}
 
 }
