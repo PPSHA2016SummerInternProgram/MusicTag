@@ -2,7 +2,7 @@
 function getRadarDataFromServer(elementId, callback) {
 	var url = 'distribution/scores/';
 	var args = {
-			callback, callback,
+			callback: callback,
 			elementId : elementId,
 	}
 	sendAjax(url, null, drawRadar, args);
@@ -60,8 +60,6 @@ function radarConfig(){
 }
 
 function drawRadar(response, args){
-	console.log(response)
-	console.log(args);
 	var elementId = args['elementId'];
 	var config = radarConfig();
 	var data = [];
