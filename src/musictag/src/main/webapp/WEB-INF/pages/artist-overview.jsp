@@ -6,7 +6,7 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/bootstrap.css" />
 <link rel="stylesheet" type="text/css"
-    href="<%=request.getContextPath()%>/css/header.css" />
+	href="<%=request.getContextPath()%>/css/header.css" />
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/release.css" />
 <link rel="stylesheet" type="text/css"
@@ -15,6 +15,7 @@
 	href="<%=request.getContextPath()%>/css/artist-overview.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/highcharts-more.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist.js"></script>
@@ -25,16 +26,20 @@
 </head>
 <body>
 
-	<% int active_tab  = 0; %>
+	<%
+		int active_tab = 0;
+	%>
 	<%@ include file="_navbar.html"%>
-    <%@ include file="_artist_header.jsp"%>
-
+	<%@ include file="_artist_header.jsp"%>
 	<div class="container">
-		<div class="artist-overview" data-artist-overview>
+		<div class="artist-overview" data-artist-overview
+			style="padding-top: 0;">
+			<div style="height: 0">
+				<div id=""
+					style="position: relative; float: left; left: 30px; top: 70px; width: 100px; height: 100px;"></div>
+			</div>
 			<div class="artist-overview-basic-info">
-				<div class="container">
-				</div>
-
+				<!-- <div class="container"></div> -->
 				<div style="margin-top: -30px;">
 					<div class="artist-overview-key">Gender:</div>
 					<div class="artist-overview-value" data-artist-overview-gender></div>
@@ -54,7 +59,8 @@
 								class="glyphicon glyphicon-triangle-bottom"></i></span> <span
 								class="readmore_single_toggler" style="display: none;"
 								id="artist-overview-profile-read-less">Less <i
-								style="font-size: 10px;" class="glyphicon glyphicon-triangle-top"></i>
+								style="font-size: 10px;"
+								class="glyphicon glyphicon-triangle-top"></i>
 							</span>
 						</div>
 					</div>
@@ -73,7 +79,8 @@
 									class="glyphicon glyphicon-triangle-bottom"></i></span> <span
 									class="readmore_single_toggler" style="display: none;"
 									id="artist-hot-chart-read-less">Hide <i
-									style="font-size: 10px;" class="glyphicon glyphicon-triangle-top"></i>
+									style="font-size: 10px;"
+									class="glyphicon glyphicon-triangle-top"></i>
 								</span>
 							</div>
 						</div>
@@ -81,7 +88,7 @@
 
 					<div class="artist-overview-key" data-artist-listeners-chart-value
 						style="width: 110%; margin-left: -100px; height: 0; overflow: hidden"
-						id="artist-listeners"></div>
+						id="artist-radar"></div>
 					<div style="clear: both"></div>
 					<div class="artist-overview-key" style="margin-top: 5px;">
 						<button class="btn btn-sm" style="margin-left: -10px"

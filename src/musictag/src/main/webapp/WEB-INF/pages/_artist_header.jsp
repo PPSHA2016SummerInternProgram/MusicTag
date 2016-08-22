@@ -9,7 +9,13 @@
     </div>
     <div class='header-nav'>
       <div class='header-title'>
-        <span class='avatar-name' data-artist-overview-name=''>&nbsp;</span>
+      	<div style="float:left">
+        	<span class='avatar-name' data-artist-overview-name=''>&nbsp;</span>
+        </div>
+        <div  style="float:left; height:0;width:0">
+        	<div id="artist-radar-chart" style="margin-top:-30px; width:90px; height:90px;"></div>
+        </div>
+        <span style="color:black;line-height:32px">.</span>
       </div>
       <nav class='nav-list'>
         <ul class='nav-list-items'>

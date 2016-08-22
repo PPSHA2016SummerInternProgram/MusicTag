@@ -4,7 +4,7 @@ $(function() {
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-	showSimilarArtists();
+//	showSimilarArtists();
 });
 
 function showSimilarArtists(){
@@ -56,11 +56,24 @@ function createSimilarArtistHtml(mbid, name, imageSrc){
 	+'</li>';
 }
 
+function showRadar() {
+	getRadarDataFromServer('artist-radar-chart', receivedRadar);
+}
+
 var basicInfo;
 
 function showHotCharts() {
 	getStatisticsDataFromServer('artist', 'listeners', 'artist-listeners',
 			getUuid(), showRank);
+}
+
+function receivedRadar(){
+
+//	var artistName = basicInfo ? getValue(basicInfo, 'name') : '';
+//	var key = $('[data-artist-listeners-chart-key]');
+//	key.html(artistName + ' get <span style="color:#dd4b39">100</span> scores: ')
+//	$('[data-artist-listeners-char]').show();
+//	addArtistHotChartListener();
 }
 
 function showRank(rank, total) {
@@ -200,7 +213,8 @@ function receivedBasicInfo(data) {
 	getImageFromServer();
 	getRelLinksFromServer();
 
-	showHotCharts();
+//	showHotCharts();
+	showRadar();
 }
 
 /**

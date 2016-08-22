@@ -1,3 +1,101 @@
+
+function getRadarDataFromServer(elementId, callback) {
+	var url = 'distribution/scores/';
+	var args = {
+			callback, callback,
+			elementId : elementId,
+	}
+	sendAjax(url, null, drawRadar, args);
+}
+
+function radarConfig(){
+	return {
+        chart: {
+            polar: true,
+            type: 'line',
+            backgroundColor: 'rgba(0,0,0,0)'
+        },
+        title: {
+            text: null,
+        },
+        pane: {
+            size: '100%'
+        },
+        xAxis: {
+            categories: [],
+            tickmarkPlacement: 'on',
+            lineWidth: 0,
+            labels:
+            {
+              enabled: false
+            }
+        },
+
+        yAxis: {
+            gridLineInterpolation: 'polygon',
+            lineWidth: 0,
+            min: 0,
+            max: 100
+        },
+
+        tooltip: {
+            shared: true,
+            pointFormat: '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+        },
+
+        legend: {
+            align: 'right',
+            verticalAlign: 'top',
+            y: 70,
+            layout: 'vertical'
+        },
+
+        series: [],
+        
+        credits: {
+            enabled: false
+        }
+
+    };
+}
+
+function drawRadar(response, args){
+	console.log(response)
+	console.log(args);
+	var elementId = args['elementId'];
+	var config = radarConfig();
+	var data = [];
+	var categories = [];
+	var items = getValue(response, 'data');
+	
+	var scores = {
+		'Relationship' : getScore(items, 'contacts_amount'),
+		'Popularity' : (getScore(items, 'edit_amount')+getScore(items, 'listener_amount')+getScore(items, 'play_amount'))/3,
+		'Influence' : getScore(items, 'country_amount'),
+		'Productivity' : (getScore(items, 'recording_amount') + getScore(items, 'release_amount'))/2,
+		'Active Span' : getScore(items, 'active_years'),
+	};
+	
+	for(var type in scores) {
+		if (scores.hasOwnProperty(type)) {
+			categories.push(type);
+			data.push(getValue(scores, type))
+		}
+	}
+	config['xAxis']['categories'] = categories;
+	config['series'] = [{color:'#B90000', 'data':data, pointPlacement: 'on', showInLegend: false, name:basicInfo ? getValue(basicInfo, 'name') : ''}];
+	
+	$('#' + elementId).highcharts(config);
+	if(args['callback']){
+		args['callback']();
+	}
+}
+
+function getScore(items, type){
+	var score = getValue(items, type, 'rank', 'score');
+	return score ? score : 0;
+}
+
 function getStatisticsDataFromServer(entityType, hotType, id, gid, callback) {
 	var subUrl = entityType + '-' + hotType;
 	var url = ContextPath + '/statistics/' + subUrl + '/' + gid + '.ajax';
