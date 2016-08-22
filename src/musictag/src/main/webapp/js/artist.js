@@ -1,6 +1,6 @@
 $(function() {
 	hideBasicInfo();
-	getBasicInfoFromServer();
+	getBasicInfoFromServer(receivedBasicInfo);
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
@@ -56,10 +56,6 @@ function createSimilarArtistHtml(mbid, name, imageSrc){
 	+'</li>';
 }
 
-function showRadar() {
-	getRadarDataFromServer('artist-radar-chart', receivedRadar);
-}
-
 var basicInfo;
 
 function showHotCharts() {
@@ -69,11 +65,6 @@ function showHotCharts() {
 
 function receivedRadar(){
 
-//	var artistName = basicInfo ? getValue(basicInfo, 'name') : '';
-//	var key = $('[data-artist-listeners-chart-key]');
-//	key.html(artistName + ' get <span style="color:#dd4b39">100</span> scores: ')
-//	$('[data-artist-listeners-char]').show();
-//	addArtistHotChartListener();
 }
 
 function showRank(rank, total) {
@@ -127,17 +118,6 @@ function clearBasicInfo() {
 	$('[data-artist-listeners-chart]').html('');
 }
 
-function getBasicInfoFromServer() {
-	var url = 'basic-info';
-	var data = {};
-	sendAjax(url, data, receivedBasicInfo);
-}
-
-function getImageFromServer() {
-	var url = 'image';
-	sendAjax(url, null, receivedImageUrl);
-}
-
 function getRelLinksFromServer() {
 	var url = 'rel-links';
 	sendAjax(url, null, receivedRelLinks);
@@ -146,14 +126,6 @@ function getRelLinksFromServer() {
 function getProfileFromServer() {
 	var url = 'profile';
 	sendAjax(url, null, receivedProfile);
-}
-
-function receivedImageUrl(data) {
-	if (data.success && !isEmpty(getValue(data, 'data', 'commons-img'))) {
-		var src = getValue(data, 'data', 'commons-img');
-		$('[data-artist-overview-image]').show();
-		$('[data-artist-overview-image]').attr('src', src);
-	}
 }
 
 function receivedRelLinks(data) {

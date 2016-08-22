@@ -14,8 +14,6 @@
 <link rel="stylesheet" type="text/css"
 	href="<%=request.getContextPath()%>/css/artist-overview.css" />
 <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/highcharts-more.js"></script>
 <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
 <script src="<%=request.getContextPath()%>/js/util.js"></script>
 <script src="<%=request.getContextPath()%>/js/artist.js"></script>
