@@ -25,7 +25,7 @@ public class StatisticServiceImplTest {
 	@Test
 	public void testTryGetArea(){
 
-		System.out.println(statisticsServiceImpl.artistArea(StaticValues.artistGid0));
+		System.out.println(statisticsServiceImpl.artistAreaCount(StaticValues.artistGid0));
 		
 	}
 	

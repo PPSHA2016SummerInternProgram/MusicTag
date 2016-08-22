@@ -39,7 +39,9 @@ public interface ArtistRelationMapper {
 
 	int getRecordingCount(@Param(value = "artistGid") UUID artistGid);
 
-	List<Map<String, Object>> getArtistArea(@Param(value = "artistGid") UUID artistGid);
+	List<Map<String, Object>> getArtistAreaCount(@Param(value = "artistGid") UUID artistGid);
+	
+	List<Map<String, Object>> getArtistAreaDetails(@Param(value = "artistGid") UUID artistGid);
 	
 	List<Map<String, Object>> getArtistEdit(@Param(value = "artistGid") UUID artistGid);
 

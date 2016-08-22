@@ -44,6 +44,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 	}
 
 	@Override
+	public Map<String, Object> releaseInfo(String gid) {
+		return hotStatisticsDaoImpl.releaseInfo(gid);
+
+	}
+	
+	@Override
 	public Map<String, Object> artistPlaycount(String gid) {
 		return hotStatisticsDaoImpl.artistPlaycount(gid);
 	}
@@ -110,8 +116,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 		}
 	}
 
-	public List<Map<String, Object>> artistArea(String artistGid) {
-		List<Map<String, Object>> mapList = artistRelationMapper.getArtistArea(UUID.fromString(artistGid));
+	public List<Map<String, Object>> artistAreaCount(String artistGid) {
+		List<Map<String, Object>> mapList = artistRelationMapper.getArtistAreaCount(UUID.fromString(artistGid));
+		
+		return mapList;
+	}
+	
+	public List<Map<String, Object>> artistAreaDetails(String artistGid) {
+		List<Map<String, Object>> mapList = artistRelationMapper.getArtistAreaDetails(UUID.fromString(artistGid));
 		
 		return mapList;
 	}

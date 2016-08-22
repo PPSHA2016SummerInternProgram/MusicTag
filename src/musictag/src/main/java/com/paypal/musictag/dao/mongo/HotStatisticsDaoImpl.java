@@ -33,6 +33,27 @@ public class HotStatisticsDaoImpl implements HotStatisticsDao {
 		return map;
 	}
 
+	
+	@Override
+	public Map<String, Object> releaseInfo(String gid) {
+		return getReleaseInfo("release", "aadd2a0e-5702-412c-a509-76b89e4411f6");
+	}
+
+	private Map<String, Object> getReleaseInfo(String type, String gid) {
+		Query searchQuery = new Query(Criteria.where("gid").is(gid));
+		LastfmAlbumOrTrack album = mongoTemplate.findOne(searchQuery, LastfmAlbumOrTrack.class, "lastfm.album");
+		int listeners=album.getListeners();
+		int playcount=album.getPlaycount();
+		Map<String,Object> map = new HashMap<>();
+		//System.out.println("-------------------------");
+		//System.out.println("----------------------"+listeners+playcount+"------------------------");
+		map.put("listeners", listeners);
+		map.put("playcount", playcount);
+		//fillRank(map, type, gid);
+		return map;
+	}
+	
+	
 	private void fillRank(Map<String, Object> map, String type, String gid) {
 
 		String type0 = type.split("-")[0];
@@ -110,5 +131,7 @@ public class HotStatisticsDaoImpl implements HotStatisticsDao {
 	public Map<String, Object> recordingPlaycount(String gid) {
 		return getData("track-playcount", gid);
 	}
-
+	
+	
+	
 }

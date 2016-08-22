@@ -254,7 +254,7 @@
         ORDER BY date_year
 	</select>
 	
-	<select id="getArtistArea" resultType="map">	
+	<select id="getArtistAreaCount" resultType="map">	
 	select area.name,count(*) from release
 	JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
 	JOIN artist on acn.artist = artist.id
@@ -262,7 +262,15 @@
   	JOIN area ON rc.country=area.id
 	where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
   	group by area.name;
+	</select>
 	
+	<select id="getArtistAreaDetails" resultType="map">	
+	select release.name as name,area.name as area,release.gid as gid from release
+	JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+	JOIN artist on acn.artist = artist.id
+	JOIN release_country rc ON release.id = rc.release
+  	JOIN area ON rc.country=area.id
+	where artist.gid = #{artistGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR};
 	</select>
 	
 	<!--  

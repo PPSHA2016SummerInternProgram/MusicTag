@@ -45,7 +45,10 @@ $(document).ready(function(){
 					            //       + '.' + value[1];
 					            value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');
 					            //alert(value);
-					            if(value=='NaN'){
+
+					            
+					            
+					            if(value==='NaN'){
 					            	return params.name + ' : ' + '0';
 					            }else{return params.name + ' : ' + value;}
 					        

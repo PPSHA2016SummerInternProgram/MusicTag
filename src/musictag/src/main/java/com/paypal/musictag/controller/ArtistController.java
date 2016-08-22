@@ -104,7 +104,13 @@ public class ArtistController {
 	@RequestMapping(value = "/{gid}/artist-areas", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistAreas(@PathVariable("gid") String gid) throws IOException {
-		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistArea(gid));
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistAreaCount(gid));
+	}
+	
+	@RequestMapping(value = "/{gid}/artist-areas-details", method = RequestMethod.GET)
+	@ResponseBody
+	public Map<String, Object> artistAreasDetails(@PathVariable("gid") String gid) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistAreaDetails(gid));
 	}
 	
 	@RequestMapping(value = "/{gid}/artist-edit", method = RequestMethod.GET)

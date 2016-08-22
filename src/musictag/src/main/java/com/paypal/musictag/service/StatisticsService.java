@@ -7,6 +7,8 @@ public interface StatisticsService {
 
 	Map<String, Object> distribution();
 
+	Map<String, Object> releaseInfo(String gid);
+	
 	Map<String, Object> artistListeners(String gid);
 
 	Map<String, Object> artistPlaycount(String gid);
@@ -21,7 +23,9 @@ public interface StatisticsService {
 
 	Map<String, Object> artistCreditCount(String artistGid);
 
-	List<Map<String, Object>> artistArea(String artistGid);
+	List<Map<String, Object>> artistAreaCount(String artistGid);
+	
+	List<Map<String, Object>> artistAreaDetails(String artistGid);
 	
 	List<Map<String, Object>> artistEdit(String artistGid);
 
