@@ -11,4 +11,6 @@ public interface RecordingService {
     Map<String, Object> workArtistRels(String recordingId) throws IOException;
 
     Map<String, Object> full(String recordingId) throws IOException;
+
+    Map<String, Object> lyric(String recordingId) throws IOException;
 }

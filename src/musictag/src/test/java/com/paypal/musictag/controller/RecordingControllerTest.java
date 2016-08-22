@@ -82,4 +82,10 @@ public class RecordingControllerTest {
 		assertEquals(page,"/WEB-INF/pages/song.jsp");
 	}
 
+	@Test
+	public void testLyric() throws IOException {
+		Map<String, Object> res = recordingController.lyric(StaticValues.recordingGid0);
+		assertEquals(res.get("success"), true);
+	}
+
 }

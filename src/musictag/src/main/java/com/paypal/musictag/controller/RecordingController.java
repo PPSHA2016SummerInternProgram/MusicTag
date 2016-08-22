@@ -56,4 +56,10 @@ public class RecordingController {
     public Map<String, Object> full(@PathVariable("gid") String recordingId) throws IOException {
             return MusicTagUtil.wrapResult(recordingServiceImpl.full(recordingId));
     }
+
+    @RequestMapping(value = "/{gid}/lyric", method = RequestMethod.GET)
+    @ResponseBody
+    public Map<String, Object> lyric(@PathVariable("gid") String recordingGId) throws IOException {
+        return MusicTagUtil.wrapResult(recordingServiceImpl.lyric(recordingGId));
+    }
 }
