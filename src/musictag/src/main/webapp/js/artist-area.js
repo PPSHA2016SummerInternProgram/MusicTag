@@ -32,6 +32,7 @@ $(document).ready(function(){
 							node.name='United States of America';
 						}else if(node.name==="Hong Kong"||node.name==="Taiwan"||node.name==="China"){
 							count_china=count_china+node.count;
+							node.value=0
 						}
 					})
 					if(count_china>0){
