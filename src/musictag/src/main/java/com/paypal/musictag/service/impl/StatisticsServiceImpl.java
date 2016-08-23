@@ -37,16 +37,17 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private MongoTemplate mongoTemplate;
 
 	final private static String SCORES_CACHE_COLLECTION = "scores.cache";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> distributionScores(String gid) {
 
 		Query searchQuery = new Query(Criteria.where("gid").is(gid));
 		Map<String, Object> cache = mongoTemplate.findOne(searchQuery, Map.class, SCORES_CACHE_COLLECTION);
-		if(cache != null){
+		if (cache != null) {
 			return (Map<String, Object>) cache.get("data");
 		}
-		
+
 		String[] types = { "edit_amount", "recording_amount", "release_amount", "active_years", "contacts_amount",
 				"country_amount", "listener_amount", "play_amount" };
 		Map<String, Object> result = new HashMap<>();
@@ -55,12 +56,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 			item.put("distribution", null);
 			result.put(type, item);
 		}
-		
+
 		cache = new HashMap<>();
 		cache.put("gid", gid);
 		cache.put("data", result);
 		mongoTemplate.save(cache, SCORES_CACHE_COLLECTION);
-		
+
 		return result;
 	}
 
@@ -109,7 +110,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 				break;
 			case "country_amount":
 				amount = distributionMapper.countryAmount(params);
-				xAxis = (int) ((Math.pow(amount, 0.48) * 5));
+				xAxis = (int) (Math.pow(amount, 0.48) * 5);
 				break;
 			case "listener_amount":
 				amount = getArtistListenersOrPlay(gid, "listeners");
@@ -119,6 +120,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 				amount = getArtistListenersOrPlay(gid, "playcount");
 				xAxis = (int) (Math.log(amount + 1) * 1.5);
 				break;
+			default:
 			}
 			prettyXAxis = Math.min(Math.max(min, xAxis), max);
 			score = (int) ((double) (prettyXAxis - min) / (max - min) * 100);
@@ -176,7 +178,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 		return hotStatisticsDaoImpl.getReleaseInfo(gid);
 
 	}
-	
+
 	@Override
 	public Map<String, Object> artistPlaycount(String gid) {
 		return hotStatisticsDaoImpl.artistPlaycount(gid);
@@ -244,45 +246,45 @@ public class StatisticsServiceImpl implements StatisticsService {
 		}
 	}
 
-
 	public List<Map<String, Object>> artistAreaCount(String artistGid) {
 		List<Map<String, Object>> mapList = artistRelationMapper.getArtistAreaCount(UUID.fromString(artistGid));
-		
+
 		return mapList;
 	}
-	
-	public List<Map<String, Object>> artistAreaDetails(String artistGid,String area) {
+
+	public List<Map<String, Object>> artistAreaDetails(String artistGid, String area) {
 		List<Map<String, Object>> mapList = artistRelationMapper.getArtistAreaDetails(UUID.fromString(artistGid));
-		List<Map<String,Object>> areaRelease = new ArrayList<Map<String,Object>>();
-		if(area.equals("China")||area.equals("Taiwan")||area.equals("Hong Kong")){
-			for(Map<String,Object> release: mapList){
-				if(release.get("area").equals("China")||release.get("area").equals("Taiwan")||release.get("area").equals("Hong Kong")) {
+		List<Map<String, Object>> areaRelease = new ArrayList<Map<String, Object>>();
+		if (area.equals("China") || area.equals("Taiwan") || area.equals("Hong Kong")) {
+			for (Map<String, Object> release : mapList) {
+				if (release.get("area").equals("China") || release.get("area").equals("Taiwan")
+						|| release.get("area").equals("Hong Kong")) {
 					areaRelease.add(release);
-				}	
-			}	
-		}else{
-			for(Map<String,Object> release: mapList){
-				if(release.get("area").equals(area)) {
+				}
+			}
+		} else {
+			for (Map<String, Object> release : mapList) {
+				if (release.get("area").equals(area)) {
 					areaRelease.add(release);
 				}
 			}
 		}
 		return areaRelease;
 	}
-	
-	public List<Map<String, Object>> artistEdit(String artistGid){
+
+	public List<Map<String, Object>> artistEdit(String artistGid) {
 		List<Map<String, Object>> tryList = artistRelationMapper.getArtistEdit(UUID.fromString(artistGid));
 
 		return tryList;
 	}
-	
+
 	@Override
 	public Map<String, Object> artistLyricist(String artistGid) {
-		//link info
+		// link info
 		List<Map<String, Object>> linksWithCount = artistRelationMapper
 				.findReleaseLyricistLink(UUID.fromString(artistGid));
 		linksWithCount.addAll(artistRelationMapper.findRecordingLyricistLink(UUID.fromString(artistGid)));
-		
+
 		return constructResult(linksWithCount);
 	}
 
@@ -290,10 +292,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 		List<Integer> ids = MusicTagUtil.extractUniqueIds(linksWithCount);
 		List<Map<String, Object>> nodes = new LinkedList<>();
 		if (ids.size() > 0) {
-			nodes = artistRelationMapper.findArtistNode(ids);	
+			nodes = artistRelationMapper.findArtistNode(ids);
 			postProcessLinkAndNode(nodes, linksWithCount);
 		}
-		
+
 		Map<String, Object> resultMap = new HashMap<>();
 		resultMap.put("links", linksWithCount);
 		resultMap.put("nodes", nodes);
@@ -302,11 +304,11 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	@Override
 	public Map<String, Object> artistComposer(String artistGid) {
-		//link info
+		// link info
 		List<Map<String, Object>> linksWithCount = artistRelationMapper
 				.findReleaseComposerLink(UUID.fromString(artistGid));
 		linksWithCount.addAll(artistRelationMapper.findRecordingComposerLink(UUID.fromString(artistGid)));
-		
+
 		return constructResult(linksWithCount);
 	}
 }
