@@ -56,6 +56,10 @@ $(document).ready(function(){
 					        top: 'top'
 					    },
 					    tooltip : {
+					    	
+					    	enterable : true,
+							showDelay: 300,
+							hideDelay: 500,
 					        trigger: 'item',
 					        formatter : function (params, ticket, callback) {
 					            var value = (params.value + '').split('.');
@@ -71,15 +75,6 @@ $(document).ready(function(){
 					            		 
 											callback(ticket, artistHtml(content,params.name,value));
 
-											//data.data.forEach(function(node){
-							            	//	$.get('/musictag/artist/'+'United States'+'/release/'+node.gid+'/image',function(data){
-							            			//url:data.data.images[0].image
-							            	//		list_image.push(data.data.images[0].image);
-							            			
-							            	//	},'json');
-							            		
-							            	//});
-
 											
 									     });
 					            }else{
@@ -87,17 +82,14 @@ $(document).ready(function(){
 					            	$.get('/musictag/artist/'+curArtistGid+'/'+params.name, function (content) {
 									
 					            	callback(ticket, artistHtml(content,params.name,value));
-
 					            	
 							     });
 					            }
-					            
-					            
-					            
-					        
-					         //return 'Loading';
+
+					         return 'Loading';
 					        }
 					    },
+					    //animationDuration : 500,
 					    toolbox: {
 					        show : false,
 					        orient : 'vertical',
@@ -167,7 +159,7 @@ $(document).ready(function(){
 			html+='</div>';
 			html+='<table style="color:white;">';
 			html+='<tbody>';
-			//html+='<div>'+name+':'+value+'</div>';
+
 			content.data.forEach(function(node){
 
 				//html += '<div>' + JSON.stringify(node) + '</div>';
@@ -176,7 +168,7 @@ $(document).ready(function(){
 			html+='</tbody>'
 			html += '</table>'
 			
-			//html += '</div>';
+
 			return html;
 		}	
 		

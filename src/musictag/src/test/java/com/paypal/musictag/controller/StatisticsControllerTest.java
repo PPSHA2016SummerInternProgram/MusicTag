@@ -19,7 +19,17 @@ public class StatisticsControllerTest {
 
 	@Autowired
 	private StatisticsController statisticsController;
-
+	
+	@Test
+	public void testDistribution() throws IOException {
+		statisticsController.distribution();
+	}
+	
+	@Test
+	public void testArtistArea() throws IOException {
+		statisticsController.artistArea(StaticValues.artistGid0);
+	}
+	
 	@Test
 	public void testIndex() {
 		assertEquals("/WEB-INF/pages/statistics.jsp", statisticsController.index());

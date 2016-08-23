@@ -28,6 +28,53 @@ public class ArtistControllerTest {
 	@Autowired
 	ArtistController artistController;
 	
+	@Test
+	public void testArtistEdit() throws IOException{
+		artistController.artistEdit(StaticValues.artistGid0);
+	}
+
+	@Test
+	public void testArtistLyricists() throws IOException{
+		artistController.artistLyricists(StaticValues.artistGid0);
+	}
+
+	@Test
+	public void testArtistComposers() throws IOException{
+		artistController.artistComposers(StaticValues.artistGid0);
+	}
+
+	@Test
+	public void testTooltipInfo() throws IOException{
+		artistController.tooltipInfo(StaticValues.artistGid0);
+	}
+
+	@Test
+	public void testArtistCreditCount() throws IOException{
+		artistController.artistCreditCount(StaticValues.artistGid0);
+	}
+	
+	@Test
+	public void testSimilarArtists() throws Exception{
+		artistController.similarArtist(StaticValues.artistGid0);
+	}
+	
+	@Test
+	public void testDistributionScores0() throws IOException{
+		artistController.distributionScores(StaticValues.artistGid0);
+		artistController.distribution(StaticValues.artistGid0, "edit_amount");
+		artistController.distribution(StaticValues.artistGid0, "recording_amount");
+		artistController.distribution(StaticValues.artistGid0, "release_amount");
+		artistController.distribution(StaticValues.artistGid0, "active_years");
+		artistController.distribution(StaticValues.artistGid0, "contacts_amount");
+		artistController.distribution(StaticValues.artistGid0, "country_amount");
+		artistController.distribution(StaticValues.artistGid0, "listener_amount");
+		artistController.distribution(StaticValues.artistGid0, "play_amount");
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testDistributionScores1() throws IOException{
+		artistController.distribution(StaticValues.artistGid0, "");
+	}
 	
 	@Test
 	public void testArtistAreas() throws IOException{

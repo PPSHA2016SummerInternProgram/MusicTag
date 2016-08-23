@@ -37,6 +37,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 	private MongoTemplate mongoTemplate;
 
 	final private static String SCORES_CACHE_COLLECTION = "scores.cache";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> distributionScores(String gid) {
@@ -109,7 +110,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 				break;
 			case "country_amount":
 				amount = distributionMapper.countryAmount(params);
-				xAxis = (int) ((Math.pow(amount, 0.48) * 5));
+				xAxis = (int) (Math.pow(amount, 0.48) * 5);
 				break;
 			case "listener_amount":
 				amount = getArtistListenersOrPlay(gid, "listeners");
@@ -119,6 +120,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 				amount = getArtistListenersOrPlay(gid, "playcount");
 				xAxis = (int) (Math.log(amount + 1) * 1.5);
 				break;
+			default:
 			}
 			prettyXAxis = Math.min(Math.max(min, xAxis), max);
 			score = (int) ((double) (prettyXAxis - min) / (max - min) * 100);
@@ -244,7 +246,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 		}
 	}
 
-
 	public List<Map<String, Object>> artistAreaCount(String artistGid) {
 		List<Map<String, Object>> mapList = artistRelationMapper.getArtistAreaCount(UUID.fromString(artistGid));
 		
@@ -257,13 +258,14 @@ public class StatisticsServiceImpl implements StatisticsService {
 		List<Map<String,Object>> areaRelease = new ArrayList<Map<String,Object>>();
 		if(area.equals("China")||area.equals("Taiwan")||area.equals("Hong Kong")){
 			for(Map<String,Object> release: mapList){
-				if(release.get("area").equals("China")||release.get("area").equals("Taiwan")||release.get("area").equals("Hong Kong")) {
+				if (release.get("area").equals("China") || release.get("area").equals("Taiwan")
+						|| release.get("area").equals("Hong Kong")) {
 					areaRelease.add(release);
 					length++;
 					if(length>10){
 						break;
 					}
-				}	
+				}
 			}	
 		}else{
 			for(Map<String,Object> release: mapList){
