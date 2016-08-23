@@ -81,7 +81,7 @@
           Data Sources
         </div>
         <div class='span count'>
-          3
+          4
         </div>
       </div>
       <div class='feature-box feature5'>
@@ -89,7 +89,7 @@
           Search
         </div>
         <div class='span info'>
-          filter & ranking
+          filtering & ranking
         </div>
       </div>
       <div class='feature-box feature6'>
@@ -102,10 +102,10 @@
       </div>
       <div class='feature-box feature7'>
         <div class='span title'>
-          Visualization
+          Data Visualization
         </div>
         <div class='span info'>
-          various categories
+          wide variety
         </div>
       </div>
     </div>
