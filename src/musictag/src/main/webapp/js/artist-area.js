@@ -69,7 +69,7 @@ $(document).ready(function(){
 					            if(params.name ==='United States of America'){
 					            	 $.get('/musictag/artist/'+curArtistGid+'/'+'United States', function (content) {
 					            		 
-											callback(ticket, artistHtml(content));
+											callback(ticket, artistHtml(content,params.name,value));
 
 											//data.data.forEach(function(node){
 							            	//	$.get('/musictag/artist/'+'United States'+'/release/'+node.gid+'/image',function(data){
@@ -86,16 +86,14 @@ $(document).ready(function(){
 					            
 					            	$.get('/musictag/artist/'+curArtistGid+'/'+params.name, function (content) {
 									
-					            	callback(ticket, artistHtml(content));
+					            	callback(ticket, artistHtml(content,params.name,value));
 
 					            	
 							     });
 					            }
 					            
 					            
-					            if(value==='NaN'){
-					            	return params.name + ' : ' + '0';
-					            }else{return params.name + ' : ' + value;}
+					            
 					        
 					         //return 'Loading';
 					        }
@@ -157,15 +155,28 @@ $(document).ready(function(){
 	},'json');
 		
 	
-		function artistHtml(content){
+		function artistHtml(content,name,value){
 						
-			var html = '<div>';						
+
+			var html = '<div>';	
+			if(value==='NaN'){
+				html+='<div>'+name+':'+'0'+'</div>';
+	        }else{
+	        	html+='<div>'+name+':'+value+'</div>';
+	        } 
+			html+='</div>';
+			html+='<table style="color:white;">';
+			html+='<tbody>';
+			//html+='<div>'+name+':'+value+'</div>';
 			content.data.forEach(function(node){
+
 				//html += '<div>' + JSON.stringify(node) + '</div>';
-				html += '<div>' + node.area+','+node.name + '</div>';
+				html += '<tr>'+'<td>' + node.area+':'+'</td>'+'<td>'+'&lt;'+node.name + '&gt;'+'</td>'+'</tr>';
 			});
+			html+='</tbody>'
+			html += '</table>'
 			
-			html += '</div>';
+			//html += '</div>';
 			return html;
 		}	
 		

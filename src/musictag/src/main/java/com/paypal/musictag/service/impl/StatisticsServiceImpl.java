@@ -252,18 +252,27 @@ public class StatisticsServiceImpl implements StatisticsService {
 	}
 	
 	public List<Map<String, Object>> artistAreaDetails(String artistGid,String area) {
+		int length = 0;
 		List<Map<String, Object>> mapList = artistRelationMapper.getArtistAreaDetails(UUID.fromString(artistGid));
 		List<Map<String,Object>> areaRelease = new ArrayList<Map<String,Object>>();
 		if(area.equals("China")||area.equals("Taiwan")||area.equals("Hong Kong")){
 			for(Map<String,Object> release: mapList){
 				if(release.get("area").equals("China")||release.get("area").equals("Taiwan")||release.get("area").equals("Hong Kong")) {
 					areaRelease.add(release);
+					length++;
+					if(length>10){
+						break;
+					}
 				}	
 			}	
 		}else{
 			for(Map<String,Object> release: mapList){
 				if(release.get("area").equals(area)) {
 					areaRelease.add(release);
+					length++;
+					if(length>10){
+						break;
+					}
 				}
 			}
 		}
