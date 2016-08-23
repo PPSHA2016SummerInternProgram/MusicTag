@@ -16,3 +16,12 @@
 	min-width: 100px;
 	min-height: 20px;
 }
+
+.lyric-box {
+	font-size: 16px;
+
+}
+
+.mxm-lyrics__content {
+	white-space: pre-line;
+}
