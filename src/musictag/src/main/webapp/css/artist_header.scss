@@ -61,7 +61,7 @@
 
 nav.nav-list {
   position: absolute;
-
+  bottom: 40px;
 }
 
 ul.nav-list-items {
@@ -75,14 +75,15 @@ li.nav-list-item {
   display: inline-block;
   a {
     position: relative;
+    display: inline-block;
     text-decoration: none;
     color: white;
     font-size: 2rem;
-    padding: 0 10px 10px 10px;
+    padding: 0 10px 10px 12px;
     &.active:after, &:hover:after {
       content: '';
       position: absolute;
-      bottom: -7px;
+      bottom: -5px;
       left: 10px;
       right: 10px;
       height: 5px;

@@ -1,6 +1,7 @@
 $(function() {
 	clearBasicInfo();
 	getRecordingFull()
+	window.LyricHelper.fillLyric($('.lyric-box'));
 });
 
 function clearBasicInfo() {
@@ -9,12 +10,12 @@ function clearBasicInfo() {
 	$('[data-recording-name]').text('');
 	$('[data-rate]').html('');
 	$('[data-song-length]').text('');
-	$('[data-song-style').text('');
-	$('[data-song-producer').text('');
+	$('[data-song-style]').text('');
+	$('[data-song-producer]').text('');
 	$('[data-song-composer]').text('');
-	$('[data-song-lyricist').text('');
-	$('[data-song-publisher').text('');
-	$('[data-song-versions').text('');
+	$('[data-song-lyricist]').text('');
+	$('[data-song-publisher]').text('');
+	$('[data-song-versions]').text('');
 }
 
 

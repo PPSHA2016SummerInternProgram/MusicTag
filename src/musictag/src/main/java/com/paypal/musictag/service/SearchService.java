@@ -3,17 +3,11 @@ package com.paypal.musictag.service;
 import java.io.IOException;
 import java.util.Map;
 
+import org.springframework.util.MultiValueMap;
+
 public interface SearchService {
 
-	/**
-	 * Search artist and release and recording. Return the first 20 results for
-	 * each type.
-	 * 
-	 * @param key
-	 * @param perPage
-	 * @return
-	 */
-	Map<String, Object> searchAll(String key, int perPage) throws IOException;
+
 
 	/**
 	 * Search one page for artist.
@@ -23,7 +17,7 @@ public interface SearchService {
 	 * @param perPage
 	 * @return
 	 */
-	Map<String, Object> searchArtist(String key, int currPage, int perPage) throws IOException;
+	Map<String, Object> searchArtist(String key, int currPage, int perPage, MultiValueMap<String, String> params) throws IOException;
 
 	/**
 	 * Search one page for release.

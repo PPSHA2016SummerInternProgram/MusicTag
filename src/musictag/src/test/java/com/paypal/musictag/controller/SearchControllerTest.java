@@ -33,14 +33,8 @@ public class SearchControllerTest {
 	}
 
 	@Test
-	public void testSearchAll() throws IOException {
-		Map<?, ?> map = searchController.searchAll("Taylor Swift", 1);
-		assertEquals(map.get("success"), true);
-	}
-
-	@Test
 	public void testSearchArtist() throws IOException {
-		Map<?, ?> map = searchController.searchArtist("Taylor Swift", 0, 1);
+		Map<?, ?> map = searchController.searchArtist("Taylor Swift", 0, 1, null);
 		assertEquals(map.get("success"), true);
 	}
 

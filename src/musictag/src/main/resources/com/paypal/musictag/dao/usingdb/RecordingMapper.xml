@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.paypal.musictag.dao.usingdb.RecordingMapper">
+	<select id="getWorkMBID"  resultType="String">
+		SELECT concat(work.gid, '') AS work_mbid
+		FROM recording
+		JOIN l_recording_work as lrw on lrw.entity0 = recording.id
+		JOIN work on lrw.entity1 = work.id
+		where recording.gid = #{recordingGid, typeHandler=com.paypal.musictag.util.UuidTypeHandler, javaType=java.util.UUID, jdbcType=VARCHAR}
+	</select>
+</mapper>

@@ -1,10 +1,10 @@
 $(function() {
 	hideBasicInfo();
-	getBasicInfoFromServer();
+	getBasicInfoFromServer(receivedBasicInfo);
 	getProfileFromServer();
 	addReadMoreProfileListener();
 	addShowLinksListener();
-	showSimilarArtists();
+//	showSimilarArtists();
 });
 
 function showSimilarArtists(){
@@ -63,6 +63,10 @@ function showHotCharts() {
 			getUuid(), showRank);
 }
 
+function receivedRadar(){
+
+}
+
 function showRank(rank, total) {
 	if (rank && total) {
 		var key = $('[data-artist-listeners-chart-key]');
@@ -114,17 +118,6 @@ function clearBasicInfo() {
 	$('[data-artist-listeners-chart]').html('');
 }
 
-function getBasicInfoFromServer() {
-	var url = 'basic-info';
-	var data = {};
-	sendAjax(url, data, receivedBasicInfo);
-}
-
-function getImageFromServer() {
-	var url = 'image';
-	sendAjax(url, null, receivedImageUrl);
-}
-
 function getRelLinksFromServer() {
 	var url = 'rel-links';
 	sendAjax(url, null, receivedRelLinks);
@@ -133,14 +126,6 @@ function getRelLinksFromServer() {
 function getProfileFromServer() {
 	var url = 'profile';
 	sendAjax(url, null, receivedProfile);
-}
-
-function receivedImageUrl(data) {
-	if (data.success && !isEmpty(getValue(data, 'data', 'commons-img'))) {
-		var src = getValue(data, 'data', 'commons-img');
-		$('[data-artist-overview-image]').show();
-		$('[data-artist-overview-image]').attr('src', src);
-	}
 }
 
 function receivedRelLinks(data) {
@@ -200,7 +185,8 @@ function receivedBasicInfo(data) {
 	getImageFromServer();
 	getRelLinksFromServer();
 
-	showHotCharts();
+//	showHotCharts();
+	showRadar();
 }
 
 /**

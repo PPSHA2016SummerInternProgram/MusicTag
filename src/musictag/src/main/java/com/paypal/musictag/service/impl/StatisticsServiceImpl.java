@@ -36,8 +36,17 @@ public class StatisticsServiceImpl implements StatisticsService {
 	@Resource(name = "mongoTemplate")
 	private MongoTemplate mongoTemplate;
 
+	final private static String SCORES_CACHE_COLLECTION = "scores.cache";
+	@SuppressWarnings("unchecked")
 	@Override
 	public Map<String, Object> distributionScores(String gid) {
+
+		Query searchQuery = new Query(Criteria.where("gid").is(gid));
+		Map<String, Object> cache = mongoTemplate.findOne(searchQuery, Map.class, SCORES_CACHE_COLLECTION);
+		if(cache != null){
+			return (Map<String, Object>) cache.get("data");
+		}
+		
 		String[] types = { "edit_amount", "recording_amount", "release_amount", "active_years", "contacts_amount",
 				"country_amount", "listener_amount", "play_amount" };
 		Map<String, Object> result = new HashMap<>();
@@ -46,6 +55,12 @@ public class StatisticsServiceImpl implements StatisticsService {
 			item.put("distribution", null);
 			result.put(type, item);
 		}
+		
+		cache = new HashMap<>();
+		cache.put("gid", gid);
+		cache.put("data", result);
+		mongoTemplate.save(cache, SCORES_CACHE_COLLECTION);
+		
 		return result;
 	}
 

@@ -13,6 +13,7 @@
 
 <script src="<%=request.getContextPath()%>/js/release_cover_builder.js"></script>
 <script src="<%=request.getContextPath()%>/js/song.js"></script>
+<script src="<%=request.getContextPath()%>/js/lyric.js"></script>
 </head>
 
 <body>
@@ -55,6 +56,11 @@
 			<div class="song-value" data-song-publisher>DDD</div>
 			<div class="song-key">Later translated versions:</div>
 			<div class="song-value" data-song-versions>version1...</div>
+		</div>
+
+		<div class="lyric-wrap">
+            <h2>Lyrics</h2>
+			<div class="lyric-box"></div>
 		</div>
 
 		<div class="song-releases-info">

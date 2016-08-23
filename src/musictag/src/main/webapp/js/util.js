@@ -100,6 +100,9 @@ window.UrlHelper = {
 	recordingUrl: function(recordingId) {
 		return UrlHelper.contextPath + "/recording/" + recordingId + "/";
 	},
+	lyricUrl: function(recordingGid) {
+		return UrlHelper.contextPath + "/recording/" + recordingGid + "/lyric";
+	},
 	defaultArtistCoverUrl:  'http://p4.music.126.net/UK-Nt38gGjh_krcHwc1UmA==/6008831046001841.jpg'
 };
 
