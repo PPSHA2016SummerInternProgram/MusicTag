@@ -16,5 +16,5 @@ public interface HotStatisticsDao {
 
 	Map<String, Object> recordingPlaycount(String gid);
 	
-	Map<String, Object> releaseInfo(String gid);
+	Map<String, Object> getReleaseInfo(String gid);
 }

@@ -21,6 +21,7 @@
 
     <div class="container" >
         <div id="artist-area" style="width: 100%; height: 400px;"></div>
+        <div id="artist-area-data"></div>
     </div>
 </body>
 </html>

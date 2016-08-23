@@ -30,6 +30,9 @@ public class ArtistController {
 	private ArtistService artistServiceImpl;
 	@Autowired
 	private StatisticsService statisticsServiceImpl;
+	
+	//@Autowired
+	//private CoverArtArchiveService coverArtArchiveServiceImpl;
 
 	@RequestMapping(value = "/{gid}/distribution/scores/", method = RequestMethod.GET)
 	@ResponseBody
@@ -154,18 +157,30 @@ public class ArtistController {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistCreditCount(gid));
 	}
 
-	@RequestMapping(value = "/{gid}/artist-areas", method = RequestMethod.GET)
+	@RequestMapping(value = "/{gid}/artist-areas-count", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistAreas(@PathVariable("gid") String gid) throws IOException {
 		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistAreaCount(gid));
 	}
 	
-	@RequestMapping(value = "/{gid}/artist-areas-details", method = RequestMethod.GET)
+	//@RequestMapping(value = "/{area}/release/{gid}/image", method = RequestMethod.GET)
+	//@ResponseBody
+	//public Map<String, Object> artistAreaReleaseImage(@PathVariable("gid") String gid) throws IOException {
+	//	return MusicTagUtil.wrapResult(coverArtArchiveServiceImpl.releaseCover(gid));
+	//}
+	
+	@RequestMapping(value = "/{gid}/{area}", method = RequestMethod.GET)
 	@ResponseBody
-	public Map<String, Object> artistAreasDetails(@PathVariable("gid") String gid) throws IOException {
-		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistAreaDetails(gid));
+	public Map<String, Object> artistAreasDetails(@PathVariable("gid") String gid,@PathVariable("area") String area) throws IOException {
+		return MusicTagUtil.wrapResult(statisticsServiceImpl.artistAreaDetails(gid,area));
 	}
 
+	//@RequestMapping(value = "/{gid}/artist-release-info", method = RequestMethod.GET)
+	//@ResponseBody
+	//public Map<String, Object> artistReleaseInfo(@PathVariable("gid") String gid) throws IOException {
+	//	return MusicTagUtil.wrapResult(statisticsServiceImpl.releaseInfo(gid));
+	//}
+	
 	@RequestMapping(value = "/{gid}/artist-edit", method = RequestMethod.GET)
 	@ResponseBody
 	public Map<String, Object> artistEdit(@PathVariable("gid") String gid) throws IOException {

@@ -35,12 +35,8 @@ public class HotStatisticsDaoImpl implements HotStatisticsDao {
 
 	
 	@Override
-	public Map<String, Object> releaseInfo(String gid) {
-		return getReleaseInfo("release", "aadd2a0e-5702-412c-a509-76b89e4411f6");
-	}
-
-	private Map<String, Object> getReleaseInfo(String type, String gid) {
-		Query searchQuery = new Query(Criteria.where("gid").is(gid));
+	public Map<String, Object> getReleaseInfo(String gid) {
+		Query searchQuery = new Query(Criteria.where("gid").is("0600d3b9-f0f4-47c3-b957-34d6dba1e9bc"));
 		LastfmAlbumOrTrack album = mongoTemplate.findOne(searchQuery, LastfmAlbumOrTrack.class, "lastfm.album");
 		int listeners=album.getListeners();
 		int playcount=album.getPlaycount();

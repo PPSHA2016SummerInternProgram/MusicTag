@@ -32,7 +32,7 @@ public interface StatisticsService {
 	//List<Map<String, Object>> artistArea(String artistGid);
 	List<Map<String, Object>> artistAreaCount(String artistGid);
 	
-	List<Map<String, Object>> artistAreaDetails(String artistGid);
+	List<Map<String, Object>> artistAreaDetails(String artistGid, String area);
 	
 	List<Map<String, Object>> artistEdit(String artistGid);
 

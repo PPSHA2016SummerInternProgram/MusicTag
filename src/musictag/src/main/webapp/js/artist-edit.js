@@ -35,7 +35,7 @@ $(document).ready(function(){
 				option = {
 						title : {
 					        text: 'Edit Distribution',
-					        subtext: 'Sourse: MusicBrainz.org',
+					        subtext: 'Source: MusicBrainz.org',
 					        //sublink : 'http://esa.un.org/wpp/Excel-Data/population.htm',
 					        left: 'center',
 					        top: 'top'
@@ -87,7 +87,10 @@ $(document).ready(function(){
 					};
 					
 				artistEditChart.setOption(option);
-				
+				if(data.data.nodes.length === 0 ){
+					artistRelationChart.hideLoading();
+					$('#artist-edit').html('<h2 style="text-align: center">Oops! No Edit found. </h2>');
+				}
 				
 			},'json');
 	
