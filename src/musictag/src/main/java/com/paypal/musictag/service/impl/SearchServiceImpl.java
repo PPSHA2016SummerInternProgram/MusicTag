@@ -5,6 +5,7 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
@@ -61,16 +62,17 @@ public class SearchServiceImpl implements SearchService {
 		url.append("rows=").append(perPage).append("&");
 		
 		if(allParams != null){
-			for(String param : allParams.keySet()){
-				List<String> values = allParams.get(param);
+			for(Entry<String, List<String>> entry: allParams.entrySet()){
+				List<String> values = entry.getValue();
 				if(values != null){
-					for(String value : values){
-						url.append(param).append("=").append(value).append("&");
+					for(String value: values){
+						url.append(entry.getKey()).append("=").append(value).append("&");
 					}
 				}
 			}
 		}
-		System.out.println(url.toString());
+		System.out.println("==================");
+		System.out.println(url);
 		return MusicTagUtil.jsontoMap(
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
 
