@@ -88,13 +88,21 @@ $(document).ready(function() {
             if(json.success === true) {
                 var releases = json.data.releases;
                 releases.forEach(function(r, index){
+                    var region;
+                    var re = r['release-events'][0];
+                    if( re.area && re.area.name ) {
+                        region = re.area.name;
+                    } else {
+                        region = r.country;
+                    }
                     var builder = window.TagBuilder;
                     $(builder('tr', null,
                         builder('td', null, index + 1) +
                         builder('td', null, builder('a', {href: UrlHelper.releaseUrl(r.id)}, r.title)) +
                         builder('td', null, r.status) +
-                        builder('td', null, r.country) +
-                        builder('td', null, r.date)
+                        builder('td', null, region) +
+                        builder('td', null, r.date) +
+                        builder('td', null, r.disambiguation)
                     )).appendTo(container);
                 });
             }

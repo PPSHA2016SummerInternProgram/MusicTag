@@ -110,13 +110,16 @@ public class Distribution {
 	private String helper(String name, String value) {
 		return "\"" + name + "\":\"" + value + "\"";
 	}
+	private String helper(String name, int value){
+		return "\"" + name + "\":" + value;
+	}
 
-	private void print(List<int[]> list, String colName, String description) {
+	private void print(List<int[]> list, String colName, String description, int min, int max) {
 
 		String id = colName + " (" + description + ")";
 		System.out.println(mongoQuery + "remove({" + helper("id", id) + "})");
 		System.out.print(mongoQuery + "insertOne({" + helper("id", id) + "," + helper("type", colName) + ","
-				+ helper("description", description) + ", \"data\":[");
+				+ helper("description", description) + "," + helper("min", min) + "," + helper("max", max) + ", \"data\":[");
 		for (int i = 0; i < list.size(); i++) {
 			System.out.print("[" + list.get(i)[0] + "," + list.get(i)[1] + "]");
 			if (i < list.size() - 1) {
@@ -156,7 +159,7 @@ public class Distribution {
 					amountList = operate(amountList, operation);
 					Map<Integer, Integer> map = count(amountList);
 					List<int[]> list = sort(map);
-					print(list, colName, description);
+					//print(list, colName, description);
 				}
 			}
 		}
@@ -236,7 +239,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 5, 25);
 	}
 	public static void printRecordingAmount(Distribution d) throws Exception {
                 String colName = "recording_amount";
@@ -248,7 +251,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 20);
 	}
 	public static void printReleaseAmount(Distribution d) throws Exception {
                 String colName = "release_amount";
@@ -260,7 +263,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 12);
 	}
 	public static void printActiveYears(Distribution d) throws Exception {
                 String colName = "active_years";
@@ -271,7 +274,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 17);
 	}
 	public static void printContactsAmount(Distribution d) throws Exception {
                 String colName = "contacts_amount";
@@ -282,7 +285,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 15);
 	}
 	public static void printCountryAmount(Distribution d) throws Exception {
                 String colName = "country_amount";
@@ -294,7 +297,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 20);
 	}
 	public static void printPlayAmount(Distribution d) throws Exception {
                 String colName = "play_amount";
@@ -304,7 +307,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 22);
 	}
 	public static void printListenerAmount(Distribution d) throws Exception {
                 String colName = "listener_amount";
@@ -314,7 +317,7 @@ public class Distribution {
                 Map<Integer, Integer> map = d.count(amountList);
                 List<int[]> list = d.sort(map);
                 list = d.addZero(list);
-		d.print(list, colName, operation.getDescription());
+		d.print(list, colName, operation.getDescription(), 0, 27);
 	}
 
 	public static void printMongo()throws Exception{
@@ -333,7 +336,7 @@ public class Distribution {
 			Map<Integer, Integer> map = d.count(amountList);
 			List<int[]> list = d.sort(map);
 			list = d.addZero(list);
-			d.print(list, colName, operation.getDescription() + " (" + (rate) + ")");
+			//d.print(list, colName, operation.getDescription() + " (" + (rate) + ")");
 		}
 
 	}

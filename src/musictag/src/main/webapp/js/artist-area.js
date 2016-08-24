@@ -150,7 +150,7 @@ $(document).ready(function(){
 	
 		function artistHtml(content,name,value){
 						
-
+			var times=0;
 			var html = '<div>';	
 			if(value==='NaN'){
 				html+='<div>'+name+':'+'0'+'</div>';
@@ -158,20 +158,36 @@ $(document).ready(function(){
 	        	html+='<div>'+name+':'+value+'</div>';
 	        } 
 			html+='</div>';
-			html+='<table style="color:white;">';
-			html+='<tbody>';
+			//html+='<table style="color:white;">';
+			//html+='<tbody>';
+
+			//content.data.forEach(function(node){
+
+				//html += '<div>' + JSON.stringify(node) + '</div>';
+				//html += '<tr>'+'<td>' + node.area+':'+'</td>'+'<td>'+'&lt;'+node.name + '&gt;'+'</td>'+'</tr>';
+			//});
+			//html+='</tbody>'
+			//html += '</table>'
+			//html += '</div>';
+				
+			html += '<div style="width: 500px; word-wrap: break-word; white-space:normal;color:white;">';	
+			html += '<table class="table"><thead><tr><th> # </th><th> Release Title </th><th>Country</th><th>Date</th></tr></thead><tbody>';
 
 			content.data.forEach(function(node){
 
 				//html += '<div>' + JSON.stringify(node) + '</div>';
-				html += '<tr>'+'<td>' + node.area+':'+'</td>'+'<td>'+'&lt;'+node.name + '&gt;'+'</td>'+'</tr>';
+				//html += '<tr>'+'<td>' + node.area+':'+'</td>'+'<td>'+'&lt;'+node.name + '&gt;'+'</td>'+'</tr>';
+				times++;
+				html += '<tr><td>' + times + '</td><td><a href="/musictag/release/' + node.gid + '/">' + node.name + '</a></td>' +
+				'<td>' + node.area + '</td>' +
+				'<td>' + node.year + '</td>';
 			});
-			html+='</tbody>'
-			html += '</table>'
-			
-
+			html += '</tbody></table>';
+			html += '</div>';
 			return html;
 		}	
+		
+		
 		
 		
 		
