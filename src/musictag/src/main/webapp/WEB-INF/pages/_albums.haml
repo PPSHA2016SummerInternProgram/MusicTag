@@ -39,7 +39,7 @@
     #pagination.text-center
 
   #releases-modal.modal.fade{:role => "dialog", :tabindex => "-1"}
-    .modal-dialog
+    .modal-dialog.modal-lg
       .modal-content
         .modal-header
           %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
@@ -51,8 +51,9 @@
               %th #
               %th Title
               %th Status
-              %th Country
+              %th Country & Region
               %th Date
+              %th Disambiguation
             %tbody
 
   #release-group-modal.modal.fade{:role => "dialog", :tabindex => "-1"}
