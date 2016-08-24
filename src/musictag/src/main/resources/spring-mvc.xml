@@ -50,7 +50,7 @@
 	</bean>
 	<mybatis:scan base-package="com.paypal.musictag.dao.usingdb" />
 	
-	<mongo:mongo host="10.24.53.72" port="27017"/> 
+	<mongo:mongo host="${mongo.url}" port="${mongo.port}"/> 
 	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongo" ref="mongo"/>
 		<constructor-arg name="databaseName" value="music-tag" />
