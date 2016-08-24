@@ -265,7 +265,7 @@
 	</select>
 	
 	<select id="getArtistAreaDetails" resultType="map">	
-	select release.name as name,area.name as area,release.gid as gid from release
+	select release.name as name,area.name as area,release.gid as gid,rc.date_year as year from release
 	JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
 	JOIN artist on acn.artist = artist.id
 	JOIN release_country rc ON release.id = rc.release
