@@ -11,8 +11,6 @@ function drawDistribution(elementId, type, title) {
 }
 
 function receivedDistribution(response, args) {
-	console.log(response);
-	console.log(args);
 	var distribution = getValue(response, 'data', 'distribution');
 	var rank = getValue(response, 'data', 'rank');
 	var mark = rank['xAxis'];
@@ -118,6 +116,11 @@ function drawRadar(response, args) {
 		showInLegend : false,
 		name : basicInfo ? getValue(basicInfo, 'name') : ''
 	} ];
+	config['pane']['size'] = '60%';
+
+	$('#' + elementId).css('width', 150);
+	$('#' + elementId).css('height', 150);
+	$('#' + elementId).css('margin-top', -60);
 
 	$('#' + elementId).highcharts(config);
 	if (args['callback']) {
