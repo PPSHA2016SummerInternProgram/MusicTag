@@ -111,7 +111,6 @@ $(document).ready(
 										layout : 'none', // circular
 										data : data.data.nodes,
 										links : data.data.links,
-										roam : true,
 										top: 80,
 										bottom: '10%',
 										left: '50%',
@@ -187,7 +186,6 @@ $(document).ready(
 										layout : 'none', // circular
 										data : lyricistData.data.nodes,
 										links : lyricistData.data.links,
-										roam : true,
 										focusNodeAdjacency: true,
 										right: '50%',
 										left: '10%',
@@ -256,7 +254,6 @@ $(document).ready(
 												layout : 'none', // circular
 												data : composerData.data.nodes,
 												links : composerData.data.links,
-												roam : true,
 												left: "10%",
 												top: 80,
 												right: '50%',
