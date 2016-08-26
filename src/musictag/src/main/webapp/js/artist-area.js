@@ -148,20 +148,11 @@ $(document).ready(function(){
 	        	html+='<div>'+name+':'+value+'</div>';
 	        } 
 			html+='</div>';
-			//html+='<table style="color:white;">';
-			//html+='<tbody>';
-
-			//content.data.forEach(function(node){
-
-				//html += '<div>' + JSON.stringify(node) + '</div>';
-				//html += '<tr>'+'<td>' + node.area+':'+'</td>'+'<td>'+'&lt;'+node.name + '&gt;'+'</td>'+'</tr>';
-			//});
-			//html+='</tbody>'
-			//html += '</table>'
-			//html += '</div>';
+			
+			if(content.data.length>0){
 				
 			html += '<div style="width: 500px; word-wrap: break-word; white-space:normal;">';	
-			html += '<table class="table"><thead><tr><th> # </th><th> Release Title </th><th>Country</th><th>Date</th></tr></thead><tbody>';
+			html += '<table class="table"><thead><tr><th style="color: white;"> # </th><th style="color: white;"> Release Title </th><th style="color: white;">Country</th><th style="color: white;">Date</th></tr></thead><tbody>';
 
 			content.data.forEach(function(node){
 
@@ -174,6 +165,7 @@ $(document).ready(function(){
 			});
 			html += '</tbody></table>';
 			html += '</div>';
+			}
 			return html;
 		}	
 		

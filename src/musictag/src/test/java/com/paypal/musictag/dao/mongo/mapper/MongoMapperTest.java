@@ -96,6 +96,7 @@ public class MongoMapperTest {
 		item.setType(null);
 		item.setType("type");
 		item.getDescription();
+		item.setDescription("description");
 		item.getData();
 		item.setData(null);
 		List<Object> data = new ArrayList<Object>();	

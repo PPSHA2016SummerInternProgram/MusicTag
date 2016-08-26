@@ -262,7 +262,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 						|| release.get("area").equals("Hong Kong")) {
 					areaRelease.add(release);
 					length++;
-					if(length>10){
+					if(length>4){
 						break;
 					}
 				}
@@ -272,7 +272,7 @@ public class StatisticsServiceImpl implements StatisticsService {
 				if(release.get("area").equals(area)) {
 					areaRelease.add(release);
 					length++;
-					if(length>10){
+					if(length>4){
 						break;
 					}
 				}
