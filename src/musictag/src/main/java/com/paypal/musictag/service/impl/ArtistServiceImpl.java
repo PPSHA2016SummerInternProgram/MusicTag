@@ -52,7 +52,7 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public Map<String, Object> image(String gid) throws IOException {
+	public Map<String, Object> image(String gid) {
 		List<Map<String, Object>> images = imageDaoImpl.artistImagesFromLastfm(gid);
 
 		Map<String, Object> result = new HashMap<>();
@@ -71,13 +71,9 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public Map<String, Object> tooltipInfo(String gid) throws IOException {
+	public Map<String, Object> tooltipInfo(String gid) {
 		Map<String, Object> result = new HashMap<>();
-		try {
-			result.putAll(image(gid));
-		} catch (Exception e) {
-			logger.error(null, e);
-		}
+		result.putAll(image(gid));
 		try {
 			result.putAll(basicInfo(gid));
 		} catch (Exception e) {

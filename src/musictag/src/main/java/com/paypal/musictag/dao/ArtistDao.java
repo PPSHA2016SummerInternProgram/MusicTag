@@ -28,9 +28,8 @@ public interface ArtistDao {
      * 
      * @param artistGid
      * @return
-     * @throws IOException
      */
-    Map<String, Object> image(String artistGid) throws IOException;
+    Map<String, Object> image(String artistGid);
 
     /**
      * Find basic information of an artist by his/her global ID.

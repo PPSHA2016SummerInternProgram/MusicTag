@@ -45,8 +45,7 @@ public class ArtistDaoWSImpl implements ArtistDao {
 	}
 
 	@Override
-	public Map<String, Object> image(String artistGid)
-			throws NetConnectionException, NetContentNotFoundException, NetBadRequestException {
+	public Map<String, Object> image(String artistGid) {
 
 		Map<String, Object> info = imageDaoImpl.imageInfoFromCoverart(artistGid);
 		if (info != null) {
