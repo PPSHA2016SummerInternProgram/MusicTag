@@ -85,6 +85,8 @@ function radarConfig() {
 	};
 }
 
+var hideBigRadarInterval = null;
+
 function drawRadar(response, args) {
 	var elementId = args['elementId'];
 	var config = radarConfig();
@@ -136,8 +138,7 @@ function drawRadar(response, args) {
             cursor: 'pointer',  
             point :{
 	            events: {  
-	                click: function(event) {  
-	                    console.log(this.category)
+	                click: function() {  
 	                    switch(this.category){
 	                    case 'Active Span':
 	                    	location.href = 'active-span'
@@ -154,6 +155,7 @@ function drawRadar(response, args) {
 	                    case 'Productivity':
 	                    	location.href = 'productivity'
 	                    	break;
+	                    default:
 	                    }
 	                }
 	            }
@@ -191,8 +193,6 @@ function drawRadar(response, args) {
 		hideBigRadarInterval = setInterval(hideBigRadar, hideTime);
 	});
 }
-
-var hideBigRadarInterval = null;
 
 function hideBigRadar(){
 	$('#big-radar-chart-popover').fadeOut(100);
