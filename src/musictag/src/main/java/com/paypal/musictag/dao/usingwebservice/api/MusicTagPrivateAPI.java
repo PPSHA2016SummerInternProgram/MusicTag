@@ -38,6 +38,17 @@ public final class MusicTagPrivateAPI {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String requestUrl = new StringBuilder(URL).append("artist/").append(artistGid).append("/")
 				.append("commons-image").toString();
+		Document doc = requestDocument(requestUrl);
+		Elements imgs = doc.select(".picture > img");
+		if (imgs == null || imgs.first() == null) {
+			throw new NetContentNotFoundException("url: " + requestUrl);
+		}
+		map.put("commons-img", imgs.first().attr("src"));
+		return map;
+	}
+
+	private static Document requestDocument(String requestUrl)
+			throws NetConnectionException, NetBadRequestException, NetContentNotFoundException {
 		Document doc = null;
 		try {
 			doc = Jsoup.connect(requestUrl).get();
@@ -52,12 +63,7 @@ public final class MusicTagPrivateAPI {
 		} catch (IOException e) {
 			throw new NetContentNotFoundException("url: " + requestUrl, e);
 		}
-		Elements imgs = doc.select(".picture > img");
-		if (imgs == null || imgs.first() == null) {
-			throw new NetContentNotFoundException("url: " + requestUrl);
-		}
-		map.put("commons-img", imgs.first().attr("src"));
-		return map;
+		return doc;
 	}
 
 	/**
@@ -73,21 +79,7 @@ public final class MusicTagPrivateAPI {
 		Map<String, Object> map = new HashMap<String, Object>();
 		String requestUrl = new StringBuilder(URL).append("artist/").append(artistGid).append("/")
 				.append("wikipedia-extract").toString();
-		Document doc;
-		Jsoup.connect(requestUrl);
-		try {
-			doc = Jsoup.connect(requestUrl).get();
-		} catch (SocketTimeoutException | MalformedURLException e) {
-			throw new NetConnectionException("url: " + requestUrl, e);
-		} catch (HttpStatusException e) {
-			if(e.getStatusCode() == HttpStatus.BAD_REQUEST.value()){
-				throw new NetBadRequestException("url: " + requestUrl, e);
-			}else{
-				throw new NetContentNotFoundException("url: " + requestUrl, e);
-			}
-		} catch (IOException e) {
-			throw new NetContentNotFoundException("url: " + requestUrl, e);
-		}
+		Document doc = requestDocument(requestUrl);
 		Elements wikis = doc.select("div.wikipedia-extract-body.wikipedia-extract-collapse");
 		if (wikis == null || wikis.first() == null) {
 			throw new NetContentNotFoundException("url: " + requestUrl);
