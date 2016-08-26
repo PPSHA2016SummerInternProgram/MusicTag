@@ -39,7 +39,7 @@ public class SearchController {
 	public Map<String, Object> searchArtist(@RequestParam("key") String key, @RequestParam("currPage") int currPage,
 			@RequestParam("perPage") int perPage, @RequestParam MultiValueMap<String, String> allRequestParams) throws IOException {
 		System.out.println(allRequestParams);
-		if (key == null || key == "") {
+		if (key == null || key.equals("")) {
 			key = "*:*";
 		}
 		return MusicTagUtil.wrapResult(searchServiceImpl.searchArtist(key, currPage, perPage, allRequestParams));
