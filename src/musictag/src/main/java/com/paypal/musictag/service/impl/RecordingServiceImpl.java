@@ -43,7 +43,8 @@ public class RecordingServiceImpl implements RecordingService {
         return recordingDaoWSImpl.full(recordingId);
     }
 
-    public Map<String, Object> lyric(String recordingGId) throws IOException{
+    @SuppressWarnings("unchecked")
+	public Map<String, Object> lyric(String recordingGId) throws IOException{
         String work_mbid = recordingMapper.getWorkMBID(UUID.fromString(recordingGId));
 
         Query searchQuery = new Query(Criteria.where("work_mbid").is(work_mbid));

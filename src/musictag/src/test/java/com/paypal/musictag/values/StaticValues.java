@@ -9,6 +9,7 @@ final public class StaticValues {
 	public static final String artistGid1 = "20244d07-534f-4eff-b4d4-930878889970"; // Taylor
 	public static final String artistGidNoWikiExtract = "7c7463a9-01d7-4472-b766-872e8f8da52b";
 	public static final String artistGidNoCommonImg = "7c7463a9-01d7-4472-b766-872e8f8da52b";
+	public static final String artistGidNoReleaseGroup = "b2d821b3-fc33-4503-8446-d31a0c7f109f";
 	
 	public static final String releaseGid0 = "76df3287-6cda-33eb-8e9a-044b5e15ffdd";
 	public static final String releaseGid1 = "93772f35-6f32-4c08-99b1-992c78ecf50d";
@@ -20,4 +21,9 @@ final public class StaticValues {
 	
 	public static final String recordingGid0 = "0ccffde0-5a08-41d2-b162-b1300af0c246";
 	public static final String recordingGid1 = "2dd409e4-6a40-4fc7-8344-eacbb54c14a3";
+	
+	public static final String randomUUID(){
+		String randomReleaseGid = String.valueOf((int)(Math.random() * 10000000));
+		return randomReleaseGid;
+	}
 }

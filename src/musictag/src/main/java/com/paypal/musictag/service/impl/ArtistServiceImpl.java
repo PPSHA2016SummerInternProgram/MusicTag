@@ -52,7 +52,7 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public Map<String, Object> image(String gid) throws IOException {
+	public Map<String, Object> image(String gid) {
 		List<Map<String, Object>> images = imageDaoImpl.artistImagesFromLastfm(gid);
 
 		Map<String, Object> result = new HashMap<>();
@@ -71,13 +71,9 @@ public class ArtistServiceImpl implements ArtistService {
 	}
 
 	@Override
-	public Map<String, Object> tooltipInfo(String gid) throws IOException {
+	public Map<String, Object> tooltipInfo(String gid) {
 		Map<String, Object> result = new HashMap<>();
-		try {
-			result.putAll(image(gid));
-		} catch (Exception e) {
-			logger.error(null, e);
-		}
+		result.putAll(image(gid));
 		try {
 			result.putAll(basicInfo(gid));
 		} catch (Exception e) {
@@ -193,16 +189,20 @@ public class ArtistServiceImpl implements ArtistService {
 			throw new IllegalArgumentException("CooperationType should not be null");
 		}
 		Map<String, Object> result = new HashMap<>();
-		if (type == CooperationType.CREDIT) {
+		switch(type){
+		case  CREDIT:
 			result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
 			result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
-		}else if (type == CooperationType.LYRICIST) {
+			break;
+		case  LYRICIST:
 			result.put("releases", artistRelationMapper.getReleaseLyricCooperationsOfArtist(sid, tid));
 			result.put("recordings", artistRelationMapper.getRecordingLyricCooperationsOfArtists(sid, tid));
-		}else if (type == CooperationType.COMPOSER) {
+			break;
+		case  COMPOSER:
 			result.put("releases", artistRelationMapper.getReleaseComposerCooperationsOfArtist(sid, tid));
 			result.put("recordings", artistRelationMapper.getRecordingComposerCooperationsOfArtists(sid, tid));
-		}else {
+			break;
+		default:
 			throw new AssertionError("should not reach here");
 		}
 		

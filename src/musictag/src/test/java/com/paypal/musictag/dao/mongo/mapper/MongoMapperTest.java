@@ -1,5 +1,8 @@
 package com.paypal.musictag.dao.mongo.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -80,5 +83,24 @@ public class MongoMapperTest {
 		item.setUrl(null);
 		item.getUrl();
 
+	}
+	
+	
+	@Test
+	public void testDistribution(){
+		Distribution item = new Distribution();
+		item.getId();
+		item.setId(null);
+		item.setId("id");
+		item.getType();
+		item.setType(null);
+		item.setType("type");
+		item.getDescription();
+		item.getData();
+		item.setData(null);
+		List<Object> data = new ArrayList<Object>();	
+		item.setData(data);
+		item.setMin(0);
+		item.setMax(10);	
 	}
 }
