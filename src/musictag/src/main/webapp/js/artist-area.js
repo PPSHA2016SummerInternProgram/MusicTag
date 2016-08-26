@@ -4,9 +4,6 @@ $(document).ready(function(){
 	
 	
 	var artistAreaChart = echarts.init(document.getElementById('artist-area'));
-	//alert("*******");
-	
-
 	
 	
 	var oldResize = window.onresize;
@@ -39,14 +36,7 @@ $(document).ready(function(){
 						data.data.push({name:"China",value:count_china});
 					}
 
-					
-					
-					
-					///$.get('/musictag/artist/China/release/032eee52-4ce5-49f6-a60e-44b00c778403/image',function(data1){
-						
-					//	list_image.push(data1.data.images[0].image);
-						
-            		//},'json');
+
 					
 					option = {
 					    title : {
@@ -107,12 +97,12 @@ $(document).ready(function(){
 					        show:true,
 					    	type: 'continuous',
 					        min: 0,
-					        max: 50,
+					        max: 20,
 					        text:['High','Low'],
 					        realtime: false,
 					        calculable : true,
 					        inRange: {
-				                color: ['lightskyblue','yellow', 'orangered','red']
+				                color: ['#EEEEEE','pink','red']
 				            }
 					    },
 					    series : [
@@ -170,7 +160,7 @@ $(document).ready(function(){
 			//html += '</table>'
 			//html += '</div>';
 				
-			html += '<div style="width: 500px; word-wrap: break-word; white-space:normal;color:white;">';	
+			html += '<div style="width: 500px; word-wrap: break-word; white-space:normal;">';	
 			html += '<table class="table"><thead><tr><th> # </th><th> Release Title </th><th>Country</th><th>Date</th></tr></thead><tbody>';
 
 			content.data.forEach(function(node){
@@ -178,9 +168,9 @@ $(document).ready(function(){
 				//html += '<div>' + JSON.stringify(node) + '</div>';
 				//html += '<tr>'+'<td>' + node.area+':'+'</td>'+'<td>'+'&lt;'+node.name + '&gt;'+'</td>'+'</tr>';
 				times++;
-				html += '<tr><td>' + times + '</td><td><a href="/musictag/release/' + node.gid + '/">' + node.name + '</a></td>' +
-				'<td>' + node.area + '</td>' +
-				'<td>' + node.year + '</td>';
+				html += '<tr><td style="color: white;font-size: small;">' + times + '</td><td style="color: white;font-size: small;"><a style="color:white;text-decoration:underline;" href="/musictag/release/' + node.gid + '/">' + node.name + '</a></td>' +
+				'<td style="color: white;font-size: small;">' + node.area + '</td>' +
+				'<td style="color: white;font-size: small;">' + node.year + '</td>';
 			});
 			html += '</tbody></table>';
 			html += '</div>';
