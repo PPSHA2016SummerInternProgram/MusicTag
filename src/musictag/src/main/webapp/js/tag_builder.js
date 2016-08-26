@@ -16,7 +16,7 @@
         var buildPair = function(key, val) { return key + '="' + val + '"';};
         var buildAttr = function(key, map) {
             var attrs = map[key];
-            if( attrs !== undefined) {
+            if( attrs !== undefined && attrs !== null) {
                 var val = '';
                 if (attrs instanceof Array) {
                     val += attrs.join(delimiter);

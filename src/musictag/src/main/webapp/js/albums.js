@@ -2,8 +2,7 @@ $(document).ready(function() {
     // initialize albums display
     var albumsWrapper = $('#albums-wrapper');
     var albums = $('#albums');
-    window.Paginator(albums, 'release-groups', function(groups){
-
+    var albumsUpdate = function (groups) {
         var builder = window.TagBuilder;
         var tbody = $('#album-table').find('tbody');
         var frames = $('#album-frames').find('.panel-body');
@@ -67,14 +66,16 @@ $(document).ready(function() {
         });
 
         return albumCnt;
-    });
+    };
+
+    window.Paginator(albums, 'release-groups', albumsUpdate);
 
     // bind album order select event
     $('[data-albums-order]').find('select').change(function(){
         var op = $(this).find('option:selected');
         var albums = $('#albums');
         albums.data('order-by', op.data('order-by')).data('direction', op.data('direction'));
-        window.Paginator.turnTo(albums, 0);
+        window.Paginator.turnTo(albums, 0, 'release-groups', albumsUpdate);
     });
 
     // bind event to fetch multiple releases of one release group

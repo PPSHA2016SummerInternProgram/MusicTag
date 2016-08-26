@@ -1,6 +1,19 @@
 $(document).ready(function() {
+    $('#artist-filter').on('click', '[data-selectable]', function (e) {
+        var t = $(this);
+        if(t.hasClass('selected')) {
+            t.removeClass('selected');
+        } else {
+            t.addClass('selected');
+        }
+    });
 
-    var queryKey = decodeURIComponent( getUrlVars()['key'].replace(/\+/g, '%20'));
+    $('#artist-sorter').on('click', '.up, .down', function (e) {
+        $(e.delegateTarget).find('.up, .down').not(this).removeClass('selected');
+        $(this).toggleClass('selected');
+    });
+
+    var queryKey = decodeURIComponent( UrlHelper.getUrlVars()['key'].replace(/\+/g, '%20'));
 
     $("#search-input").val(queryKey);
     $("#navbar-search-input").val(queryKey);
@@ -13,7 +26,23 @@ $(document).ready(function() {
 
     var artistHandler = function(e) {
         var numFound = 0;
-        Paginator($("#artist-frames"), '/musictag/search/artist?key=' + queryKey, function (json) {
+        var url = '/musictag/search/artist?key=' + queryKey;
+
+        var generateUrl = function() {
+            var filter = $('#artist-filter').find('.filter').map(function(){
+                return Filter.serializeFilterGroup($(this));
+            }).get().join('&');
+
+            var partition = Filter.serializePartition($('#artist-partition'));
+            var sorter = Filter.serializeSorter($('#artist-sorter'));
+            if(filter) url += '&' + filter;
+            return url + (partition ? '&' + partition : '' ) + (sorter ? '&' + sorter : '');
+        };
+
+        var artistUpdate = function (json) {
+            var filter_html = Filter.buildFilter(json.data.facet_counts.facet_fields,
+                json.data.facet_counts.facet_ranges);
+            $('#artist-filter').html(filter_html);
 
             var frames = $("#artist-frames");
             var res = json.data.response;
@@ -40,15 +69,22 @@ $(document).ready(function() {
                     };
 
                     if(json['data']['commons-img']){
-                    	downloadingImage.src = json.data['commons-img'];
-                    	frame.find('img').attr('src', this.src);
+                        downloadingImage.src = json.data['commons-img'];
+                        frame.find('img').attr('src', this.src);
                     }
                 });
                 frame.appendTo(frames);
             });
 
             return res.numFound;
+        };
+        var enumerable = $("#artist-frames");
+        Paginator(enumerable, generateUrl, artistUpdate);
+
+        $('#apply-filter').on('click', function () {
+            Paginator.turnTo(enumerable, 0, generateUrl, artistUpdate);
         });
+
         $("#artists-tab").off('show.bs.tab', artistHandler).on('show.bs.tab', function(){
             summaryUpdate(numFound);
         });
@@ -85,8 +121,8 @@ $(document).ready(function() {
                     };
 
                     if(json['data']['images']){
-                    	downloadingImage.src = json.data.images[0].thumbnails.large;
-                    	frame.find('img').attr('src', this.src);
+                        downloadingImage.src = json.data.images[0].thumbnails.large;
+                        frame.find('img').attr('src', this.src);
                     }
                 });
                 frame.appendTo(frames);

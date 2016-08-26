@@ -1,0 +1,76 @@
+#artist-filter, #artist-partition {
+  margin-bottom: 1rem; }
+
+.filter, .partition, .sorter {
+  margin: 1rem 0; }
+  .filter .field, .partition .field, .sorter .field {
+    color: #777777;
+    display: inline-block; }
+
+.filter .field, .partition .field {
+  padding-top: 0.5rem;
+  margin-top: 0.5rem; }
+
+.filter .item {
+  position: relative;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem;
+  text-decoration: none;
+  cursor: pointer; }
+  .filter .item:hover, .filter .item.selected {
+    background-color: rgba(51, 122, 183, 0.9);
+    color: white;
+    border-radius: 4px; }
+  .filter .item.selected {
+    background-color: rgba(92, 184, 92, 0.9); }
+    .filter .item.selected:before {
+      content: "\e013";
+      color: white;
+      position: absolute;
+      font-size: 8px;
+      left: 2px;
+      top: 2px;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: normal;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale; }
+
+.partition-input {
+  padding: 0.5rem 0;
+  margin: 0.5rem;
+  white-space: nowrap; }
+  .partition-input input.begin, .partition-input input.end {
+    display: inline-block;
+    width: 3.5rem;
+    padding: 3px 8px;
+    height: 30px; }
+
+.sorter-pair {
+  display: inline-block;
+  margin: 0 0.5rem; }
+  .sorter-pair .sorter-name {
+    color: #337ab7; }
+  .sorter-pair .up, .sorter-pair .down {
+    cursor: pointer;
+    color: #777777; }
+    .sorter-pair .up:before, .sorter-pair .down:before {
+      left: 2px;
+      right: 2px; }
+    .sorter-pair .up:hover, .sorter-pair .down:hover {
+      color: #337ab7; }
+    .sorter-pair .up.selected, .sorter-pair .down.selected {
+      color: #5cb85c; }
+
+#apply-filter {
+  position: absolute;
+  z-index: 100;
+  top: 1rem;
+  right: 1rem; }
+
+#artists {
+  position: relative; }
+
+/*# sourceMappingURL=filter.css.map */

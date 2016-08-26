@@ -7,12 +7,14 @@
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/release.css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/artist-overview.css" />
     <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/search.css" />
+    <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/filter.css" />
     <script src="<%=request.getContextPath()%>/js/jquery.js"></script>
     <script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>
     <script src="<%=request.getContextPath()%>/js/util.js"></script>
     <script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>
     <script src="<%=request.getContextPath()%>/js/paginator.js"></script>
     <script src="<%=request.getContextPath()%>/js/search.js"></script>
+    <script src="<%=request.getContextPath()%>/js/filter.js"></script>
   </head>
   <body>
     <%@ include file="_navbar.html"%>
@@ -64,6 +66,83 @@
           <div class='text-center' id='recordings-pagination'></div>
         </div>
         <div class='tab-pane fade' id='artists' role='tabpanel'>
+          <button class='btn btn-success' id='apply-filter'>
+            Apply filter
+          </button>
+          <div class='panel panel-default' id='artist-filter'></div>
+          <div class='panel panel-default' id='artist-partition'>
+            <div class='partition row'>
+              <div class='col-md-1'>
+                <span class='field'>Range</span>
+              </div>
+              <div class='col-md-11'>
+                <span class='partition-input' data-partition-field='relationship_rank'>
+                  <span class='field'>Relationship:</span>
+                  <input class='begin form-control' maxlength='2' type='text'>
+                  <span>~</span>
+                  <input class='end form-control' maxlength='2' type='text'>
+                </span>
+                <span class='partition-input' data-partition-field='popularity_rank'>
+                  <span class='field'>Popularity:</span>
+                  <input class='begin form-control' maxlength='2' type='text'>
+                  <span>~</span>
+                  <input class='end form-control' maxlength='2' type='text'>
+                </span>
+                <span class='partition-input' data-partition-field='influence_rank'>
+                  <span class='field'>Influence:</span>
+                  <input class='begin form-control' maxlength='2' type='text'>
+                  <span>~</span>
+                  <input class='end form-control' maxlength='2' type='text'>
+                </span>
+                <span class='partition-input' data-partition-field='productivity_rank'>
+                  <span class='field'>Productivity:</span>
+                  <input class='begin form-control' maxlength='2' type='text'>
+                  <span>~</span>
+                  <input class='end form-control' maxlength='2' type='text'>
+                </span>
+                <span class='partition-input' data-partition-field='active_span_rank'>
+                  <span class='field'>Active span:</span>
+                  <input class='begin form-control' maxlength='2' type='text'>
+                  <span>~</span>
+                  <input class='end form-control' maxlength='2' type='text'>
+                </span>
+              </div>
+            </div>
+          </div>
+          <div class='panel panel-default' id='artist-sorter'>
+            <div class='sorter row'>
+              <div class='col-md-1'>
+                <span class='field'>Order by</span>
+              </div>
+              <div class='col-md-11 sorter-group'>
+                <span class='sorter-pair'>
+                  <i class='up glyphicon glyphicon-triangle-top' data-sorter='relationship_score'></i>
+                  <span class='sorter-name'>Relationship</span>
+                  <i class='down glyphicon glyphicon-triangle-bottom' data-sorter='relationship_score'></i>
+                </span>
+                <span class='sorter-pair'>
+                  <i class='up glyphicon glyphicon-triangle-top' data-sorter='popularity_score'></i>
+                  <span class='sorter-name'>Popularity</span>
+                  <i class='down glyphicon glyphicon-triangle-bottom' data-sorter='popularity_score'></i>
+                </span>
+                <span class='sorter-pair'>
+                  <i class='up glyphicon glyphicon-triangle-top' data-sorter='influence_score'></i>
+                  <span class='sorter-name'>Influence</span>
+                  <i class='down glyphicon glyphicon-triangle-bottom' data-sorter='influence_score'></i>
+                </span>
+                <span class='sorter-pair'>
+                  <i class='up glyphicon glyphicon-triangle-top' data-sorter='productivity_score'></i>
+                  <span class='sorter-name'>Productivity</span>
+                  <i class='down glyphicon glyphicon-triangle-bottom' data-sorter='productivity_score'></i>
+                </span>
+                <span class='sorter-pair'>
+                  <i class='up glyphicon glyphicon-triangle-top' data-sorter='active_span_score'></i>
+                  <span class='sorter-name'>Active span</span>
+                  <i class='down glyphicon glyphicon-triangle-bottom' data-sorter='active_span_score'></i>
+                </span>
+              </div>
+            </div>
+          </div>
           <div class='row' data-page-param='currPage' data-pagination='#artist-pagination' data-per-page-param='perPage' data-per-page='24' data-window='10' id='artist-frames'></div>
           <div class='text-center' id='artist-pagination'></div>
         </div>

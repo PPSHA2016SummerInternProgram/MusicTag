@@ -1,0 +1,107 @@
+@import 'bt_variables';
+
+$field-color: $gray-light;
+
+#artist-filter, #artist-partition {
+  margin-bottom: 1rem;
+}
+
+.filter, .partition, .sorter {
+  margin: 1rem 0;
+  .field {
+    color: $field-color;
+    display: inline-block;
+  }
+}
+
+.filter, .partition {
+  .field {
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+  }
+
+}
+
+.filter {
+
+  .item {
+    position: relative;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem;
+    text-decoration: none;
+    cursor: pointer;
+    &:hover, &.selected {
+      background-color: rgba($brand-primary, 0.9);
+      color: white;
+      border-radius: 4px;
+    }
+    &.selected {
+      background-color: rgba($brand-success, 0.9);
+      &:before {
+        content: "\e013";
+        color: white;
+        position: absolute;
+        font-size: 8px;
+        left: 2px;
+        top: 2px;
+        font-family: 'Glyphicons Halflings';
+        font-style: normal;
+        font-weight: normal;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    }
+  }
+
+
+}
+
+.partition-input {
+  padding: 0.5rem 0;
+  margin: 0.5rem;
+  white-space: nowrap;
+  input.begin, input.end {
+    display: inline-block;
+    width: 3.5rem;
+    padding: 3px 8px;
+    height: 30px;
+  }
+}
+
+.sorter-pair {
+  display: inline-block;
+  margin: 0 0.5rem;
+  .sorter-name {
+    color: $link-color;
+  }
+  .up, .down {
+    cursor: pointer;
+    color: $gray-light;
+    &:before {
+      left: 2px;
+      right: 2px;
+    }
+    &:hover {
+      color: $brand-primary;
+    }
+    &.selected {
+      color: $brand-success;
+    }
+  }
+}
+
+#apply-filter {
+  position: absolute;
+  z-index: 100;
+  top: 1rem;
+  right: 1rem;
+}
+
+#artists {
+  position: relative;
+}
+
+
+

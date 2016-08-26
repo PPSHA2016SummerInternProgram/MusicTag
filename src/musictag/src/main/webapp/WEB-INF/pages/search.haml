@@ -7,12 +7,14 @@
     = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/release.css" />'
     = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/artist-overview.css" />'
     = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/search.css" />'
+    = '<link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/css/filter.css" />'
     = '<script src="<%=request.getContextPath()%>/js/jquery.js"></script>'
     = '<script src="<%=request.getContextPath()%>/js/bootstrap.js"></script>'
     = '<script src="<%=request.getContextPath()%>/js/util.js"></script>'
     = '<script src="<%=request.getContextPath()%>/js/tag_builder.js"></script>'
     = '<script src="<%=request.getContextPath()%>/js/paginator.js"></script>'
     = '<script src="<%=request.getContextPath()%>/js/search.js"></script>'
+    = '<script src="<%=request.getContextPath()%>/js/filter.js"></script>'
   %body
     = '<%@ include file="_navbar.html"%>'
     .container{:style => "margin-top:80px;"}
@@ -50,6 +52,31 @@
             %tbody
           #recordings-pagination.text-center
         #artists.tab-pane.fade{:role => "tabpanel"}
+          %button#apply-filter.btn.btn-success
+            Apply filter
+          #artist-filter.panel.panel-default
+          #artist-partition.panel.panel-default
+            .partition.row
+              .col-md-1
+                %span.field Range
+              .col-md-11
+                - %w( relationship popularity influence productivity active_span ).each do |dim|
+                  %span.partition-input{'data-partition-field': dim + '_rank'}
+                    %span.field= dim.capitalize.sub('_', ' ') + ':'
+                    %input.begin.form-control{type: :text, maxlength: 2}
+                    %span= '~'
+                    %input.end.form-control{type: :text, maxlength: 2}
+          #artist-sorter.panel.panel-default
+            .sorter.row
+              .col-md-1
+                %span.field Order by
+              .col-md-11.sorter-group
+                - %w( relationship popularity influence productivity active_span ).each do |dim|
+                  %span.sorter-pair
+                    %i.up.glyphicon.glyphicon-triangle-top{data: {sorter: dim + '_score'}}
+                    %span.sorter-name= dim.capitalize.sub('_', ' ')
+                    %i.down.glyphicon.glyphicon-triangle-bottom{data: {sorter: dim + '_score'}}
+
           #artist-frames.row{data: {pagination: '#artist-pagination', 'per-page': 24, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}
           #artist-pagination.text-center
         #releases.tab-pane.fade{:role => "tabpanel"}

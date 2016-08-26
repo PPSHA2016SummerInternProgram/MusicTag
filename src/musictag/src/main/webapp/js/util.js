@@ -1,25 +1,6 @@
 var ContextPath = '/musictag';
 
 /**
- * Get the URL params. For example:
- * localhost:8080/musictag/artist?gid=123&limit=100, will return {'gid': '123',
- * 'limit': '100'}
- * 
- * @returns {Array}
- */
-function getUrlVars() {
-	var vars = [], hash;
-	var hashes = window.location.href.slice(
-			window.location.href.indexOf('?') + 1).split('&');
-	for (var i = 0; i < hashes.length; i++) {
-		hash = hashes[i].split('=');
-		vars.push(hash[0]);
-		vars[hash[0]] = hash[1];
-	}
-	return vars;
-}
-
-/**
  * Send a GET request to server. If callback method exists, call it after
  * receiving response.
  * 
@@ -103,7 +84,25 @@ window.UrlHelper = {
 	lyricUrl: function(recordingGid) {
 		return UrlHelper.contextPath + "/recording/" + recordingGid + "/lyric";
 	},
-	defaultArtistCoverUrl:  'http://p4.music.126.net/UK-Nt38gGjh_krcHwc1UmA==/6008831046001841.jpg'
+	defaultArtistCoverUrl:  'http://p4.music.126.net/UK-Nt38gGjh_krcHwc1UmA==/6008831046001841.jpg',
+
+	/**
+	 * Get the URL params. For example:
+	 * localhost:8080/musictag/artist?gid=123&limit=100, will return {'gid': '123', 'limit': '100'}
+	 *
+	 * @returns {Array}
+	 */
+	getUrlVars: function () {
+		var vars = [], hash;
+		var hashes = window.location.search.slice(1).split('&');
+		for (var i = 0; i < hashes.length; i++) {
+			hash = hashes[i].split('=');
+			vars.push(hash[0]);
+			vars[hash[0]] = hash[1];
+		}
+		return vars;
+	}
+
 };
 
 window.OtherHelper = {
