@@ -14,6 +14,13 @@
         </div>
         <div  style="float:left; height:0;width:0">
         	<div id="artist-radar-chart" style="margin-top:-30px; width:90px; height:90px;"></div>
+        	<div id="big-radar-chart-popover" class="popover fade bottom in" role="tooltip"  style="display:none;">
+		    	<div class="arrow" style="bottom:50%"></div>
+		    	<h3 id="big-radar-chart-title" style="color:black; font-size:20px" class="popover-title text-center">Scores</h3>
+		    	<div class="popover-content" id="big-radar-chart-wrapper">
+		    		<div id="big-radar-chart"></div>
+		    	</div>
+		    </div>
         </div>
         <span style="color:black;line-height:32px">.</span>
         <script src="http://code.highcharts.com/highcharts.js"></script>
@@ -40,4 +47,24 @@
       </nav>
     </div>
   </div>
+<!-- 	<div id="big-radar-chart-modal" class="modal fade"> -->
+<!-- 		<div class="modal-dialog" role="document"> -->
+<!-- 			<div id="big-radar-chart-modal-content" class="modal-content"> -->
+<!-- 				<div class="modal-header"> -->
+<!-- 					<button type="button" class="close" data-dismiss="modal" -->
+<!-- 						aria-label="Close"> -->
+<!-- 						<span aria-hidden="true">&times;</span> -->
+<!-- 					</button> -->
+<!-- 					<h4 id="big-radar-chart-modal-title" class="modal-title">Modal title</h4> -->
+<!-- 				</div> -->
+<!-- 				<div class="modal-body"> -->
+<!-- 					<div id="big-radar-chart"></div> -->
+<!-- 				</div> -->
+<!-- 				<div class="modal-footer"> -->
+<!-- 					<button type="button" class="btn btn-secondary" -->
+<!-- 						data-dismiss="modal">Close</button> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
+<!-- 	</div> -->
 </header>

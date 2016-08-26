@@ -1,11 +1,11 @@
 function drawDistribution(elementId, type, title) {
 	var url = 'distribution/' + type;
 	var args = {
-			id : elementId,
-			title : title ? title : type,
-			yText: 'Artist Amount',
-			name : 'name',
-			callback : null,
+		id : elementId,
+		title : title ? title : type,
+		yText : 'Artist Amount',
+		name : 'name',
+		callback : null,
 	}
 	sendAjax(url, null, receivedDistribution, args);
 }
@@ -15,13 +15,13 @@ function receivedDistribution(response, args) {
 	var rank = getValue(response, 'data', 'rank');
 	var mark = rank['xAxis'];
 	var arr = getValue(distribution, 'data');
-	var max = arr[arr.length-1][0];
+	var max = arr[arr.length - 1][0];
 	mark = max < mark ? max : mark;
 	mark = mark < 0 ? 0 : mark;
 	var config = chartConfig(args['title'], mark, args['yText']);
-	config['series'] = [{
+	config['series'] = [ {
 		data : getValue(distribution, 'data'),
-	}]
+	} ]
 	$('#' + args['id']).highcharts(config);
 }
 
@@ -65,7 +65,8 @@ function radarConfig() {
 
 		tooltip : {
 			shared : true,
-			pointFormat : '<span style="color:{series.color}">{series.name}: <b>{point.y:,.0f}</b><br/>'
+			pointFormat : '<span style="">{series.name}: <b>{point.y:,.0f}</b><br/>',
+			enabled: false,
 		},
 
 		legend : {
@@ -126,6 +127,77 @@ function drawRadar(response, args) {
 	if (args['callback']) {
 		args['callback']();
 	}
+
+	config['xAxis']['labels']['enabled'] = true;
+	config['pane']['size'] = '65%';
+	config['tooltip']['enabled'] = true;
+	config['plotOptions'] = {  
+        series: {  
+            cursor: 'pointer',  
+            point :{
+	            events: {  
+	                click: function(event) {  
+	                    console.log(this.category)
+	                    switch(this.category){
+	                    case 'Active Span':
+	                    	location.href = 'active-span'
+	                    	break;
+	                    case 'Popularity':
+	                    	location.href = 'popularity'
+	                    	break;
+	                    case 'Relationship':
+	                    	location.href = 'relationship'
+	                    	break;
+	                    case 'Influence':
+	                    	location.href = 'influence'
+	                    	break;
+	                    case 'Productivity':
+	                    	location.href = 'productivity'
+	                    	break;
+	                    }
+	                }
+	            }
+            }
+        }
+	};
+	
+	var width = 400;
+	$('#big-radar-chart-popover').css('position', 'relative').css(
+			'margin-left', '-120px').css('margin-top', '-25px').css('width',
+			width).css('max-width', width).css('opacity', '0.9');
+	$('#big-radar-chart-wrapper').css('width', width).css('padding', '0').css('margin-top', '-30px');
+	$('#big-radar-chart').css('width', width).css('height', width);
+	$('#big-radar-chart').highcharts(config);
+	$('#big-radar-chart-popover').hide();
+	$('#big-radar-chart-title').text(
+			basicInfo ? 'Scores of ' + basicInfo.name : 'Scores');
+
+	var hideTime = 500;
+	$('#' + elementId).off('mouseenter').on('mouseenter', function() {
+		$('#big-radar-chart-popover').show();
+		clearInterval(hideBigRadarInterval);
+	});
+
+	$('#' + elementId).off('mouseleave').on('mouseleave', function() {
+		hideBigRadarInterval = setInterval(hideBigRadar, hideTime);
+	});
+	
+	$('#big-radar-chart-popover').on('mouseenter', function(){
+		$('#big-radar-chart-popover').show();
+		clearInterval(hideBigRadarInterval);
+	});
+
+	$('#big-radar-chart-popover').off('mouseleave').on('mouseleave', function() {
+		hideBigRadarInterval = setInterval(hideBigRadar, hideTime);
+	});
+}
+
+var hideBigRadarInterval = null;
+
+function hideBigRadar(){
+	$('#big-radar-chart-popover').fadeOut(100);
+	clearInterval(hideBigRadarInterval);
+	hideBigRadarInterval = null;
 }
 
 function getScore(items, type) {
@@ -161,7 +233,7 @@ function chartConfig(title, mark, yText) {
 			text : title
 		},
 		subtitle : {
-//			text : 'Click and drag in the plot area to zoom in',
+			// text : 'Click and drag in the plot area to zoom in',
 			text : null,
 		},
 		xAxis : {
