@@ -29,6 +29,12 @@ public class ArtistControllerTest {
 	ArtistController artistController;
 	
 	@Test
+	public void testArtistAreasDetails() throws IOException{
+		artistController.artistAreasDetails(StaticValues.artistGid0, "China");
+		artistController.artistAreasDetails(StaticValues.artistGid0, "Unknown Area");
+	}
+	
+	@Test
 	public void testArtistEdit() throws IOException{
 		artistController.artistEdit(StaticValues.artistGid0);
 	}
