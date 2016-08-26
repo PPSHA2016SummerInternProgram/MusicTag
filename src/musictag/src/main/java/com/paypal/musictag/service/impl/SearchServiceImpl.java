@@ -71,8 +71,6 @@ public class SearchServiceImpl implements SearchService {
 				}
 			}
 		}
-		System.out.println("==================");
-		System.out.println(url);
 		return MusicTagUtil.jsontoMap(
 				MusicTagUtil.getJsonFromURLWithoutProxy(new URL(MusicTagUtil.encodeURIComponent(url.toString()))));
 

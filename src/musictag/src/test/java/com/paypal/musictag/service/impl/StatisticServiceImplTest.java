@@ -36,4 +36,20 @@ public class StatisticServiceImplTest {
 		System.out.println("******************"+statisticsServiceImpl.artistEdit(StaticValues.artistGid0)+"*******************");
 		System.out.println("--------------------------------------------------------");
 	}
+	
+	@Test
+	public void testArtistAreaDetails(){
+		System.out.println(statisticsServiceImpl.artistAreaDetails(StaticValues.artistGid0, "China"));
+	}
+	
+	@Test
+	public void testDistributionScores(){
+		System.out.println(statisticsServiceImpl.distributionScores(StaticValues.artistGid0));
+	}
+	
+	@Test
+	public void testReleaseInfo(){
+		System.out.println(statisticsServiceImpl.releaseInfo(StaticValues.artistGid0));
+	}
+	
 }
