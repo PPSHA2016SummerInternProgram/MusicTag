@@ -21,6 +21,7 @@ public class SearchServiceImplTest {
 	@Test
 	public void testSearchAllParamsNotNull() throws IOException{
 		MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+		params.add("fq", "born_year:1930");
 		searchServiceImpl.searchArtist("taylor swift", 0, 24, params);
 	}
 }
