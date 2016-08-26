@@ -43,9 +43,10 @@
 		and ar1.gid != #{gid};
 	</select>
 	<select id="countryAmount" resultType="Integer">
-		select count(*)
-		from artist
-		join edit_artist ea on ea.artist=artist.id
+		select count(distinct rc.country) from release
+		JOIN artist_credit_name acn ON release.artist_credit = acn.artist_credit
+		JOIN artist on acn.artist = artist.id
+		JOIN release_country rc ON release.id = rc.release
 		where artist.gid = #{gid};
 	</select>
 </mapper>
