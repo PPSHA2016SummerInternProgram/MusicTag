@@ -17,6 +17,11 @@ public class StatisticServiceImplTest {
 	StatisticsService statisticsServiceImpl;
 	
 	@Test
+	public void testDistributionScores1(){
+		statisticsServiceImpl.distributionScores(StaticValues.randomUUID());
+	}
+	
+	@Test
 	public void testArtistCreditCount(){
 		System.out.println(statisticsServiceImpl.artistCreditCount(StaticValues.artistGid0));
 		
@@ -40,6 +45,10 @@ public class StatisticServiceImplTest {
 	@Test
 	public void testArtistAreaDetails(){
 		System.out.println(statisticsServiceImpl.artistAreaDetails(StaticValues.artistGid0, "China"));
+		System.out.println(statisticsServiceImpl.artistAreaDetails(StaticValues.artistGid0, "Taiwan"));
+		System.out.println(statisticsServiceImpl.artistAreaDetails(StaticValues.artistGid0, "Hong Kong"));
+		System.out.println(statisticsServiceImpl.artistAreaDetails(StaticValues.artistGid1, "United States"));
+		System.out.println(statisticsServiceImpl.artistAreaDetails(StaticValues.artistGid1, "United States of America"));
 	}
 	
 	@Test

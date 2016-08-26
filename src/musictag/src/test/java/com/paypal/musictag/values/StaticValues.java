@@ -20,4 +20,9 @@ final public class StaticValues {
 	
 	public static final String recordingGid0 = "0ccffde0-5a08-41d2-b162-b1300af0c246";
 	public static final String recordingGid1 = "2dd409e4-6a40-4fc7-8344-eacbb54c14a3";
+	
+	public static final String randomUUID(){
+		String randomReleaseGid = String.valueOf((int)(Math.random() * 1000));
+		return randomReleaseGid;
+	}
 }
