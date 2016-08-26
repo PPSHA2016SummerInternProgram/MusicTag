@@ -189,16 +189,20 @@ public class ArtistServiceImpl implements ArtistService {
 			throw new IllegalArgumentException("CooperationType should not be null");
 		}
 		Map<String, Object> result = new HashMap<>();
-		if (type == CooperationType.CREDIT) {
+		switch(type){
+		case  CREDIT:
 			result.put("recordings", artistRelationMapper.getCooperationsOnRecordingOfArtists(sid, tid));
 			result.put("releases", artistRelationMapper.getCooperationsOnReleaseOfArtists(sid, tid));
-		}else if (type == CooperationType.LYRICIST) {
+			break;
+		case  LYRICIST:
 			result.put("releases", artistRelationMapper.getReleaseLyricCooperationsOfArtist(sid, tid));
 			result.put("recordings", artistRelationMapper.getRecordingLyricCooperationsOfArtists(sid, tid));
-		}else if (type == CooperationType.COMPOSER) {
+			break;
+		case  COMPOSER:
 			result.put("releases", artistRelationMapper.getReleaseComposerCooperationsOfArtist(sid, tid));
 			result.put("recordings", artistRelationMapper.getRecordingComposerCooperationsOfArtists(sid, tid));
-		}else {
+			break;
+		default:
 			throw new AssertionError("should not reach here");
 		}
 		
