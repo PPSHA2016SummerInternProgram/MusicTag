@@ -6,7 +6,7 @@ $(function() {
 	getReleaseCoverFromServer(uuid);
 	getReleaseArtistinfoFromServer();
 	getReleasevoteFromServer();
-	showHotCharts();
+//	showHotCharts();
 });
 
 var basicInfo;
