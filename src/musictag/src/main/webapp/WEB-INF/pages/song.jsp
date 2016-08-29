@@ -29,7 +29,7 @@
  					src="<%=request.getContextPath()%>/images/default_album_cover.jpg">
  			</div>
  			<div class="release-info">
- 				<div class="artist-name" data-artist-name>Carpenters</div>
+ 				<a class="artist-name" data-artist-name>Carpenters</a>
  				<div class="release-name" data-recording-name>Yesterday Once More</div>
  				<div class="date" data-song-length>3:00</div>
 				<div class="rate" data-rate>

@@ -32,6 +32,8 @@ function receivedRecordingFull(data) {
 	// get basic info
 	var artistCredit = getValue(data, "data", "artist-credit")[0];
 	var artistName = getValue(artistCredit, "name");
+	var artistGid = getValue(artistCredit, 'artist', 'id');
+	debugger
 	var recordingName = getValue(data, "data", "title");
 	var length = getValue(data, "data", "length");
 	if (!length)
@@ -77,7 +79,7 @@ function receivedRecordingFull(data) {
 
 	updateRecordingBasicInfo(artistName, recordingName, length, rating, tagStr,
 			producerArtists, composerArtist, lyricistArtist, translationWorks,
-			publisherArtist);
+			publisherArtist, artistGid);
 
 	// get releases
 	var releases = getValue(data, "data", "releases");
@@ -124,7 +126,8 @@ function createContainingReleaseLinkEle(release){
 
 function updateRecordingBasicInfo(artistName, recordingName, length, rating,
 		tagStr, producerArtists, composerArtist, lyricistArtist,
-		translationWorks, publisherArtist) {
+		translationWorks, publisherArtist, artistGid) {
+	$('[data-artist-name]').attr('href', ContextPath + '/artist/' + artistGid+'/')
 	$('[data-artist-name]').text(artistName);
 	$('[data-recording-name]').text(recordingName);
 	$('[data-rate]').html(createVoteHtml(rating));
