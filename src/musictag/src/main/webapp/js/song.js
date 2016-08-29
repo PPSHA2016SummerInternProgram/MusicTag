@@ -33,7 +33,7 @@ function receivedRecordingFull(data) {
 	var artistCredit = getValue(data, "data", "artist-credit")[0];
 	var artistName = getValue(artistCredit, "name");
 	var artistGid = getValue(artistCredit, 'artist', 'id');
-	debugger
+
 	var recordingName = getValue(data, "data", "title");
 	var length = getValue(data, "data", "length");
 	if (!length)
