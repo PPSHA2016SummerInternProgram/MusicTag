@@ -98,14 +98,18 @@
       var html = '';
 
       for(var index in arguments) {
-        var arr = arguments[index];
-        for (var field in arr) {
-          var items = arr[field].counts || arr[field];
-          var items_html = '';
-          for (var i = 0; i < items.length; i += 2) {
-            items_html += buildFilterItems(items[i], items[i + 1], arr[field].gap)
+        if(arguments.hasOwnProperty(index)) {
+          var arr = arguments[index];
+          for (var field in arr) {
+            if(arr.hasOwnProperty(field)) {
+              var items = arr[field].counts || arr[field];
+              var items_html = '';
+              for (var i = 0; i < items.length; i += 2) {
+                items_html += buildFilterItems(items[i], items[i + 1], arr[field].gap)
+              }
+              html += buildFilterRow(field, items_html, arr[field].gap);
+            }
           }
-          html += buildFilterRow(field, items_html, arr[field].gap);
         }
       }
 
