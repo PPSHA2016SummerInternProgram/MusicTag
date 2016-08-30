@@ -74,7 +74,7 @@ $(document).ready(
 										enterable : true,
 										showDelay: 300,
 										hideDelay: 500,
-										backgroundColor: 'rgba(162,180,186,0.7)',
+										backgroundColor: 'rgba(50, 50, 50, 0.701961)',
 										formatter: function (params, ticket, callback) {
 											if(params.dataType === "node"){
 											     $.get('/musictag/artist/' + params.data.gid + '/tooltip-info', function (content) {
@@ -264,7 +264,7 @@ $(document).ready(
 														position : 'right',
 														formatter : '{b}',
 														textStyle : {
-															color : '#a2b4ba'
+															color : 'white'
 														}
 													}
 												},
@@ -304,15 +304,15 @@ $(document).ready(
 				var img = content.data['commons-img'] ? content.data['commons-img'] : window.UrlHelper.defaultArtistCoverUrl;
 //				var wiki = content.data['wikipedia-extract'] ? content.data['wikipedia-extract'] : '';
 				//TODO process wiki
-				var html = '<div style="float: left; width: 100px; height: 100px;">' + 
+				var html = '<div style="float: left; width: 100px; height: 100px; ">' + 
 						'<img width="100px" src="' + img + '" style="display: inline;">'+
 					'</div>' +
-					'<div style="margin-left: 110px; min-width: 200px; max-width: 500px; max-height: 50px"> <h2 stylle"margin-right: 50px">'+content.data.name+'</h2> </div>';
+					'<div style="margin-left: 110px; min-width: 200px; max-width: 500px; max-height: 50px;"> <h2 stylle"margin-right: 50px">'+content.data.name+'</h2> </div>';
 				return html
 			}
 			
 			function cooperationTooltipHtml(content){
-				var html = '<div style="width: 500px; word-wrap: break-word; white-space:normal;">';
+				var html = '<div style="width: 500px; word-wrap: break-word; white-space:normal">';
 				if(content.data.recordings && content.data.recordings.length > 0){
 					html += buildRecordingTable(content.data.recordings);
 				}
@@ -325,7 +325,7 @@ $(document).ready(
 			}
 			
 			function buildRecordingTable(recordings){
-				var html = '<table class="table"><thead><tr><th> # </th><th> Recording Title </th><th> Length </th></tr></thead><tbody>';
+				var html = '<table class="table"><thead><tr><th style="color: white;font-size: small;"> # </th><th style="color: white;font-size: small;"> Recording Title </th><th style="color: white;font-size: small;"> Length </th></tr></thead><tbody>';
 				if(recordings && recordings.length !== 0){
 					for(var i = 0; i < recordings.length; i++){
 						html += buildRecordingRow(i+1, recordings[i]);
@@ -336,7 +336,7 @@ $(document).ready(
 			}
 			
 			function buildReleaseTable(releases){
-				var html = '<table class="table"><thead><tr><th> # </th><th> Release Title </th><th>Country</th><th>Date</th></tr></thead><tbody>';
+				var html = '<table class="table"><thead><tr><th style="color: white;font-size: small;"> # </th><th style="color: white;font-size: small;"> Release Title </th><th style="color: white;font-size: small;">Country</th><th style="color: white;font-size: small;">Date</th></tr></thead><tbody>';
 				if(releases && releases.length !== 0){
 					for(var i = 0; i < releases.length; i++){
 						html += buildReleaseRow(i, releases[i]);
@@ -350,7 +350,7 @@ $(document).ready(
 				if(!recording.length) {
 					recording.length = 0;
 				}
-				var html = '<tr><td>' + index + '</td><td><a href="/musictag/recording/' + recording.gid + '/">' + recording.name + '</a></td>' +
+				var html = '<tr style="color: white;font-size: small;"><td>' + index + '</td><td style="color: white;font-size: small;"><a style="color: white;font-size: small; text-decoration:underline;" href="/musictag/recording/' + recording.gid + '/">' + recording.name + '</a></td>' +
 					'<td>' + OtherHelper.recordingLength(recording.length) + '</td>';
 				return html;
 			}
