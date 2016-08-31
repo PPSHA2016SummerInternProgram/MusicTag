@@ -95,12 +95,12 @@ function drawRadar(response, args) {
 	var items = getValue(response, 'data');
 
 	var scores = {
-		'Relationship' : getScore(items, 'contacts_amount'),
+		'Connections' : getScore(items, 'contacts_amount'),
 		'Popularity' : (getScore(items, 'edit_amount')
 				+ getScore(items, 'listener_amount') + getScore(items,
 				'play_amount')) / 3,
 		'Influence' : getScore(items, 'country_amount'),
-		'Productivity' : (getScore(items, 'recording_amount') + getScore(items,
+		'Works Amount' : (getScore(items, 'recording_amount') + getScore(items,
 				'release_amount')) / 2,
 		'Active Span' : getScore(items, 'active_years'),
 	};
@@ -146,13 +146,13 @@ function drawRadar(response, args) {
 	                    case 'Popularity':
 	                    	location.href = 'popularity'
 	                    	break;
-	                    case 'Relationship':
+	                    case 'Connections':
 	                    	location.href = 'relationship'
 	                    	break;
 	                    case 'Influence':
 	                    	location.href = 'influence'
 	                    	break;
-	                    case 'Productivity':
+	                    case 'Works Amount':
 	                    	location.href = 'productivity'
 	                    	break;
 	                    default:
