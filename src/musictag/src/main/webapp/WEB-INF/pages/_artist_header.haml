@@ -10,6 +10,6 @@
         %span.avatar-name{'data-artist-overview-name' => ''} &nbsp;
       %nav.nav-list
         %ul.nav-list-items
-          - [ ['Baisc', './'], ['Relationship', 'relationship'], ['Popularity', 'popularity'], ['Influence', 'influence'],
+          - [ ['Baisc', './'], ['Connections', 'relationship'], ['Popularity', 'popularity'], ['Influence', 'influence'],
               ['Productivity', 'productivity'], ["Active Span", 'active-span']].each_with_index do |(item, href), index|
             = '<li class="nav-list-item " >' + '<a href="' + href + '" class="<%= active_tab == ' + index.to_s + ' ?  "active" : ""' +  '%>" >' + item + '</a></li>'

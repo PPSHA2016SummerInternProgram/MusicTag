@@ -1,4 +1,4 @@
-$portal-main-color: #00A896;
+$portal-main-color: #428bca;
 $form-portal-height: 45px;
 
 $gray-base:              #000 !default;
@@ -9,6 +9,10 @@ $gray-light:             lighten($gray-base, 46.7%) !default; // #777
 $gray-lighter:           lighten($gray-base, 93.5%) !default; // #eee
 
 $border-color: #bbb;
+
+#portal-img-stop {
+  stop-color: $portal-main-color;
+}
 
 .logo-wrap {
   margin: 5rem 0;

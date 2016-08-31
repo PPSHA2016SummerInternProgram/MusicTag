@@ -29,7 +29,7 @@
               <g>
                 <lineargradient gradientunits='objectBoundingBox' id='logo__item--logo_0__0' x1='0.5' x2='0.5' y1='0' y2='1'>
                   <stop offset='0' style='stop-color:#2C1D16'></stop>
-                  <stop offset='1' style='stop-color:#00A896'></stop>
+                  <stop id='portal-img-stop' offset='1'></stop>
                 </lineargradient>
                 <filter height='300%' id='logo__item--logo_0__0_Effect' width='300%' x='-100%' y='-100%'>
                   <fegaussianblur in='SourceGraphic' result='glow' stddeviation='5'></fegaussianblur>

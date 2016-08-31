@@ -38,7 +38,7 @@
       <nav class='nav-list'>
         <ul class='nav-list-items'>
           <li class="nav-list-item " ><a href="./" class="<%= active_tab == 0 ?  "active" : ""%>" >Baisc</a></li>
-          <li class="nav-list-item " ><a href="relationship" class="<%= active_tab == 1 ?  "active" : ""%>" >Relationship</a></li>
+          <li class="nav-list-item " ><a href="relationship" class="<%= active_tab == 1 ?  "active" : ""%>" >Connections</a></li>
           <li class="nav-list-item " ><a href="popularity" class="<%= active_tab == 2 ?  "active" : ""%>" >Popularity</a></li>
           <li class="nav-list-item " ><a href="influence" class="<%= active_tab == 3 ?  "active" : ""%>" >Influence</a></li>
           <li class="nav-list-item " ><a href="productivity" class="<%= active_tab == 4 ?  "active" : ""%>" >Productivity</a></li>

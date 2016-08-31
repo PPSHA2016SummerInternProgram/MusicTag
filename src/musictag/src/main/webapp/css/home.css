@@ -1,8 +1,11 @@
+#portal-img-stop {
+  stop-color: #428bca; }
+
 .logo-wrap {
   margin: 5rem 0; }
 
 span.strong {
-  color: #005c52; }
+  color: #2a6496; }
 
 .svg-wrap {
   margin: 0 auto;
@@ -17,12 +20,12 @@ span.strong {
     min-width: 40rem;
     border-color: #bbb; }
   .form-portal .form-control:focus {
-    border-color: #00A896;
+    border-color: #428bca;
     outline: 0;
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 168, 150, 0.6);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(0, 168, 150, 0.6); }
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(66, 139, 202, 0.6);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(66, 139, 202, 0.6); }
   .form-portal button {
-    background-color: #00A896;
+    background-color: #428bca;
     color: white;
     width: 5rem; }
     .form-portal button:hover {
@@ -40,7 +43,7 @@ span.strong {
   .feature-box .title {
     font-weight: bold;
     font-size: 1.75rem;
-    color: #007568; }
+    color: #3071a9; }
   .feature-box .count {
     color: #333333; }
     .feature-box .count:after {
