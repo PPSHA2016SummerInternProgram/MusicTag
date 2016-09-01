@@ -60,9 +60,10 @@
               .col-md-1
                 %span.field Range
               .col-md-11
-                - %w( relationship popularity influence productivity active_span ).each do |dim|
+                - [ %w(Connections relationship), %w(Popularity popularity), %w(Influence influence),
+                    %w(Productivity productivity), ['Active span', 'active_span'] ].each do |title, dim|
                   %span.partition-input{'data-partition-field': dim + '_rank'}
-                    %span.field= dim.capitalize.sub('_', ' ') + ':'
+                    %span.field= title + ':'
                     %input.begin.form-control{type: :text, maxlength: 2}
                     %span= '~'
                     %input.end.form-control{type: :text, maxlength: 2}
@@ -71,10 +72,11 @@
               .col-md-1
                 %span.field Order by
               .col-md-11.sorter-group
-                - %w( relationship popularity influence productivity active_span ).each do |dim|
+                - [ %w(Connections relationship), %w(Popularity popularity), %w(Influence influence),
+                    %w(Productivity productivity), ['Active span', 'active_span'] ].each do |title, dim|
                   %span.sorter-pair
                     %i.up.glyphicon.glyphicon-triangle-top{data: {sorter: dim + '_score'}}
-                    %span.sorter-name= dim.capitalize.sub('_', ' ')
+                    %span.sorter-name= title
                     %i.down.glyphicon.glyphicon-triangle-bottom{data: {sorter: dim + '_score'}}
 
           #artist-frames.row{data: {pagination: '#artist-pagination', 'per-page': 24, window: 10, 'page-param': 'currPage', 'per-page-param': 'perPage'}}

@@ -77,7 +77,7 @@
               </div>
               <div class='col-md-11'>
                 <span class='partition-input' data-partition-field='relationship_rank'>
-                  <span class='field'>Relationship:</span>
+                  <span class='field'>Connections:</span>
                   <input class='begin form-control' maxlength='2' type='text'>
                   <span>~</span>
                   <input class='end form-control' maxlength='2' type='text'>
@@ -117,7 +117,7 @@
               <div class='col-md-11 sorter-group'>
                 <span class='sorter-pair'>
                   <i class='up glyphicon glyphicon-triangle-top' data-sorter='relationship_score'></i>
-                  <span class='sorter-name'>Relationship</span>
+                  <span class='sorter-name'>Connections</span>
                   <i class='down glyphicon glyphicon-triangle-bottom' data-sorter='relationship_score'></i>
                 </span>
                 <span class='sorter-pair'>
