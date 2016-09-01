@@ -60,11 +60,6 @@ public class ArtistControllerTest {
 	}
 	
 	@Test
-	public void testSimilarArtists() throws Exception{
-		artistController.similarArtist(StaticValues.artistGid0);
-	}
-	
-	@Test
 	public void testDistributionScores0() throws IOException{
 		artistController.distributionScores(StaticValues.artistGid0);
 		artistController.distribution(StaticValues.artistGid0, "edit_amount");

@@ -134,12 +134,6 @@ public class ArtistController {
 		return "/WEB-INF/pages/artist_active_span.jsp";
 	}
 
-	@RequestMapping(value = "/{gid}/similar", method = RequestMethod.GET)
-	@ResponseBody
-	public Map<String, Object> similarArtist(@PathVariable("gid") String gid) throws Exception {
-		return MusicTagUtil.wrapResult(artistServiceImpl.similarArtist(gid));
-	}
-
 	/*
 	 * ================================================================
 	 * statistics api for artist

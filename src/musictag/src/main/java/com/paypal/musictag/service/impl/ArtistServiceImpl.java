@@ -1,8 +1,6 @@
 package com.paypal.musictag.service.impl;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,16 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.paypal.musictag.dao.ArtistDao;
 import com.paypal.musictag.dao.ImageDao;
 import com.paypal.musictag.dao.usingdb.ArtistRelationMapper;
 import com.paypal.musictag.dao.usingdb.ReleaseGroupMapper;
 import com.paypal.musictag.dao.usingdb.resulthandler.ReleaseesCountsMapResultHandler;
-import com.paypal.musictag.dao.usingwebservice.api.LastFmAPI;
-import com.paypal.musictag.exception.NetBadRequestException;
-import com.paypal.musictag.exception.NetConnectionException;
-import com.paypal.musictag.exception.NetContentNotFoundException;
 import com.paypal.musictag.service.ArtistService;
 import com.paypal.musictag.util.CooperationType;
 import com.paypal.musictag.util.MusicTagUtil;
@@ -207,13 +200,5 @@ public class ArtistServiceImpl implements ArtistService {
 		}
 		
 		return result;
-	}
-
-	@Override
-	public Map<String, Object> similarArtist(String gid) throws NetConnectionException, NetContentNotFoundException,
-			NetBadRequestException, JsonMappingException, ProtocolException, MalformedURLException {
-
-		return LastFmAPI.similarArtist(gid);
-
 	}
 }
