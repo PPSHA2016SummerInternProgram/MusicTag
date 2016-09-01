@@ -54,7 +54,7 @@ $(document).ready(
 								});
 								option = {
 									title : {
-										text : 'Artist Relation',
+										text : 'Artist Connections',
 										subtext: 'Source: musicbrainz.org',
 										top : 'top',
 										left : 'center',
@@ -82,7 +82,7 @@ $(document).ready(
 											     });
 												
 											}else if(params.dataType === "edge"){
-												if(params.seriesName === "Credit"){
+												if(params.seriesName === "Chorus"){
 													$.get('/musictag/artist/' + params.data.source + '/target-artist/' + params.data.target + '/type/credit/cooperations', function (content) {
 														callback(ticket, cooperationTooltipHtml(content));
 												     });
@@ -264,7 +264,7 @@ $(document).ready(
 														position : 'right',
 														formatter : '{b}',
 														textStyle : {
-															color : 'white'
+															color : '#a2b4ba'
 														}
 													}
 												},
@@ -339,7 +339,7 @@ $(document).ready(
 				var html = '<table class="table"><thead><tr><th style="color: white;font-size: small;"> # </th><th style="color: white;font-size: small;"> Release Title </th><th style="color: white;font-size: small;">Country</th><th style="color: white;font-size: small;">Date</th></tr></thead><tbody>';
 				if(releases && releases.length !== 0){
 					for(var i = 0; i < releases.length; i++){
-						html += buildReleaseRow(i, releases[i]);
+						html += buildReleaseRow(i+1, releases[i]);
 					}
 				}
 				html += '</tbody></table>';
@@ -375,7 +375,7 @@ $(document).ready(
 					date += '-??';
 				}
 				
-				var html = '<tr><td>' + index + '</td><td><a href="/musictag/release/' + release.gid + '/">' + release.name + '</a></td>' +
+				var html = '<tr style="color: white;font-size: small;"><td>' + index + '</td><td><a style="color: white;font-size: small; text-decoration:underline;" href="/musictag/release/' + release.gid + '/">' + release.name + '</a></td>' +
 					'<td>' + release.country + '</td>' +
 					'<td>' + date + '</td>';
 				return html;
