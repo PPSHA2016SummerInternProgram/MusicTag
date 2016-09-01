@@ -103,10 +103,10 @@ $(document).ready(
 									animationEasingUpdate : 'quinticInOut',
 									legend: {
 										left: 'right',
-										data:['Credit', 'Lyrics', 'Composing']
+										data:['Chorus', 'Lyrics', 'Composing']
 									},
 									series : [ {
-										name : 'Credit',
+										name : 'Chorus',
 										type : 'graph',
 										layout : 'none', // circular
 										data : data.data.nodes,
