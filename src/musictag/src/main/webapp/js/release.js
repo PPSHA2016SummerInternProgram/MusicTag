@@ -155,13 +155,56 @@ function receivedTracklist(data) {
 	addMoreListener();
 }
 
+function SeedRandom(state1,state2){
+    var mod1=4294967087
+    var mul1=65539
+    var mod2=4294965887
+    var mul2=65537
+    if(typeof state1!="number"){
+        state1=+new Date()
+    }
+    if(typeof state2!="number"){
+        state2=state1
+    }
+    state1=state1%(mod1-1)+1
+    state2=state2%(mod2-1)+1
+    function random(limit){
+        state1=(state1*mul1)%mod1
+        state2=(state2*mul2)%mod2
+        if(state1<limit && state2<limit && state1<mod1%limit && state2<mod2%limit){
+            return random(limit)
+        }
+        return (state1+state2)%limit
+    }
+    return random
+}
+
+String.prototype.hashCode = function() {
+	  var hash = 0, i, chr, len;
+	  if (this.length === 0) return hash;
+	  for (i = 0, len = this.length; i < len; i++) {
+	    chr   = this.charCodeAt(i);
+	    hash  = ((hash << 5) - hash) + chr;
+	    hash |= 0; // Convert to 32bit integer
+	  }
+	  return hash;
+	};
+	
+var randomSeed = null;
+
 function findMaxRating(recordings) {
+	
+	if(!randomSeed){
+		var seed = getUuid().hashCode();
+		randomSeed = SeedRandom(seed < 0 ? -seed : seed+0);
+	}
+	
 	var max = 0;
 	for (var i = 0; !isEmpty(recordings) && i < recordings.length; i++) {
 		var recording = recordings[i];
 		var playAmount = getValue(recording, 'play-amount');
 		if (!playAmount) {
-			playAmount = randomInt(100, 5000); // fake data now
+			playAmount = randomSeed(5000) + 100; // fake data now
 			recording['play-amount'] = playAmount;
 		}
 		max = Math.max(playAmount, max);
